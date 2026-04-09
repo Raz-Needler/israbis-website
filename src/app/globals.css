@@ -1,142 +1,200 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;600;700;800;900&display=swap');
+
+/* ═══════════════════════════════════════════════════
+   TOKENS — Matching the actual IsraBis app theme system
+   ═══════════════════════════════════════════════════ */
 
 :root {
+  /* Background */
   --bg: #FFFFFF;
-  --bg-alt: #F5F5F7;
-  --text: #1D1D1F;
-  --text-sub: #6E6E73;
-  --text-dim: #86868B;
+  --bg-secondary: #F5F5F5;
+  --bg-mid: #FAFAFA;
+
+  /* Text */
+  --text: #1A1A1A;
+  --text-secondary: #3C3C43;
+  --text-muted: #8E8E93;
+  --text-dimmer: rgba(60,60,67,0.36);
+
+  /* Accent — System Green */
   --accent: #34C759;
-  --accent-hover: #2DB14E;
-  --link: #0071E3;
-  --link-dark: #2997FF;
-  --border: #D2D2D7;
-  --card-bg: #F5F5F7;
+  --accent-mid: #30B350;
+  --accent-dark: #248A3D;
+  --accent-light: #A8E6B0;
+  --accent-bright: #4CD964;
+  --accent-10: rgba(52,199,89,0.10);
+  --accent-15: rgba(52,199,89,0.15);
+  --accent-20: rgba(52,199,89,0.20);
+
+  /* Secondary — System Blue */
+  --secondary: #007AFF;
+  --secondary-dark: #0056CC;
+
+  /* Surface */
+  --card: #FFFFFF;
+  --glass-border: rgba(0,0,0,0.06);
+  --glass-faint: rgba(245,245,245,0.4);
+  --shadow: rgba(0,0,0,0.08);
+
+  /* Gradients */
+  --btn-gradient: linear-gradient(135deg, #34C759, #30B350, #248A3D);
+  --name-gradient: linear-gradient(135deg, #1A1A1A, #34C759, #248A3D);
 }
 
 [data-theme="midnight"] {
-  --bg: #000000; --bg-alt: #1D1D1F; --text: #F5F5F7; --text-sub: #A1A1A6;
-  --text-dim: #86868B; --accent: #06B6D4; --accent-hover: #0891B2; --link: #2997FF;
-  --link-dark: #64D2FF; --border: #424245; --card-bg: #1D1D1F;
+  --bg: #080E1C; --bg-secondary: #0C1328; --bg-mid: #141E34;
+  --text: #FFFFFF; --text-secondary: rgba(255,255,255,0.82); --text-muted: rgba(255,255,255,0.58); --text-dimmer: rgba(255,255,255,0.3);
+  --accent: #06B6D4; --accent-mid: #0891B2; --accent-dark: #0E7490; --accent-light: #67E8F9; --accent-bright: #22D3EE;
+  --accent-10: rgba(6,182,212,0.10); --accent-15: rgba(6,182,212,0.15); --accent-20: rgba(6,182,212,0.20);
+  --secondary: #818CF8; --secondary-dark: #6366F1;
+  --card: #0C1328; --glass-border: rgba(255,255,255,0.06); --glass-faint: rgba(20,30,52,0.6); --shadow: rgba(6,182,212,0.12);
+  --btn-gradient: linear-gradient(135deg, #06B6D4, #0891B2, #0E7490);
+  --name-gradient: linear-gradient(135deg, #FFFFFF, #06B6D4, #0E7490);
 }
 [data-theme="autumn"] {
-  --bg: #FFFAF5; --bg-alt: #FFF3E8; --text: #3D2415; --text-sub: #6B4D38;
-  --text-dim: #8B6B50; --accent: #E8773A; --accent-hover: #D4652E; --link: #E8773A;
-  --link-dark: #F5A623; --border: #E8D5C4; --card-bg: #FFF3E8;
+  --bg: #FFF8F0; --bg-secondary: #FCEBD8; --bg-mid: #F8DCC4;
+  --text: #3D2415; --text-secondary: #5A3A22; --text-muted: #8B6B50; --text-dimmer: rgba(61,36,21,0.3);
+  --accent: #E8773A; --accent-mid: #D4652E; --accent-dark: #B85424; --accent-light: #F5A623; --accent-bright: #F0C040;
+  --accent-10: rgba(232,119,58,0.10); --accent-15: rgba(232,119,58,0.15); --accent-20: rgba(232,119,58,0.20);
+  --secondary: #7BAE5E; --secondary-dark: #5C8E42;
+  --card: #FFFFFF; --glass-border: rgba(61,36,21,0.06); --glass-faint: rgba(252,235,216,0.5); --shadow: rgba(232,119,58,0.10);
+  --btn-gradient: linear-gradient(135deg, #E8773A, #D4652E, #B85424);
+  --name-gradient: linear-gradient(135deg, #3D2415, #E8773A, #B85424);
 }
 [data-theme="dusk"] {
-  --bg: #1A1423; --bg-alt: #231B30; --text: #F5F0FA; --text-sub: #B8A8CC;
-  --text-dim: #8B7AA0; --accent: #E8587A; --accent-hover: #D44A6C; --link: #E8587A;
-  --link-dark: #F4A0B4; --border: #3D2F50; --card-bg: #231B30;
+  --bg: #1A1423; --bg-secondary: #231B30; --bg-mid: #2D2340;
+  --text: #F5F0FA; --text-secondary: rgba(245,240,250,0.82); --text-muted: rgba(245,240,250,0.5); --text-dimmer: rgba(245,240,250,0.25);
+  --accent: #E8587A; --accent-mid: #D44A6C; --accent-dark: #B83A5A; --accent-light: #F4A0B4; --accent-bright: #FF6B8A;
+  --accent-10: rgba(232,88,122,0.10); --accent-15: rgba(232,88,122,0.15); --accent-20: rgba(232,88,122,0.20);
+  --secondary: #A78BFA; --secondary-dark: #7C5CC4;
+  --card: #231B30; --glass-border: rgba(245,240,250,0.06); --glass-faint: rgba(35,27,48,0.6); --shadow: rgba(232,88,122,0.12);
+  --btn-gradient: linear-gradient(135deg, #E8587A, #D44A6C, #B83A5A);
+  --name-gradient: linear-gradient(135deg, #F5F0FA, #E8587A, #B83A5A);
 }
+
+/* ═══════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════ */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  direction: rtl;
-  scroll-behavior: smooth;
-}
+html { direction: rtl; scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   font-size: 17px;
-  line-height: 1.47;
+  line-height: 1.53;
   overflow-x: hidden;
-  transition: background-color 0.4s ease, color 0.3s ease;
+  transition: background-color 0.5s ease, color 0.4s ease;
 }
 
 ::selection { background: var(--accent); color: #fff; }
 
-/* ── Apple-style button ── */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 400;
-  padding: 12px 24px;
-  border-radius: 980px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.15s ease;
-  line-height: 1.17;
-  letter-spacing: -0.022em;
-}
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-primary:active { transform: scale(0.97); }
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════ */
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--accent);
-  font-size: 17px;
-  font-weight: 400;
-  padding: 12px 24px;
-  border-radius: 980px;
-  border: 1px solid var(--accent);
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease, transform 0.15s ease;
-  line-height: 1.17;
-  letter-spacing: -0.022em;
-}
-.btn-secondary:hover { background: var(--accent); color: #fff; }
-.btn-secondary:active { transform: scale(0.97); }
+.w-980 { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+.w-1120 { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.sec { padding: 88px 0; }
+.sec-sm { padding: 56px 0; }
+@media (max-width: 734px) { .sec { padding: 56px 0; } }
 
-/* ── Link ── */
-.link {
-  color: var(--link);
-  font-size: 21px;
-  font-weight: 400;
-  text-decoration: none;
-  cursor: pointer;
-}
-.link:hover { text-decoration: underline; }
-.link-sm { font-size: 17px; }
+/* ═══════════════════════════════════════════════════
+   COMPONENTS — matching the app
+   ═══════════════════════════════════════════════════ */
 
-/* ── Typography ── */
-.headline-hero {
-  font-size: clamp(2.8rem, 5vw + 1rem, 5rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.06;
+/* Pill button (like the app stepper/CTAs) */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-size: 16px; font-weight: 600;
+  padding: 14px 28px; border-radius: 16px; border: none;
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
-.headline-section {
-  font-size: clamp(2rem, 3vw + 0.5rem, 3.2rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.08;
+.btn:active { transform: scale(0.96); }
+
+.btn-accent {
+  background: var(--btn-gradient); color: #fff;
+  box-shadow: 0 4px 16px var(--shadow);
 }
-.headline-sub {
-  font-size: clamp(1.5rem, 2vw + 0.3rem, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.12;
+.btn-accent:hover { box-shadow: 0 8px 32px var(--accent-20); transform: translateY(-1px); }
+
+.btn-outline {
+  background: transparent; color: var(--accent);
+  border: 1.5px solid var(--accent);
 }
-.body-elevated {
-  font-size: clamp(1rem, 1.2vw, 1.3rem);
-  line-height: 1.5;
-  color: var(--text-sub);
+.btn-outline:hover { background: var(--accent-10); }
+
+.btn-white {
+  background: #FFFFFF; color: var(--accent-dark);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }
-.caption {
-  font-size: 14px;
-  line-height: 1.43;
-  color: var(--text-dim);
+.btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+/* Glass card (matches app's glass.card) */
+.glass-card {
+  background: var(--card);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px var(--shadow); }
+
+/* Feature icon (matches app's 36px rounded icon square) */
+.feat-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 
-/* ── Containers ── */
-.container-980 { max-width: 980px; margin: 0 auto; padding: 0 22px; }
-.container-1200 { max-width: 1200px; margin: 0 auto; padding: 0 22px; }
+/* Store chip (matches app's store card style) */
+.store-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 8px; border-radius: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  transition: transform 0.2s ease;
+}
+.store-chip:hover { transform: translateY(-2px); }
 
-/* ── Sections ── */
-.section-pad { padding: 80px 0; }
-@media (max-width: 734px) { .section-pad { padding: 56px 0; } }
+/* Gradient text (matches app's GradientText) */
+.grad-text {
+  background: var(--name-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section label (like app's category labels) */
+.sec-label {
+  font-size: 14px; font-weight: 500; letter-spacing: 0.03em;
+  color: var(--accent); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* Glow orb (matches app's ambient GlowOrb) */
+.glow {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none;
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.04); }
+}
+
+/* Float animation (matches app's composition SVG drift) */
+@keyframes float-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+.float { animation: float-drift 5.5s ease-in-out infinite; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 3px; }
