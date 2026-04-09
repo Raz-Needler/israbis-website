@@ -6,20 +6,20 @@ import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import FadeIn from "@/components/FadeIn";
 import { useTheme, type ThemeName, THEMES } from "@/components/ThemeProvider";
 
-/* ── Counter ── */
+/* ── Animated counter ── */
 function Counter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-50px" });
   const mv = useMotionValue(0);
   const sp = useSpring(mv, { stiffness: 40, damping: 28 });
   const [d, setD] = useState("0");
   useEffect(() => { if (inView) mv.set(target); }, [inView, target, mv]);
-  useEffect(() => { const u = sp.on("change", (v) => setD(Math.round(v).toLocaleString("he-IL"))); return u; }, [sp]);
+  useEffect(() => { const u = sp.on("change", v => setD(Math.round(v).toLocaleString("he-IL"))); return u; }, [sp]);
   return <span ref={ref}>{prefix}{d}{suffix}</span>;
 }
 
-/* ── Store logos ── */
-const STORE_LOGOS = [
+/* ── Store data ── */
+const STORES = [
   { key: "rami_levy", name: "רמי לוי" },
   { key: "shufersal", name: "שופרסל" },
   { key: "victory", name: "ויקטורי" },
@@ -29,24 +29,41 @@ const STORE_LOGOS = [
   { key: "osher_ad", name: "אושר עד" },
   { key: "hazi_hinam", name: "חצי חינם" },
   { key: "mega", name: "מגה" },
+  { key: "yeinot_bitan", name: "יינות ביתן" },
   { key: "stop_market", name: "סטופ מרקט" },
-  { key: "king_store", name: "קינג סטור" },
   { key: "good_pharm", name: "גוד פארם" },
 ];
 
-/* ── Features ── */
+/* ── Feature sections ── */
 const FEATURES = [
-  { title: "השוואת מחירים", desc: "השוו מחירים בין 33 רשתות שיווק בישראל. מצאו את הסופר הכי זול לעגלה שלכם בלחיצה אחת.", svg: "composition_1" },
-  { title: "עגלת קניות חכמה", desc: "הוסיפו מוצרים, המערכת מחשבת את העלות בכל רשת ומציעה את הזולה ביותר. חסכו בכל קנייה.", svg: "composition_7" },
-  { title: "מתכונים ובישול", desc: "מעל 1,000 מתכונים עם רשימת מרכיבים, מחירים, ומצב בישול מונחה. מהמתכון לעגלה בלחיצה.", svg: "composition_12" },
+  {
+    title: "השוואת מחירים",
+    headline: "33 רשתות.\nמחיר אחד הכי זול.",
+    body: "בדקו את המחיר של כל מוצר בכל הרשתות בישראל. המערכת מחשבת את העגלה המלאה ומוצאת את הרשת הכי זולה עבורכם.",
+    svg: "composition_1",
+    dark: false,
+  },
+  {
+    title: "עגלה חכמה",
+    headline: "בנו עגלה.\nהמערכת חוסכת.",
+    body: "הוסיפו מוצרים מהקטגוריות, מהמתכונים, או מסריקת ברקוד. המערכת משווה אוטומטית בין כל הרשתות ומציעה את העגלה הזולה ביותר.",
+    svg: "composition_7",
+    dark: true,
+  },
+  {
+    title: "מתכונים",
+    headline: "מהמתכון לעגלה.\nבלחיצה אחת.",
+    body: "מעל 1,000 מתכונים עם רשימת מרכיבים מתומחרת, מצב בישול מונחה צעד-אחר-צעד, וטיימרים חכמים. אהבתם מתכון? הוסיפו את כל המרכיבים לעגלה בלחיצה.",
+    svg: "composition_12",
+    dark: false,
+  },
 ];
 
-/* ── AI Tools ── */
 const AI_TOOLS = [
-  { title: "סריקת מקרר", desc: "צלמו את המקרר — המערכת מזהה מרכיבים ומציעה מתכונים מותאמים. אפס בזבוז.", svg: "composition_3" },
-  { title: "סריקת קלוריות", desc: "צלמו מנה וקבלו ניתוח תזונתי מלא: קלוריות, חלבון, פחמימות, שומנים.", svg: "composition_5" },
-  { title: "מתכון מסרטון", desc: "הדביקו לינק מיוטיוב, טיקטוק או אינסטגרם. קבלו מתכון כתוב עם מרכיבים ומחירים.", svg: "composition_8" },
-  { title: "סריקת קבלה", desc: "צלמו קבלה מהסופר. המערכת מזהה את כל המוצרים ומאפשרת להוסיף אותם לעגלה.", svg: "composition_11" },
+  { title: "סריקת מקרר", body: "צלמו את המקרר — AI מזהה מרכיבים ומציע מתכונים מותאמים. אפס בזבוז.", svg: "composition_3" },
+  { title: "סריקת קלוריות", body: "צלמו מנה וקבלו ניתוח תזונתי מלא: קלוריות, חלבון, פחמימות, שומנים.", svg: "composition_5" },
+  { title: "מתכון מסרטון", body: "הדביקו לינק מיוטיוב, טיקטוק או אינסטגרם. קבלו מתכון כתוב עם מרכיבים ומחירים.", svg: "composition_8" },
+  { title: "סריקת קבלה", body: "צלמו קבלה מהסופר. המערכת מזהה את כל המוצרים ומאפשרת להוסיף אותם לעגלה.", svg: "composition_11" },
 ];
 
 export default function Home() {
@@ -54,240 +71,227 @@ export default function Home() {
 
   return (
     <>
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  HERO                                                       */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section className="section" style={{ paddingTop: 80, paddingBottom: 40 }}>
-        <div className="container-narrow text-center">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  HERO                                                      */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="section-pad" style={{ paddingTop: 60 }}>
+        <div className="container-980 text-center">
           <FadeIn>
-            <Image src="/images/israbis-logo.png" alt="IsraBis" width={140} height={56} className="mx-auto mb-4" priority />
+            <p className="caption mb-3" style={{ letterSpacing: "0.03em" }}>IsraBis</p>
           </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <h1 className="text-[clamp(2.2rem,5.5vw,4rem)] font-black leading-[1.08] tracking-tight mb-4">
+          <FadeIn delay={0.05}>
+            <h1 className="headline-hero mb-4">
               חסכו עד ₪1,000 בחודש
               <br />
-              <span style={{ color: "var(--accent)" }}>על קניות הסופר</span>
+              <span style={{ color: "var(--accent)" }}>על קניות הסופר.</span>
             </h1>
           </FadeIn>
-
-          <FadeIn delay={0.2}>
-            <p className="text-[clamp(1rem,2.2vw,1.25rem)] leading-relaxed max-w-xl mx-auto mb-8" style={{ color: "var(--text-sub)" }}>
+          <FadeIn delay={0.1}>
+            <p className="body-elevated max-w-[42ch] mx-auto mb-8">
               השוו מחירים בין 33 רשתות, בנו עגלה חכמה, גלו מתכונים מדהימים, ועקבו אחרי ההוצאות — הכל באפליקציה אחת.
             </p>
           </FadeIn>
-
-          <FadeIn delay={0.3}>
-            <div className="flex flex-wrap gap-3 justify-center mb-12">
-              <a href="#download" className="inline-flex items-center px-6 py-3 rounded-full text-white text-sm font-medium transition-transform hover:scale-105 active:scale-95" style={{ background: "var(--accent)" }}>
-                הורידו בחינם
-              </a>
-              <a href="#features" className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium transition-transform hover:scale-105" style={{ color: "var(--accent)" }}>
-                גלו עוד
-              </a>
+          <FadeIn delay={0.15}>
+            <div className="flex flex-wrap gap-4 justify-center mb-10">
+              <a href="#download" className="btn-primary">הורידו בחינם</a>
+              <a href="#features" className="link link-sm">גלו עוד &larr;</a>
             </div>
           </FadeIn>
-
-          {/* Composition SVG hero image */}
-          <FadeIn delay={0.4} y={30}>
-            <div className="relative max-w-lg mx-auto">
-              <Image src="/svg/composition_12.svg" alt="IsraBis" width={500} height={400} className="w-full h-auto" />
-            </div>
+          <FadeIn delay={0.2} y={30}>
+            <Image src="/svg/composition_12.svg" alt="" width={480} height={380} className="mx-auto w-full max-w-md h-auto" priority />
           </FadeIn>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  STATS BAR                                                   */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="container-wide py-6 grid grid-cols-3 text-center">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  STATS                                                     */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section style={{ background: "var(--bg-alt)" }}>
+        <div className="container-980 py-8 grid grid-cols-3 text-center gap-4">
           {[
-            { n: 33, s: "", label: "רשתות שיווק" },
-            { n: 255000, s: "+", label: "מוצרים במאגר" },
-            { n: 1000, s: "+", label: "מתכונים" },
-          ].map((st, i) => (
-            <div key={i}>
-              <div className="text-2xl md:text-4xl font-black" style={{ color: "var(--text)" }}>
-                <Counter target={st.n} suffix={st.s} />
+            { n: 33, s: "", l: "רשתות שיווק" },
+            { n: 255000, s: "+", l: "מוצרים" },
+            { n: 1000, s: "+", l: "מתכונים" },
+          ].map((s, i) => (
+            <FadeIn key={i} delay={i * 0.06}>
+              <div className="headline-sub" style={{ color: "var(--text)" }}>
+                <Counter target={s.n} suffix={s.s} />
               </div>
-              <div className="text-xs md:text-sm mt-1" style={{ color: "var(--text-dim)" }}>{st.label}</div>
-            </div>
+              <div className="caption mt-1">{s.l}</div>
+            </FadeIn>
           ))}
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  FEATURES — alternating image + text                        */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section id="features">
-        {FEATURES.map((f, i) => {
-          const isEven = i % 2 === 0;
-          return (
-            <div key={f.title} className={i % 2 === 0 ? "section" : "section section-alt"}>
-              <div className={`container-narrow flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-10 md:gap-16`}>
-                <FadeIn className="flex-1" delay={0.1}>
-                  <Image src={`/svg/${f.svg}.svg`} alt={f.title} width={400} height={400} className="w-full max-w-[360px] mx-auto h-auto" />
-                </FadeIn>
-                <FadeIn className="flex-1 text-right" delay={0.2}>
-                  <h2 className="text-3xl md:text-[2.5rem] font-black leading-tight mb-4">{f.title}</h2>
-                  <p className="text-base md:text-lg leading-relaxed" style={{ color: "var(--text-sub)" }}>{f.desc}</p>
-                </FadeIn>
-              </div>
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  FEATURES — large alternating sections                     */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <div id="features">
+        {FEATURES.map((f, i) => (
+          <section
+            key={f.title}
+            className="section-pad"
+            style={{ background: f.dark ? "var(--bg-alt)" : "var(--bg)" }}
+          >
+            <div className="container-980 text-center">
+              <FadeIn>
+                <p className="caption mb-2" style={{ letterSpacing: "0.03em", color: "var(--accent)" }}>{f.title}</p>
+              </FadeIn>
+              <FadeIn delay={0.05}>
+                <h2 className="headline-section mb-4 whitespace-pre-line">{f.headline}</h2>
+              </FadeIn>
+              <FadeIn delay={0.1}>
+                <p className="body-elevated max-w-[50ch] mx-auto mb-10">{f.body}</p>
+              </FadeIn>
+              <FadeIn delay={0.15} y={30}>
+                <Image
+                  src={`/svg/${f.svg}.svg`}
+                  alt={f.title}
+                  width={500} height={400}
+                  className="mx-auto w-full max-w-[420px] h-auto"
+                />
+              </FadeIn>
             </div>
-          );
-        })}
-      </section>
+          </section>
+        ))}
+      </div>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  AI TOOLS                                                    */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section id="ai-tools" className="section section-alt">
-        <div className="container-narrow text-center mb-14">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  AI TOOLS                                                  */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section id="ai-tools" className="section-pad" style={{ background: "var(--bg-alt)" }}>
+        <div className="container-980 text-center mb-12">
           <FadeIn>
-            <h2 className="text-3xl md:text-[2.5rem] font-black mb-3">
-              כלים חכמים מבוססי <span style={{ color: "var(--accent)" }}>AI</span>
-            </h2>
+            <p className="caption mb-2" style={{ letterSpacing: "0.03em", color: "var(--accent)" }}>AI</p>
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <h2 className="headline-section mb-3">כלים חכמים.</h2>
           </FadeIn>
           <FadeIn delay={0.1}>
-            <p className="text-base md:text-lg" style={{ color: "var(--text-sub)" }}>
-              צלמו, סרקו, הדביקו — והמערכת עושה את השאר.
-            </p>
+            <p className="body-elevated">צלמו, סרקו, הדביקו — והמערכת עושה את השאר.</p>
           </FadeIn>
         </div>
 
-        <div className="container-wide grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {AI_TOOLS.map((tool, i) => (
-            <FadeIn key={tool.title} delay={i * 0.08}>
+        <div className="container-1200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {AI_TOOLS.map((t, i) => (
+            <FadeIn key={t.title} delay={i * 0.06}>
               <div
-                className="rounded-2xl p-8 md:p-10 transition-transform duration-200 hover:-translate-y-1"
-                style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+                className="rounded-[18px] p-8 sm:p-10 flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1"
+                style={{ background: "var(--bg)", border: "none" }}
               >
-                <Image src={`/svg/${tool.svg}.svg`} alt={tool.title} width={120} height={120} className="mb-6" />
-                <h3 className="text-xl font-bold mb-2 text-right">{tool.title}</h3>
-                <p className="text-sm leading-relaxed text-right" style={{ color: "var(--text-sub)" }}>{tool.desc}</p>
+                <Image src={`/svg/${t.svg}.svg`} alt={t.title} width={140} height={140} className="mb-6" />
+                <h3 className="headline-sub mb-2">{t.title}</h3>
+                <p className="body-elevated text-center">{t.body}</p>
               </div>
             </FadeIn>
           ))}
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  33 STORES                                                   */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section id="stores" className="section">
-        <div className="container-narrow text-center mb-14">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  33 STORES                                                 */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section id="stores" className="section-pad">
+        <div className="container-980 text-center mb-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-[2.5rem] font-black mb-3">
-              השוו מחירים ב-<span style={{ color: "var(--accent)" }}>33 רשתות</span>
-            </h2>
+            <p className="caption mb-2" style={{ letterSpacing: "0.03em", color: "var(--accent)" }}>רשתות</p>
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <h2 className="headline-section mb-3">כל הרשתות בישראל.</h2>
           </FadeIn>
           <FadeIn delay={0.1}>
-            <p className="text-base md:text-lg" style={{ color: "var(--text-sub)" }}>
-              כל הרשתות. כל המוצרים. מחיר אחד הכי זול.
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <div className="mt-6">
-              <span className="text-5xl md:text-7xl font-black" style={{ color: "var(--accent)" }}>
+            <div className="mt-4">
+              <span className="headline-hero" style={{ color: "var(--accent)" }}>
                 <Counter target={847} prefix="₪" />
               </span>
-              <p className="text-sm mt-2" style={{ color: "var(--text-dim)" }}>חיסכון ממוצע למשפחה בחודש</p>
+              <p className="caption mt-2">חיסכון ממוצע למשפחה בחודש</p>
             </div>
           </FadeIn>
         </div>
 
-        <div className="container-wide">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
-            {STORE_LOGOS.map((store, i) => (
-              <FadeIn key={store.key} delay={i * 0.04}>
-                <div
-                  className="flex flex-col items-center gap-2 py-5 px-3 rounded-xl transition-transform hover:-translate-y-1"
-                  style={{ background: "var(--bg-alt)", border: "1px solid var(--border)" }}
-                >
-                  <Image
-                    src={`/stores/${store.key}.png`}
-                    alt={store.name}
-                    width={48}
-                    height={48}
-                    className="w-10 h-10 object-contain rounded-lg"
-                  />
-                  <span className="text-xs font-medium" style={{ color: "var(--text-sub)" }}>{store.name}</span>
+        <div className="container-1200">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            {STORES.map((s, i) => (
+              <FadeIn key={s.key} delay={i * 0.03}>
+                <div className="flex flex-col items-center gap-2 py-4 px-2 rounded-[14px] transition-transform duration-200 hover:-translate-y-0.5" style={{ background: "var(--bg-alt)" }}>
+                  <Image src={`/stores/${s.key}.png`} alt={s.name} width={40} height={40} className="w-9 h-9 object-contain rounded-lg" />
+                  <span style={{ fontSize: 12, color: "var(--text-sub)", fontWeight: 500 }}>{s.name}</span>
                 </div>
               </FadeIn>
             ))}
           </div>
-          <FadeIn delay={0.3}>
-            <p className="text-center text-sm mt-6" style={{ color: "var(--text-dim)" }}>
-              ועוד 21 רשתות נוספות...
+          <FadeIn delay={0.2}>
+            <p className="text-center caption mt-5">
+              ועוד 21 רשתות נוספות
             </p>
           </FadeIn>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  MORE FEATURES LIST                                          */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section className="section section-alt">
-        <div className="container-narrow text-center mb-14">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  MORE FEATURES                                             */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="section-pad" style={{ background: "var(--bg-alt)" }}>
+        <div className="container-980 text-center mb-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-[2.5rem] font-black mb-3">עוד ב-IsraBis</h2>
+            <h2 className="headline-section mb-3">ועוד הרבה יותר.</h2>
           </FadeIn>
         </div>
-        <div className="container-narrow grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+        <div className="container-980 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
           {[
-            { title: "מעקב הוצאות", desc: "הגדירו תקציב חודשי, עקבו אחרי הוצאות לפי קטגוריה, וקבלו התראות חריגה." },
-            { title: "קניות משפחתיות", desc: "רשימת קניות משותפת לכל המשפחה, קניות חיות בזמן אמת, ודשבורד הוצאות משפחתי." },
-            { title: "מעקב מזון", desc: "הוסיפו מוצרים למזווה, עקבו אחרי תאריכי תפוגה, וקבלו התראות לפני שמשהו מתקלקל." },
-            { title: "סריקת ברקוד", desc: "סרקו כל מוצר בסופר וראו מיד את המחיר בכל 33 הרשתות." },
-            { title: "ספר מתכונים אישי", desc: "שמרו מתכונים אהובים, צרו ספרי מתכונים, ושתפו עם חברים ומשפחה." },
-            { title: "עוזר AI אישי", desc: "שאלו את מיקי — העוזר החכם שלנו — כל שאלה על מתכונים, מרכיבים, ובישול." },
+            { t: "מעקב הוצאות", d: "הגדירו תקציב חודשי, עקבו אחרי הוצאות לפי קטגוריה, וקבלו התראות חריגה." },
+            { t: "קניות משפחתיות", d: "רשימה משותפת, קניות חיות בזמן אמת, דשבורד הוצאות משפחתי." },
+            { t: "מעקב מזון", d: "הוסיפו מוצרים למזווה, עקבו אחרי תאריכי תפוגה, קבלו התראות." },
+            { t: "סריקת ברקוד", d: "סרקו מוצר בסופר וראו מיד את המחיר ב-33 רשתות." },
+            { t: "ספר מתכונים", d: "שמרו מתכונים, צרו ספרים, שתפו עם חברים ומשפחה." },
+            { t: "עוזר AI — מיקי", d: "שאלו כל שאלה על מתכונים, מרכיבים, תחליפים ובישול." },
           ].map((item, i) => (
-            <FadeIn key={item.title} delay={i * 0.06}>
+            <FadeIn key={item.t} delay={i * 0.05}>
               <div className="text-right">
-                <h3 className="text-lg font-bold mb-1">{item.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
+                <h3 style={{ fontSize: 19, fontWeight: 600, marginBottom: 4 }}>{item.t}</h3>
+                <p className="body-elevated">{item.d}</p>
               </div>
             </FadeIn>
           ))}
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  THEMES                                                      */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section className="section">
-        <div className="container-narrow text-center mb-12">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  THEMES                                                    */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section id="themes" className="section-pad">
+        <div className="container-980 text-center mb-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-[2.5rem] font-black mb-3">
+            <h2 className="headline-section">
               ארבע ערכות נושא.
               <br />
               <span style={{ color: "var(--accent)" }}>הסגנון שלכם.</span>
             </h2>
           </FadeIn>
         </div>
-        <div className="container-narrow grid grid-cols-2 md:grid-cols-4 gap-4">
-          {(Object.keys(THEMES) as ThemeName[]).map((key, i) => {
-            const t = THEMES[key];
+        <div className="container-980 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {(Object.keys(THEMES) as ThemeName[]).map((k, i) => {
+            const t = THEMES[k];
             return (
-              <FadeIn key={key} delay={i * 0.08}>
+              <FadeIn key={k} delay={i * 0.06}>
                 <button
-                  onClick={() => setTheme(key)}
-                  className="w-full rounded-2xl overflow-hidden text-center transition-transform hover:-translate-y-1 active:scale-95"
-                  style={{ border: `2px solid ${t.accent}30` }}
+                  onClick={() => setTheme(k)}
+                  className="w-full rounded-[18px] overflow-hidden transition-transform duration-200 hover:-translate-y-1 active:scale-[0.98] text-start"
+                  style={{ background: t.bg, border: `1.5px solid ${t.accent}25` }}
                 >
-                  <div className="p-4 pb-3" style={{ background: t.bg }}>
-                    {/* Mini preview */}
-                    <div className="space-y-1.5 mb-3">
-                      <div className="h-4 rounded" style={{ background: t.accent + "20" }} />
-                      <div className="h-2 w-3/4 rounded" style={{ background: t.accent + "10" }} />
-                      <div className="flex gap-1.5">
-                        <div className="flex-1 h-6 rounded" style={{ background: t.accent + "10" }} />
-                        <div className="flex-1 h-6 rounded" style={{ background: t.accent + "10" }} />
+                  <div className="p-5">
+                    <div className="space-y-2 mb-4">
+                      <div className="h-5 rounded-lg" style={{ background: t.accent + "18" }} />
+                      <div className="h-2.5 w-3/4 rounded" style={{ background: t.accent + "0D" }} />
+                      <div className="flex gap-2">
+                        <div className="flex-1 h-8 rounded-lg" style={{ background: t.accent + "0D" }} />
+                        <div className="flex-1 h-8 rounded-lg" style={{ background: t.accent + "0D" }} />
                       </div>
                     </div>
-                    <div className="w-5 h-5 rounded-full mx-auto mb-2" style={{ background: t.accent }} />
-                    <span className="text-xs font-bold" style={{ color: t.accent }}>{t.label}</span>
+                    <div className="flex items-center gap-2 justify-center">
+                      <div className="w-4 h-4 rounded-full" style={{ background: t.accent }} />
+                      <span style={{ fontSize: 13, fontWeight: 600, color: t.accent }}>{t.label}</span>
+                    </div>
                   </div>
                 </button>
               </FadeIn>
@@ -296,27 +300,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════════════ */}
-      {/*  DOWNLOAD CTA                                                */}
-      {/* ════════════════════════════════════════════════════════════ */}
-      <section id="download" className="section" style={{ background: "var(--accent)", color: "#FFFFFF" }}>
-        <div className="container-narrow text-center">
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/*  DOWNLOAD CTA                                              */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section id="download" className="section-pad" style={{ background: "var(--accent)" }}>
+        <div className="container-980 text-center">
           <FadeIn>
-            <h2 className="text-3xl md:text-[2.5rem] font-black mb-4">
-              מוכנים לחסוך?
-            </h2>
+            <h2 className="headline-section text-white mb-4">מוכנים לחסוך?</h2>
           </FadeIn>
-          <FadeIn delay={0.1}>
-            <p className="text-lg opacity-80 max-w-md mx-auto mb-8">
-              הצטרפו לאלפי ישראלים שכבר חוסכים עם IsraBis. חינם, פשוט, חכם.
+          <FadeIn delay={0.05}>
+            <p style={{ fontSize: 19, color: "rgba(255,255,255,0.8)", maxWidth: "36ch", margin: "0 auto 32px" }}>
+              הצטרפו לאלפי ישראלים שכבר חוסכים עם IsraBis.
             </p>
           </FadeIn>
-          <FadeIn delay={0.2}>
+          <FadeIn delay={0.1}>
             <div className="flex flex-wrap gap-3 justify-center">
-              <button className="px-8 py-3.5 bg-white rounded-full font-bold text-sm transition-transform hover:scale-105 active:scale-95" style={{ color: "var(--accent)" }}>
+              <button className="btn-primary" style={{ background: "#fff", color: "var(--accent)" }}>
                 App Store
               </button>
-              <button className="px-8 py-3.5 rounded-full font-bold text-sm border-2 border-white/40 text-white transition-transform hover:scale-105 active:scale-95 hover:bg-white/10">
+              <button className="btn-secondary" style={{ borderColor: "rgba(255,255,255,0.4)", color: "#fff" }}>
                 Google Play
               </button>
             </div>
