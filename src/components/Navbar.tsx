@@ -2,16 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useTheme, THEMES, type ThemeName } from "./ThemeProvider";
-
-const LINKS = [
-  { label: "תכונות", href: "#features" },
-  { label: "AI", href: "#ai" },
-  { label: "רשתות", href: "#stores" },
-  { label: "ערכות נושא", href: "#themes" },
-];
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -19,89 +11,121 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handler = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: scrolled ? "var(--bg)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+          background: scrolled ? "rgba(var(--bg-rgb, 255,255,255), 0.8)" : "var(--bg)",
+          backdropFilter: scrolled ? "saturate(180%) blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "saturate(180%) blur(20px)" : "none",
+          borderBottom: `1px solid ${scrolled ? "var(--border)" : "transparent"}`,
+          transition: "all 0.3s ease",
         }}
+        className="fixed top-0 left-0 right-0 z-50"
       >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Image src="/images/israbis-logo.png" alt="IsraBis" width={100} height={40} />
+        <div className="container-wide flex items-center justify-between h-12">
+          <Link href="/">
+            <Image src="/images/israbis-logo.png" alt="IsraBis" width={80} height={32} priority />
+          </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            {LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-dim)" }}>
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-7">
+            {[
+              { label: "תכונות", href: "/#features" },
+              { label: "כלים חכמים", href: "/#ai-tools" },
+              { label: "רשתות", href: "/#stores" },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="text-xs font-normal transition-colors duration-200"
+                style={{ color: "var(--text-sub)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-sub)")}
+              >
                 {l.label}
-              </a>
+              </Link>
             ))}
-            <div className="flex gap-2 mr-2">
-              {(Object.keys(THEMES) as ThemeName[]).map((key) => (
+
+            {/* Theme switcher */}
+            <div className="flex gap-1.5 mx-2">
+              {(Object.keys(THEMES) as ThemeName[]).map((k) => (
                 <button
-                  key={key}
-                  onClick={() => setTheme(key)}
-                  className="w-3.5 h-3.5 rounded-full transition-all duration-300"
+                  key={k}
+                  onClick={() => setTheme(k)}
+                  title={THEMES[k].label}
+                  className="w-3 h-3 rounded-full transition-all duration-200"
                   style={{
-                    background: THEMES[key].accent,
-                    transform: theme === key ? "scale(1.4)" : "scale(1)",
-                    boxShadow: theme === key ? `0 0 10px ${THEMES[key].accent}50` : "none",
+                    background: THEMES[k].accent,
+                    opacity: theme === k ? 1 : 0.35,
+                    transform: theme === k ? "scale(1.25)" : "scale(1)",
                   }}
                 />
               ))}
             </div>
-            <button className="px-5 py-2 rounded-xl text-white text-sm font-bold transition-all hover:scale-105 active:scale-95" style={{ background: "var(--accent)" }}>
+
+            <Link
+              href="/#download"
+              className="text-xs font-normal transition-colors"
+              style={{ color: "var(--accent)" }}
+            >
               הורדה
-            </button>
+            </Link>
           </div>
 
-          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
-            {menuOpen ? <X size={24} style={{ color: "var(--text)" }} /> : <Menu size={24} style={{ color: "var(--text)" }} />}
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-[5px]"
+            aria-label="תפריט"
+          >
+            <span className="block w-4 h-[1.5px] rounded-full transition-all duration-300" style={{ background: "var(--text)", transform: menuOpen ? "rotate(45deg) translateY(3.25px)" : "none" }} />
+            <span className="block w-4 h-[1.5px] rounded-full transition-all duration-300" style={{ background: "var(--text)", transform: menuOpen ? "rotate(-45deg) translateY(-3.25px)" : "none", opacity: menuOpen ? 1 : 1 }} />
           </button>
         </div>
       </nav>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 pt-20 px-6 pb-8 md:hidden flex flex-col"
-            style={{ background: "var(--bg)" }}
-          >
-            <div className="flex flex-col gap-6 mt-8">
-              {LINKS.map((l, i) => (
-                <motion.a
-                  key={l.href} href={l.href}
-                  initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-2xl font-bold" style={{ color: "var(--text)" }}
-                >
-                  {l.label}
-                </motion.a>
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 pt-12 md:hidden" style={{ background: "var(--bg)" }}>
+          <div className="container-wide flex flex-col gap-0 mt-4">
+            {[
+              { label: "תכונות", href: "/#features" },
+              { label: "כלים חכמים", href: "/#ai-tools" },
+              { label: "רשתות", href: "/#stores" },
+              { label: "הורדה", href: "/#download" },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMenuOpen(false)}
+                className="block py-3 text-base font-normal border-b"
+                style={{ color: "var(--text-sub)", borderColor: "var(--border)" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <div className="flex gap-3 mt-6">
+              {(Object.keys(THEMES) as ThemeName[]).map((k) => (
+                <button
+                  key={k}
+                  onClick={() => setTheme(k)}
+                  className="w-8 h-8 rounded-full border transition-all"
+                  style={{ background: THEMES[k].accent, borderColor: theme === k ? "var(--text)" : "transparent", opacity: theme === k ? 1 : 0.4 }}
+                />
               ))}
             </div>
-            <div className="flex gap-4 mt-8">
-              {(Object.keys(THEMES) as ThemeName[]).map((key) => (
-                <button key={key} onClick={() => setTheme(key)} className="w-10 h-10 rounded-full border-2 transition-all"
-                  style={{ background: THEMES[key].bg, borderColor: theme === key ? THEMES[key].accent : "var(--border)" }} />
-              ))}
-            </div>
-            <button onClick={() => setMenuOpen(false)} className="mt-auto px-8 py-4 rounded-2xl text-white font-bold text-lg w-full" style={{ background: "var(--accent)" }}>
-              הורידו בחינם
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
+
+      {/* Spacer for fixed nav */}
+      <div className="h-12" />
     </>
   );
 }
