@@ -24,12 +24,12 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
-export const THEMES: { name: ThemeName; label: string; dot: string }[] = [
-  { name: "snow", label: "שלג", dot: "#34C759" },
-  { name: "midnight", label: "לילה כחול", dot: "#06B6D4" },
-  { name: "autumn", label: "סתווי", dot: "#E8773A" },
-  { name: "dusk", label: "דמדומים", dot: "#E8587A" },
-];
+export const THEMES: Record<ThemeName, { label: string; accent: string; bg: string }> = {
+  snow:     { label: "שלג",        accent: "#34C759", bg: "#FFFFFF" },
+  midnight: { label: "לילה כחול",  accent: "#06B6D4", bg: "#080E1C" },
+  autumn:   { label: "סתווי",      accent: "#E8773A", bg: "#FFF8F0" },
+  dusk:     { label: "דמדומים",    accent: "#E8587A", bg: "#1A1423" },
+};
 
 export default function ThemeProvider({
   children,

@@ -1,236 +1,115 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type MotionValue, useTransform } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useTheme, THEMES, type ThemeName } from "./ThemeProvider";
+import { useTheme, type ThemeName, THEMES } from "./ThemeProvider";
 
 const NAV_LINKS = [
   { label: "תכונות", href: "#features" },
-  { label: "כלים חכמים", href: "#ai-tools" },
+  { label: "AI", href: "#ai" },
+  { label: "רשתות", href: "#stores" },
   { label: "ערכות נושא", href: "#themes" },
-  { label: "הורדה", href: "#download" },
 ];
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+export default function Navbar({ navOpacity }: { navOpacity: MotionValue<number> }) {
   const { theme, setTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
+  const bg = useTransform(navOpacity, [0, 1], ["rgba(0,0,0,0)", "var(--bg)"]);
+  const borderOpacity = useTransform(navOpacity, [0, 1], [0, 1]);
+  const blur = useTransform(navOpacity, [0, 1], ["blur(0px)", "blur(20px)"]);
 
   return (
     <>
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 right-0 left-0 z-50 transition-all duration-300"
-        style={{
-          backgroundColor: scrolled
-            ? "color-mix(in srgb, var(--bg) 85%, transparent)"
-            : "transparent",
-          backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
-          WebkitBackdropFilter: scrolled
-            ? "blur(20px) saturate(180%)"
-            : "none",
-          borderBottom: scrolled
-            ? "1px solid var(--border)"
-            : "1px solid transparent",
-        }}
+        style={{ backgroundColor: bg, backdropFilter: blur, WebkitBackdropFilter: blur }}
+        className="fixed top-0 left-0 right-0 z-50"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-[72px] items-center justify-between">
-            {/* Logo */}
-            <a href="#" className="flex items-center gap-3 shrink-0">
-              <Image
-                src="/images/israbis-logo.png"
-                alt="IsraBis"
-                width={40}
-                height={40}
-                className="rounded-xl"
-              />
-              <span
-                className="text-xl font-bold"
-                style={{ color: "var(--text-primary)" }}
-              >
-                IsraBis
-              </span>
-            </a>
+        <motion.div style={{ opacity: borderOpacity }} className="absolute bottom-0 left-0 right-0 h-px">
+          <div style={{ background: "var(--border)", height: "100%" }} />
+        </motion.div>
 
-            {/* Desktop nav links */}
-            <div className="hidden lg:flex items-center gap-8">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium transition-colors duration-200 hover:opacity-100"
-                  style={{ color: "var(--text-secondary)", opacity: 0.85 }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--accent)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--text-secondary)")
-                  }
-                >
-                  {link.label}
-                </a>
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Image src="/images/israbis-logo.png" alt="IsraBis" width={100} height={40} className="cursor-pointer" />
+
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium transition-colors duration-200"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
+              >
+                {link.label}
+              </a>
+            ))}
+
+            <div className="flex gap-2 mr-2">
+              {(Object.keys(THEMES) as ThemeName[]).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => setTheme(key)}
+                  className="w-4 h-4 rounded-full transition-all duration-300"
+                  style={{
+                    background: THEMES[key].accent,
+                    transform: theme === key ? "scale(1.3)" : "scale(1)",
+                    boxShadow: theme === key ? `0 0 12px ${THEMES[key].accent}60` : "none",
+                  }}
+                />
               ))}
             </div>
 
-            {/* Right side: theme dots + CTA + mobile burger */}
-            <div className="flex items-center gap-4">
-              {/* Theme dots - desktop only */}
-              <div className="hidden lg:flex items-center gap-2">
-                {THEMES.map((t) => (
-                  <button
-                    key={t.name}
-                    onClick={() => setTheme(t.name)}
-                    aria-label={`Switch to ${t.label} theme`}
-                    className="relative w-5 h-5 rounded-full transition-transform duration-200 hover:scale-125"
-                    style={{ backgroundColor: t.dot }}
-                  >
-                    {theme === t.name && (
-                      <motion.span
-                        layoutId="theme-ring"
-                        className="absolute inset-[-3px] rounded-full border-2"
-                        style={{ borderColor: t.dot }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 25,
-                        }}
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* CTA button */}
-              <a
-                href="#download"
-                className="hidden sm:inline-flex items-center justify-center h-10 px-5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                style={{
-                  background: `linear-gradient(135deg, var(--accent), var(--accent-dark))`,
-                  boxShadow: `0 4px 16px var(--shadow)`,
-                }}
-              >
-                הורידו עכשיו
-              </a>
-
-              {/* Mobile hamburger */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-colors"
-                style={{
-                  color: "var(--text-primary)",
-                  backgroundColor: "var(--bg-secondary)",
-                }}
-                aria-label="Toggle menu"
-              >
-                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
+            <button className="px-5 py-2 rounded-xl text-white text-sm font-bold transition-all duration-300 hover:scale-105" style={{ background: "var(--accent)" }}>
+              הורדה
+            </button>
           </div>
+
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2">
+            {menuOpen ? <X size={24} style={{ color: "var(--text-primary)" }} /> : <Menu size={24} style={{ color: "var(--text-primary)" }} />}
+          </button>
         </div>
       </motion.nav>
 
-      {/* Mobile menu overlay */}
       <AnimatePresence>
-        {mobileOpen && (
+        {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 lg:hidden"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-            onClick={() => setMobileOpen(false)}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-40 pt-20 px-6 pb-8 md:hidden flex flex-col"
+            style={{ background: "var(--bg)" }}
           >
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="absolute top-0 left-0 h-full w-[280px] p-6 pt-24 flex flex-col gap-6"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderRight: "1px solid var(--border)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="flex flex-col gap-6 mt-8">
               {NAV_LINKS.map((link, i) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05 }}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-lg font-semibold transition-colors"
+                  transition={{ delay: i * 0.08 }}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-2xl font-bold"
                   style={{ color: "var(--text-primary)" }}
                 >
                   {link.label}
                 </motion.a>
               ))}
-
-              <div className="h-px my-2" style={{ background: "var(--border)" }} />
-
-              {/* Theme dots for mobile */}
-              <div className="flex items-center gap-3">
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  ערכת נושא:
-                </span>
-                {THEMES.map((t) => (
-                  <button
-                    key={t.name}
-                    onClick={() => setTheme(t.name)}
-                    aria-label={`Switch to ${t.label} theme`}
-                    className="relative w-6 h-6 rounded-full transition-transform duration-200"
-                    style={{ backgroundColor: t.dot }}
-                  >
-                    {theme === t.name && (
-                      <span
-                        className="absolute inset-[-3px] rounded-full border-2"
-                        style={{ borderColor: t.dot }}
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              <a
-                href="#download"
-                onClick={() => setMobileOpen(false)}
-                className="mt-4 flex items-center justify-center h-12 rounded-2xl text-base font-semibold text-white"
-                style={{
-                  background: `linear-gradient(135deg, var(--accent), var(--accent-dark))`,
-                }}
-              >
-                הורידו עכשיו
-              </a>
-            </motion.div>
+            </div>
+            <div className="flex gap-4 mt-8">
+              {(Object.keys(THEMES) as ThemeName[]).map((key) => (
+                <button key={key} onClick={() => setTheme(key)} className="w-10 h-10 rounded-full border-2 transition-all"
+                  style={{ background: THEMES[key].bg, borderColor: theme === key ? THEMES[key].accent : "var(--border)" }}
+                />
+              ))}
+            </div>
+            <button onClick={() => setMenuOpen(false)} className="mt-auto px-8 py-4 rounded-2xl text-white font-bold text-lg w-full" style={{ background: "var(--accent)" }}>
+              הורידו בחינם
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
