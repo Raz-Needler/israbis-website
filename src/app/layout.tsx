@@ -14,12 +14,13 @@ const heebo = Heebo({
 export const metadata: Metadata = {
   title: "IsraBis - השוו מחירים, בשלו חכם, חסכו כסף",
   description: "השוו מחירים בין 33 רשתות שיווק בישראל, בנו עגלות קניות חכמות, גלו מתכונים מדהימים וחסכו עד 1,000 שקלים בחודש.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="he" dir="rtl" className={heebo.className} suppressHydrationWarning>
-      <body>
+      <body style={{ overflowX: "hidden" }}>
         <ThemeProvider>
           <Navbar />
           <main>{children}</main>

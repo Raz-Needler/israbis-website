@@ -5,8 +5,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer style={{ background: "var(--bg-alt)", borderTop: "0.5px solid var(--border)" }}>
-      <div className="container-980 py-4">
+    <footer style={{ background: "var(--bg-secondary)", borderTop: "0.5px solid var(--glass-border)" }}>
+      <div className="w-980 py-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <Image src="/images/israbis-logo.png" alt="IsraBis" width={56} height={22} style={{ opacity: 0.4 }} />
