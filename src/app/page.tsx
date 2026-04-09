@@ -89,7 +89,7 @@ export default function HomePage() {
           {[
             { n: 33, s: "", l: "רשתות שיווק" },
             { n: 255000, s: "+", l: "מוצרים" },
-            { n: 1000, s: "+", l: "מתכונים" },
+            { n: 90, s: "+", l: "מתכונים" },
           ].map((s, i) => (
             <FadeIn key={i} delay={i * 0.05}>
               <div className="text-h1" style={{ fontWeight: 900 }}><Counter target={s.n} suffix={s.s} /></div>
