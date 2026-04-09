@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
+import SectionHeader from "@/components/SectionHeader";
 
 const FEATURES = [
   {
@@ -60,33 +62,34 @@ export default function FeaturesContent() {
   return (
     <>
       {/* Header */}
-      <section className="sec" style={{ paddingBottom: 32, background: "var(--bg-secondary)" }}>
+      <section className="sec" style={{ paddingBottom: "var(--space-7)", background: "var(--bg-secondary)" }}>
         <div className="w-980 text-center">
-          <FadeIn>
-            <p className="sec-label">תכונות</p>
-            <h1 style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>
-              כל מה ש-<span className="grad-text">IsraBis</span>
-              <br />יודעת לעשות.
-            </h1>
-          </FadeIn>
+          <SectionHeader
+            label="תכונות"
+            title={<>כל מה ש-<span className="grad-text">IsraBis</span> יודעת לעשות.</>}
+            subtitle="7 כלים שהופכים קניות לחוויה חכמה"
+          />
         </div>
       </section>
 
       {/* Feature sections — alternating */}
       {FEATURES.map((f, i) => (
         <section key={f.title} className="sec" style={{ background: i % 2 === 0 ? "var(--bg)" : "var(--bg-secondary)" }}>
-          <div className={`w-980 flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-10 md:gap-16`}>
+          <div className={`w-980 flex flex-col ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center`} style={{ gap: "var(--space-9)" }}>
             <FadeIn className="flex-1">
               <Image src={`/svg/${f.svg}.svg`} alt={f.title} width={380} height={380} className="w-full max-w-[320px] mx-auto h-auto" />
             </FadeIn>
             <FadeIn className="flex-1 text-right" delay={0.1}>
-              <div className="feat-icon mb-4" style={{ background: f.color + "15" }}>
+              <div className="feat-icon" style={{ background: f.color + "15", marginBottom: "var(--space-4)" }}>
                 <div className="w-5 h-5 rounded" style={{ background: f.color }} />
               </div>
-              <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.5rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: 12, whiteSpace: "pre-line" }}>
+              <h2 className="text-h2" style={{ marginBottom: "var(--space-3)", whiteSpace: "pre-line" }}>
                 {f.headline}
               </h2>
-              <p style={{ fontSize: 17, color: "var(--text-muted)", lineHeight: 1.65 }}>{f.body}</p>
+              <p className="text-body c-muted">{f.body}</p>
+              <Link href="/download" className="card-cta" style={{ marginTop: "var(--space-4)" }}>
+                גלו עוד <ArrowLeft size={14} />
+              </Link>
             </FadeIn>
           </div>
         </section>
@@ -96,7 +99,7 @@ export default function FeaturesContent() {
       <section className="sec" style={{ background: "var(--accent)" }}>
         <div className="w-980 text-center">
           <FadeIn>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#fff", marginBottom: 16 }}>
+            <h2 className="text-h1" style={{ color: "#fff", marginBottom: "var(--space-4)" }}>
               רוצים לנסות?
             </h2>
             <Link href="/download" className="btn btn-white">הורידו בחינם</Link>

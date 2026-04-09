@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useInView, useMotionValue, useSpring } from "framer-motion";
 import FadeIn from "@/components/FadeIn";
+import SectionHeader from "@/components/SectionHeader";
+import HowItWorks from "@/components/HowItWorks";
 
 function Counter({ target, prefix = "" }: { target: number; prefix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -48,20 +50,13 @@ export default function StoresContent() {
   return (
     <>
       {/* Header */}
-      <section className="sec" style={{ paddingBottom: 24, background: "var(--bg-secondary)" }}>
+      <section className="sec" style={{ paddingBottom: "var(--space-6)", background: "var(--bg-secondary)" }}>
         <div className="w-980 text-center">
-          <FadeIn>
-            <p className="sec-label">רשתות</p>
-            <h1 style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.08 }}>
-              כל <span style={{ color: "var(--accent)" }}>33 הרשתות</span>
-              <br />במקום אחד.
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.05}>
-            <p style={{ fontSize: "clamp(1rem, 2vw, 1.15rem)", color: "var(--text-muted)", maxWidth: "48ch", margin: "12px auto 0" }}>
-              IsraBis סורקת מחירים מכל רשתות השיווק בישראל מדי יום, ישירות ממאגר המחירים הממשלתי לפי חוק שקיפות מחירי מזון 2014.
-            </p>
-          </FadeIn>
+          <SectionHeader
+            label="רשתות"
+            title={<>כל <span className="c-accent">33 הרשתות</span> במקום אחד.</>}
+            subtitle="IsraBis סורקת מחירים מכל רשתות השיווק בישראל מדי יום, ישירות ממאגר המחירים הממשלתי לפי חוק שקיפות מחירי מזון 2014."
+          />
         </div>
       </section>
 
@@ -69,10 +64,10 @@ export default function StoresContent() {
       <section className="sec-sm" style={{ background: "var(--bg)" }}>
         <div className="w-980 text-center">
           <FadeIn>
-            <span style={{ fontSize: "clamp(3rem, 7vw, 5rem)", fontWeight: 900, color: "var(--accent)" }}>
+            <span className="text-display" style={{ fontWeight: 900, color: "var(--accent)" }}>
               <Counter target={847} prefix="₪" />
             </span>
-            <p style={{ fontSize: 16, color: "var(--text-muted)", marginTop: 4 }}>חיסכון ממוצע למשפחה בחודש</p>
+            <p className="text-body-sm c-muted" style={{ marginTop: "var(--space-1)" }}>חיסכון ממוצע למשפחה בחודש</p>
           </FadeIn>
         </div>
       </section>
@@ -80,18 +75,18 @@ export default function StoresContent() {
       {/* All stores grid */}
       <section className="sec" style={{ background: "var(--bg-secondary)" }}>
         <div className="w-1120">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {ALL_STORES.map((s, i) => (
               <FadeIn key={s.key} delay={i * 0.02}>
-                <div className="store-chip" style={{ borderColor: s.color + "25" }}>
+                <div className="store-chip" style={{ borderColor: s.color + "25", padding: "var(--space-5) var(--space-3)" }}>
                   <Image src={`/stores/${s.key}.png`} alt={s.name} width={44} height={44} className="w-10 h-10 object-contain rounded-xl" />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary)" }}>{s.name}</span>
+                  <span className="text-caption" style={{ fontWeight: 600, color: "var(--text-secondary)" }}>{s.name}</span>
                 </div>
               </FadeIn>
             ))}
           </div>
           <FadeIn delay={0.3}>
-            <p className="text-center mt-8" style={{ fontSize: 14, color: "var(--text-muted)" }}>
+            <p className="text-center text-caption c-muted" style={{ marginTop: "var(--space-8)" }}>
               ועוד 9 רשתות נוספות. המחירים מתעדכנים מדי יום.
             </p>
           </FadeIn>
@@ -99,36 +94,13 @@ export default function StoresContent() {
       </section>
 
       {/* How it works */}
-      <section className="sec">
-        <div className="w-980 text-center mb-10">
-          <FadeIn>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 800 }}>איך זה עובד?</h2>
-          </FadeIn>
-        </div>
-        <div className="w-980 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          {[
-            { num: "1", title: "בנו עגלה", desc: "הוסיפו מוצרים מהקטגוריות, סרקו ברקוד, או הוסיפו ממתכון." },
-            { num: "2", title: "השוו מחירים", desc: "המערכת מחשבת את העלות בכל 33 הרשתות ומדרגת מהזול ליקר." },
-            { num: "3", title: "חסכו כסף", desc: "בחרו את הרשת הזולה, שמרו את העגלה, ובצעו קנייה חכמה." },
-          ].map((step, i) => (
-            <FadeIn key={step.num} delay={i * 0.08}>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold mb-4" style={{ background: "var(--accent)" }}>
-                  {step.num}
-                </div>
-                <h3 style={{ fontSize: 19, fontWeight: 700, marginBottom: 6 }}>{step.title}</h3>
-                <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.6 }}>{step.desc}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* CTA */}
       <section className="sec" style={{ background: "var(--accent)" }}>
         <div className="w-980 text-center">
           <FadeIn>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#fff", marginBottom: 16 }}>
+            <h2 className="text-h1" style={{ color: "#fff", marginBottom: "var(--space-4)" }}>
               התחילו לחסוך היום
             </h2>
             <Link href="/download" className="btn btn-white">הורידו בחינם</Link>
