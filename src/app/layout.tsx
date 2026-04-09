@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Heebo, Rubik } from "next/font/google";
 import ThemeProvider from "@/components/ThemeProvider";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const heebo = Heebo({
@@ -54,7 +55,7 @@ export default function RootLayout({
         className="min-h-screen"
         style={{ fontFamily: "var(--font-heebo), system-ui, sans-serif" }}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider><SmoothScroll>{children}</SmoothScroll></ThemeProvider>
       </body>
     </html>
   );
