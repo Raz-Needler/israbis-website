@@ -25,10 +25,8 @@ export async function fetchBackend<T>(
   path: string,
   options?: FetchOptions
 ): Promise<T> {
-  // Read env var at REQUEST TIME, not module load time.
-  // This is critical for Vercel serverless — module-level consts
-  // can get cached from builds where the var wasn't set yet.
-  const backendUrl = process.env.BACKEND_URL;
+  // Read env var at request time. Fallback to production URL if not set.
+  const backendUrl = process.env.BACKEND_URL || "https://israbis-production.up.railway.app";
 
   if (!backendUrl) {
     throw new Error("Backend not configured");
