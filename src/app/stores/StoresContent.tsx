@@ -1,23 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useInView, useMotionValue, useSpring } from "framer-motion";
 import FadeIn from "@/components/FadeIn";
 import SectionHeader from "@/components/SectionHeader";
 import HowItWorks from "@/components/HowItWorks";
-
-function Counter({ target, prefix = "" }: { target: number; prefix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  const mv = useMotionValue(0);
-  const sp = useSpring(mv, { stiffness: 40, damping: 28 });
-  const [d, setD] = useState("0");
-  useEffect(() => { if (inView) mv.set(target); }, [inView, target, mv]);
-  useEffect(() => { const u = sp.on("change", v => setD(Math.round(v).toLocaleString("he-IL"))); return u; }, [sp]);
-  return <span ref={ref}>{prefix}{d}</span>;
-}
 
 const ALL_STORES = [
   { key: "rami_levy", name: "רמי לוי", color: "#5B8C5A" },
@@ -60,14 +47,18 @@ export default function StoresContent() {
         </div>
       </section>
 
-      {/* Savings counter */}
+      {/* Savings context */}
       <section className="sec-sm" style={{ background: "var(--bg)" }}>
         <div className="w-980 text-center">
           <FadeIn>
-            <span className="text-display" style={{ fontWeight: 900, color: "var(--accent)" }}>
-              <Counter target={847} prefix="₪" />
+            <span className="text-h1" style={{ fontWeight: 900, color: "var(--accent)" }}>
+              עד 21% הפרש
             </span>
-            <p className="text-body-sm c-muted" style={{ marginTop: "var(--space-1)" }}>חיסכון ממוצע למשפחה בחודש</p>
+            <p className="text-body-sm c-muted" style={{ marginTop: "var(--space-2)", maxWidth: "52ch", margin: "var(--space-2) auto 0" }}>
+              הפרש בין הרשת הזולה ליקרה על סל זהה של 50 מוצרים בסיסיים. סל של ₪452 ברמי לוי עולה ₪548 בשופרסל דיל.
+              <br />
+              <span className="text-caption c-dimmer">(מקור: סקר Anglo-List, נתוני חוק שקיפות מחירי מזון 2014)</span>
+            </p>
           </FadeIn>
         </div>
       </section>

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import AIContent from "./AIContent";
 
 export const metadata: Metadata = {
-  title: "כלים חכמים | IsraBis - AI שחוסך לך זמן וכסף",
-  description: "סריקת מקרר, סריקת קלוריות, מתכון מסרטון, סריקת קבלה, עוזר AI — כלים מבוססי בינה מלאכותית שעושים את העבודה בשבילך.",
+  title: "כלי AI חכמים — סריקת מקרר, מתכון מסרטון, סריקת קלוריות, עוזר בישול",
+  description: "כלי בינה מלאכותית של IsraBis: סריקת מקרר שמזהה מרכיבים ומציעה מתכונים, סריקת קלוריות מתמונת מנה, מתכון מסרטון יוטיוב או טיקטוק בלחיצה, סריקת קבלה מהסופר, ועוזר AI ישרא שף שעונה על כל שאלה בבישול ותזונה.",
+  alternates: { canonical: "/ai" },
 };
 
 export default function AIPage() {

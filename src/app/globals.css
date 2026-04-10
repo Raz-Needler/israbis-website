@@ -291,6 +291,22 @@ img { max-width: 100%; height: auto; }
 }
 .splash-orbit { animation: splash-orbit 4s ease-in-out infinite; }
 
+/* ═══════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — Reduced Motion
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .float { animation: none !important; }
+  .glow { animation: none !important; }
+  .splash-orbit { animation: none !important; }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -301,3 +317,122 @@ img { max-width: 100%; height: auto; }
 .accordion-content[data-state="closed"] { animation: accordion-close 0.2s ease-in; }
 @keyframes accordion-open { from { height: 0; opacity: 0; } to { height: var(--radix-accordion-content-height); opacity: 1; } }
 @keyframes accordion-close { from { height: var(--radix-accordion-content-height); opacity: 1; } to { height: 0; opacity: 0; } }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PREMIUM EFFECTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Typewriter cursor blink */
+@keyframes cursor-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.typewriter-cursor { animation: cursor-blink 0.8s ease-in-out infinite; }
+
+/* Shimmer / skeleton loader */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent 25%, var(--accent-10) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  z-index: 0;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--accent), var(--secondary), var(--accent-bright), var(--accent));
+  background-size: 300% 300%;
+  animation: gradient-rotate 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+@keyframes gradient-rotate {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Premium glass card with glow on hover */
+.glass-card-premium {
+  background: var(--card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+  position: relative;
+}
+.glass-card-premium:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl), 0 0 30px var(--accent-20);
+  border-color: var(--accent-20);
+}
+
+/* Badge / pill tag */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-label);
+  font-weight: var(--weight-semibold);
+  background: var(--accent-10);
+  color: var(--accent);
+  border: 1px solid var(--accent-20);
+}
+
+/* Hero gradient mesh background */
+.hero-mesh {
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 20%, var(--accent-10) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, var(--accent-10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, var(--secondary-dark)05 0%, transparent 50%);
+}
+
+/* Competitor table row highlight */
+.compare-row-winner {
+  background: var(--accent-10);
+  border: 1.5px solid var(--accent-20);
+  border-radius: var(--radius-lg);
+}
+
+/* Number highlight */
+.stat-number {
+  font-size: var(--font-h1);
+  font-weight: var(--weight-black);
+  background: var(--btn-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated underline for links */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.link-underline:hover::after { width: 100%; }

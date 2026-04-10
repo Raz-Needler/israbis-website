@@ -5,12 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Sparkles, Cpu, Store, Download, ChevronLeft } from "lucide-react";
+import { Home, Sparkles, Cpu, Store, Download, ChevronLeft, ChefHat } from "lucide-react";
 import { useTheme, THEMES, type ThemeName } from "./ThemeProvider";
 
 const NAV = [
   { label: "בית", href: "/", icon: Home, color: "#34C759" },
   { label: "תכונות", href: "/features", icon: Sparkles, color: "#6366F1" },
+  { label: "מתכונים", href: "/recipes", icon: ChefHat, color: "#C4653A" },
   { label: "כלים חכמים", href: "/ai", icon: Cpu, color: "#06B6D4" },
   { label: "רשתות", href: "/stores", icon: Store, color: "#E8773A" },
   { label: "הורדה", href: "/download", icon: Download, color: "#EC4899" },

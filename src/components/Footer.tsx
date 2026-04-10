@@ -7,8 +7,10 @@ import { Globe, Mail, MessageCircle } from "lucide-react";
 const LINKS = [
   { label: "בית", href: "/" },
   { label: "תכונות", href: "/features" },
+  { label: "מתכונים", href: "/recipes" },
   { label: "כלים חכמים", href: "/ai" },
   { label: "רשתות", href: "/stores" },
+  { label: "מדריכים", href: "/guides" },
   { label: "הורדה", href: "/download" },
 ];
 
@@ -19,9 +21,9 @@ const LEGAL = [
 ];
 
 const SOCIALS = [
-  { icon: Globe, label: "Website" },
-  { icon: MessageCircle, label: "Community" },
-  { icon: Mail, label: "Email" },
+  { icon: Globe, label: "Website", href: "https://www.israbi.app" },
+  { icon: MessageCircle, label: "Community", href: "https://wa.me/972000000000" },
+  { icon: Mail, label: "Email", href: "mailto:support@israbi.app" },
 ];
 
 export default function Footer() {
@@ -43,7 +45,7 @@ export default function Footer() {
               {SOCIALS.map((s) => (
                 <a
                   key={s.label}
-                  href="#"
+                  href={s.href}
                   aria-label={s.label}
                   style={{
                     width: 40, height: 40,

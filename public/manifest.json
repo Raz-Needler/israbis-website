@@ -1,0 +1,26 @@
+{
+  "name": "IsraBis — השוואת מחירי סופר ומתכונים",
+  "short_name": "IsraBis",
+  "description": "השוו מחירים בין 33 רשתות שיווק, גלו 60,000+ מתכונים, וחסכו כסף עם AI חכם",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#34C759",
+  "lang": "he",
+  "dir": "rtl",
+  "categories": ["food", "shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -48,7 +48,7 @@ export default function AIContent() {
           <SectionHeader
             label="AI"
             title={<>כלים חכמים <span className="c-accent">שעובדים בשבילך.</span></>}
-            subtitle="צלמו, סרקו, הדביקו — והמערכת עושה את השאר. כל הכלים מבוססי Gemini AI."
+            subtitle="צלמו, סרקו, הדביקו — והמערכת עושה את השאר. כל הכלים מבוססי בינה מלאכותית מתקדמת."
           />
         </div>
       </section>
