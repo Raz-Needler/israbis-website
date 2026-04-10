@@ -7,8 +7,6 @@
  * The BACKEND_URL is invisible to any client-side code.
  */
 
-const BACKEND_URL = process.env.BACKEND_URL;
-
 /** Default ISR cache: 4 hours (prices update daily, recipes rarely change) */
 const DEFAULT_REVALIDATE = 14400;
 
@@ -27,7 +25,12 @@ export async function fetchBackend<T>(
   path: string,
   options?: FetchOptions
 ): Promise<T> {
-  if (!BACKEND_URL) {
+  // Read env var at REQUEST TIME, not module load time.
+  // This is critical for Vercel serverless — module-level consts
+  // can get cached from builds where the var wasn't set yet.
+  const backendUrl = process.env.BACKEND_URL;
+
+  if (!backendUrl) {
     throw new Error("Backend not configured");
   }
 
@@ -40,7 +43,7 @@ export async function fetchBackend<T>(
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const res = await fetch(`${BACKEND_URL}${path}`, {
+    const res = await fetch(`${backendUrl}${path}`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
