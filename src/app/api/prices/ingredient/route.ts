@@ -60,20 +60,10 @@ export async function GET(req: NextRequest) {
         },
       }
     );
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    const hasBackend = !!process.env.BACKEND_URL;
+  } catch {
     return NextResponse.json(
-      {
-        error: "Failed to fetch price",
-        debug: {
-          backendConfigured: hasBackend,
-          backendPrefix: hasBackend ? process.env.BACKEND_URL!.substring(0, 25) + "..." : null,
-          errorMessage: message,
-          errorType: err instanceof Error ? err.constructor.name : typeof err,
-        },
-      },
-      { status: 502 }
+      { error: "המוצר לא נמצא" },
+      { status: 404 }
     );
   }
 }
