@@ -32,7 +32,7 @@ export default function DownloadContent() {
             </FadeIn>
             <FadeIn delay={0.1}>
               <p className="text-body" style={{ color: "rgba(255,255,255,0.8)", maxWidth: "40ch", margin: "0 auto var(--space-7) auto" }}>
-                חינם. בלי פרסומות. בלי מעקב. פשוט חיסכון.
+                חינם. פשוט. חכם. פשוט חיסכון.
               </p>
             </FadeIn>
             <FadeIn delay={0.15}>

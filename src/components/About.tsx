@@ -67,7 +67,7 @@ export default function About() {
                   </div>
                   <div>
                     <p className="text-body-sm" style={{ fontWeight: 700 }}>פרטיות מלאה</p>
-                    <p className="text-caption c-muted">בלי מעקב, בלי מכירת מידע</p>
+                    <p className="text-caption c-muted">הצפנה, אבטחה, ללא מכירת מידע</p>
                   </div>
                 </div>
               </div>

@@ -48,7 +48,7 @@ export default function SocialProof() {
               <Shield size={28} style={{ color: "var(--accent)" }} />
             </div>
             <div className="text-h4" style={{ fontWeight: 700 }}>מאובטח ופרטי</div>
-            <div className="text-caption c-muted" style={{ marginTop: "var(--space-1)" }}>בלי מעקב. בלי פרסומות.</div>
+            <div className="text-caption c-muted" style={{ marginTop: "var(--space-1)" }}>הצפנה מלאה. פרטיות מובטחת.</div>
           </div>
         </FadeIn>
       </div>

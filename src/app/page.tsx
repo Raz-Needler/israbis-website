@@ -115,7 +115,7 @@ export default function HomePage() {
             </FadeIn>
             <FadeIn delay={0.22}>
               <p className="text-caption c-dimmer" style={{ marginTop: "var(--space-4)" }}>
-                iOS + Android &middot; עברית מלאה &middot; בלי פרסומות &middot; בלי מעקב
+                iOS + Android &middot; עברית מלאה &middot; גרסה חינמית זמינה
               </p>
             </FadeIn>
           </div>

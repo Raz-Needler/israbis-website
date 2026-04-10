@@ -52,7 +52,7 @@ export default function GuideHashvaa() {
           <section>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>בואו תתחילו לחסוך</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              הורידו את IsraBis בחינם ותתחילו להשוות מחירי סופרמרקט עוד היום. iOS + Android, עברית מלאה, בלי פרסומות.
+              הורידו את IsraBis בחינם ותתחילו להשוות מחירי סופרמרקט עוד היום. iOS + Android, עברית מלאה.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>
