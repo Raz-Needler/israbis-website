@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://www.israbis.com/sitemap.xml
+Sitemap: https://israbis.com/sitemap.xml

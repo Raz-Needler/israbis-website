@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-const BASE = "https://www.israbis.com";
+const BASE = "https://israbis.com";
 
 /* ── Organization ── */
 function OrganizationSchema() {

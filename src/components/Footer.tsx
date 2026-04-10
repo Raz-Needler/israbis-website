@@ -21,7 +21,7 @@ const LEGAL = [
 ];
 
 const SOCIALS = [
-  { icon: Globe, label: "Website", href: "https://www.israbis.com" },
+  { icon: Globe, label: "Website", href: "https://israbis.com" },
   { icon: MessageCircle, label: "Community", href: "https://wa.me/972000000000" },
   { icon: Mail, label: "Email", href: "mailto:support@israbis.com" },
 ];
