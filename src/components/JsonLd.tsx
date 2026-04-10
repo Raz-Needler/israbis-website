@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-const BASE = "https://www.israbi.app";
+const BASE = "https://www.israbis.com";
 
 /* ── Organization ── */
 function OrganizationSchema() {
@@ -24,7 +24,7 @@ function OrganizationSchema() {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "support@israbi.app",
+      email: "support@israbis.com",
       contactType: "customer support",
       availableLanguage: ["Hebrew"],
     },

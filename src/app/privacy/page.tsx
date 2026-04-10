@@ -68,7 +68,7 @@ export default function PrivacyPage() {
           <div>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>7. יצירת קשר</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              לשאלות בנוגע לפרטיות, פנו אלינו בכתובת privacy@israbi.app.
+              לשאלות בנוגע לפרטיות, פנו אלינו בכתובת privacy@israbis.com.
             </p>
           </div>
         </div>

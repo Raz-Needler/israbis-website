@@ -227,7 +227,7 @@ export default async function RecipeDetailPage({ params }: { params: Promise<{ i
               <a href="https://apps.apple.com/app/israbi/id0000000000" target="_blank" rel="noopener noreferrer" className="btn btn-white btn-lg">
                 App Store
               </a>
-              <a href="https://play.google.com/store/apps/details?id=com.israbi.app" target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-lg">
+              <a href="https://play.google.com/store/apps/details?id=com.israbis.com" target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-lg">
                 Google Play
               </a>
             </div>

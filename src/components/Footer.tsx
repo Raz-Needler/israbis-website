@@ -21,9 +21,9 @@ const LEGAL = [
 ];
 
 const SOCIALS = [
-  { icon: Globe, label: "Website", href: "https://www.israbi.app" },
+  { icon: Globe, label: "Website", href: "https://www.israbis.com" },
   { icon: MessageCircle, label: "Community", href: "https://wa.me/972000000000" },
-  { icon: Mail, label: "Email", href: "mailto:support@israbi.app" },
+  { icon: Mail, label: "Email", href: "mailto:support@israbis.com" },
 ];
 
 export default function Footer() {

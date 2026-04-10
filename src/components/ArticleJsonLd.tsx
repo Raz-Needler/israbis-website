@@ -18,26 +18,26 @@ export default function ArticleJsonLd({
     "@type": "Article",
     headline: title,
     description,
-    url: `https://www.israbi.app${url}`,
+    url: `https://www.israbis.com${url}`,
     datePublished,
     dateModified,
     inLanguage: "he",
     author: {
       "@type": "Organization",
       name: "IsraBis",
-      url: "https://www.israbi.app",
+      url: "https://www.israbis.com",
     },
     publisher: {
       "@type": "Organization",
       name: "IsraBis",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.israbi.app/images/israbis-logo.png",
+        url: "https://www.israbis.com/images/israbis-logo.png",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.israbi.app${url}`,
+      "@id": `https://www.israbis.com${url}`,
     },
   };
 

@@ -66,7 +66,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>7. יצירת קשר</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              לשאלות בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בכתובת support@israbi.app.
+              לשאלות בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בכתובת support@israbis.com.
             </p>
           </div>
         </div>

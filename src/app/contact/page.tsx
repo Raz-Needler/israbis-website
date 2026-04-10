@@ -15,7 +15,7 @@ export default function ContactPage() {
         </p>
 
         <form
-          action="mailto:support@israbi.app"
+          action="mailto:support@israbis.com"
           method="POST"
           encType="text/plain"
           style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}
@@ -137,11 +137,11 @@ export default function ContactPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
             <div>
               <p className="text-body-sm" style={{ fontWeight: 600, marginBottom: "var(--space-1)" }}>אימייל כללי</p>
-              <a href="mailto:support@israbi.app" className="text-body c-accent" style={{ textDecoration: "none" }}>support@israbi.app</a>
+              <a href="mailto:support@israbis.com" className="text-body c-accent" style={{ textDecoration: "none" }}>support@israbis.com</a>
             </div>
             <div>
               <p className="text-body-sm" style={{ fontWeight: 600, marginBottom: "var(--space-1)" }}>שיתופי פעולה ומדיה</p>
-              <a href="mailto:hello@israbi.app" className="text-body c-accent" style={{ textDecoration: "none" }}>hello@israbi.app</a>
+              <a href="mailto:hello@israbis.com" className="text-body c-accent" style={{ textDecoration: "none" }}>hello@israbis.com</a>
             </div>
           </div>
         </div>

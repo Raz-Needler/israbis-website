@@ -15,16 +15,24 @@ const CHAIN_META: Record<string, { nameHe: string; logo: string }> = {
   YOCHANANOF: { nameHe: "יוחננוף", logo: "/stores/yochananof.png" },
 };
 
-const QUICK_ITEMS = [
-  "chicken", "milk", "eggs", "bread", "cheese", "tomato", "rice", "olive oil",
-  "butter", "onion", "potato", "ground beef",
+const QUICK_ITEMS: { labelHe: string; searchTerm: string }[] = [
+  { labelHe: "חלב 3%", searchTerm: "milk" },
+  { labelHe: "חזה עוף", searchTerm: "chicken breast" },
+  { labelHe: "ביצים", searchTerm: "eggs" },
+  { labelHe: "לחם אחיד", searchTerm: "bread" },
+  { labelHe: "גבינה צהובה", searchTerm: "cheddar cheese" },
+  { labelHe: "שמן זית", searchTerm: "olive oil" },
+  { labelHe: "אורז", searchTerm: "rice" },
+  { labelHe: "בשר טחון", searchTerm: "ground beef" },
+  { labelHe: "חמאה", searchTerm: "butter" },
+  { labelHe: "בצל", searchTerm: "onion" },
+  { labelHe: "תפוח אדמה", searchTerm: "potato" },
+  { labelHe: "עגבניות", searchTerm: "tomato" },
+  { labelHe: "מלפפון", searchTerm: "cucumber" },
+  { labelHe: "סוכר", searchTerm: "sugar" },
+  { labelHe: "קמח", searchTerm: "flour" },
+  { labelHe: "פסטה", searchTerm: "pasta" },
 ];
-
-const QUICK_ITEMS_HE: Record<string, string> = {
-  chicken: "עוף", milk: "חלב", eggs: "ביצים", bread: "לחם",
-  cheese: "גבינה", tomato: "עגבניות", rice: "אורז", "olive oil": "שמן זית",
-  butter: "חמאה", onion: "בצל", potato: "תפוח אדמה", "ground beef": "בשר טחון",
-};
 
 interface StoreResult {
   chain: string;
@@ -153,8 +161,8 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
               <div className="flex flex-wrap gap-2">
                 {QUICK_ITEMS.map((item) => (
                   <button
-                    key={item}
-                    onClick={() => { setQuery(item); search(item); }}
+                    key={item.searchTerm}
+                    onClick={() => { setQuery(item.labelHe); search(item.searchTerm); }}
                     className="text-caption"
                     style={{
                       padding: "6px 14px", borderRadius: "var(--radius-pill)",
@@ -164,7 +172,7 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
                       transition: "all 0.15s",
                     }}
                   >
-                    {QUICK_ITEMS_HE[item] || item}
+                    {item.labelHe}
                   </button>
                 ))}
               </div>
