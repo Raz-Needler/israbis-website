@@ -72,7 +72,13 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
     try {
       const res = await fetch(`/api/prices/ingredient?name=${encodeURIComponent(clean)}`);
       if (!res.ok) {
-        setError(res.status === 404 ? "המוצר לא נמצא. נסו שם אחר." : "שגיאה בטעינת המחירים.");
+        if (res.status === 503) {
+          setError("השירות לא זמין כרגע. נסו שוב מאוחר יותר.");
+        } else if (res.status === 404) {
+          setError("המוצר לא נמצא. נסו שם אחר באנגלית (למשל: chicken, milk, eggs).");
+        } else {
+          setError("שגיאה בטעינת המחירים.");
+        }
         return;
       }
       const data: PriceResult = await res.json();

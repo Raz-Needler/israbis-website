@@ -71,7 +71,14 @@ export async function GET(
         "Cache-Control": "public, s-maxage=14400, stale-while-revalidate=28800",
       },
     });
-  } catch {
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "";
+    if (message.includes("Backend not configured")) {
+      return NextResponse.json(
+        { error: "Service unavailable — backend not configured" },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
       { error: "Recipe not found" },
       { status: 404 }

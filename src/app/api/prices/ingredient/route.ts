@@ -60,7 +60,14 @@ export async function GET(req: NextRequest) {
         },
       }
     );
-  } catch {
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "";
+    if (message.includes("Backend not configured")) {
+      return NextResponse.json(
+        { error: "Service unavailable — backend not configured" },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
       { error: "Ingredient not found" },
       { status: 404 }
