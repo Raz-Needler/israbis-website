@@ -61,16 +61,19 @@ export async function GET(req: NextRequest) {
       }
     );
   } catch (err) {
-    const message = err instanceof Error ? err.message : "";
-    if (message.includes("Backend not configured")) {
-      return NextResponse.json(
-        { error: "Service unavailable — backend not configured" },
-        { status: 503 }
-      );
-    }
+    const message = err instanceof Error ? err.message : String(err);
+    const hasBackend = !!process.env.BACKEND_URL;
     return NextResponse.json(
-      { error: "Ingredient not found" },
-      { status: 404 }
+      {
+        error: "Failed to fetch price",
+        debug: {
+          backendConfigured: hasBackend,
+          backendPrefix: hasBackend ? process.env.BACKEND_URL!.substring(0, 25) + "..." : null,
+          errorMessage: message,
+          errorType: err instanceof Error ? err.constructor.name : typeof err,
+        },
+      },
+      { status: 502 }
     );
   }
 }
