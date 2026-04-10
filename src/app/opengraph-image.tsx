@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "IsraBis — השוואת מחירי סופר בישראל | 33 רשתות | 60,000+ מתכונים";
+export const alt = "IsraBis — השוואת מחירי סופר בישראל | 33 רשתות | מתכונים ללא הגבלה";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -73,7 +73,7 @@ export default function OGImage() {
           {[
             { n: "33", l: "רשתות" },
             { n: "255K+", l: "מוצרים" },
-            { n: "60K+", l: "מתכונים" },
+            { n: "∞", l: "מתכונים" },
           ].map((s) => (
             <div key={s.n} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <div style={{ fontSize: 36, fontWeight: 900, color: "#34C759" }}>{s.n}</div>

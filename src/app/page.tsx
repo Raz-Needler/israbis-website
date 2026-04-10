@@ -34,7 +34,7 @@ const HERO_LINES = [
   "סריקת מקרר וקבלת מתכונים",
   "עגלת קניות חכמה שחוסכת לכם",
   "מעקב הוצאות ותקציב משפחתי",
-  "60,000+ מתכונים עם מחירים",
+  "מתכונים ללא הגבלה עם מחירים",
   "סריקת קלוריות מתמונה",
   "קניות משפחתיות בזמן אמת",
 ];
@@ -101,7 +101,7 @@ export default function HomePage() {
             </FadeIn>
             <FadeIn delay={0.14}>
               <p className="text-body c-muted" style={{ maxWidth: "48ch", margin: "0 auto var(--space-7)", lineHeight: "var(--leading-relaxed)" }}>
-                IsraBis משווה מחירים בין 33 רשתות שיווק בישראל, מוצאת את העגלה הזולה ביותר, מציעה 60,000+ מתכונים עם מחירים, וכוללת כלי AI חכמים — הכל בעברית, הכל בחינם.
+                IsraBis משווה מחירים בין 33 רשתות שיווק בישראל, מוצאת את העגלה הזולה ביותר, מציעה מתכונים ללא הגבלה עם מחירים, וכוללת כלי AI חכמים — הכל בעברית, הכל בחינם.
               </p>
             </FadeIn>
             <FadeIn delay={0.18}>
@@ -133,17 +133,21 @@ export default function HomePage() {
       {/* ═══ 3. STATS ═══ */}
       <section style={{ borderTop: "1px solid var(--glass-border)", borderBottom: "1px solid var(--glass-border)", padding: "var(--space-7) 0" }}>
         <div className="w-1120 grid grid-cols-3 text-center" style={{ gap: "var(--space-4)" }}>
-          {[
-            { n: 33, s: "", l: "רשתות שיווק", sub: "עדכון יומי" },
-            { n: 255000, s: "+", l: "מוצרים", sub: "מכל הרשתות" },
-            { n: 60000, s: "+", l: "מתכונים", sub: "עם השוואת מחירים" },
-          ].map((s, i) => (
-            <FadeIn key={i} delay={i * 0.05}>
-              <div className="stat-number"><Counter target={s.n} suffix={s.s} /></div>
-              <div className="text-body-sm" style={{ fontWeight: 600, marginTop: "var(--space-1)" }}>{s.l}</div>
-              <div className="text-caption c-dimmer" style={{ marginTop: 2 }}>{s.sub}</div>
-            </FadeIn>
-          ))}
+          <FadeIn delay={0}>
+            <div className="stat-number"><Counter target={33} /></div>
+            <div className="text-body-sm" style={{ fontWeight: 600, marginTop: "var(--space-1)" }}>רשתות שיווק</div>
+            <div className="text-caption c-dimmer" style={{ marginTop: 2 }}>עדכון יומי</div>
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <div className="stat-number"><Counter target={255000} suffix="+" /></div>
+            <div className="text-body-sm" style={{ fontWeight: 600, marginTop: "var(--space-1)" }}>מוצרים</div>
+            <div className="text-caption c-dimmer" style={{ marginTop: 2 }}>מכל הרשתות</div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <div className="stat-number" style={{ fontSize: "var(--font-h1)" }}>&#8734;</div>
+            <div className="text-body-sm" style={{ fontWeight: 600, marginTop: "var(--space-1)" }}>מתכונים</div>
+            <div className="text-caption c-dimmer" style={{ marginTop: 2 }}>באפליקציה + חילוצים</div>
+          </FadeIn>
         </div>
       </section>
 
@@ -328,7 +332,7 @@ export default function HomePage() {
                   {[
                     { feat: "השוואת מחירים בין רשתות", us: true, p: true, m: true, c: false },
                     { feat: "33 רשתות שיווק", us: true, p: false, m: false, c: false },
-                    { feat: "60,000+ מתכונים", us: true, p: false, m: false, c: false },
+                    { feat: "מתכונים ללא הגבלה", us: true, p: false, m: false, c: false },
                     { feat: "מתכון מסרטון (AI)", us: true, p: false, m: false, c: false },
                     { feat: "סריקת מקרר (AI)", us: true, p: false, m: false, c: false },
                     { feat: "סריקת קלוריות (AI)", us: true, p: false, m: false, c: false },

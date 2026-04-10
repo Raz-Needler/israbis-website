@@ -35,9 +35,9 @@ export default function SocialProof() {
         <FadeIn delay={0.08}>
           <div style={{ padding: "var(--space-5) var(--space-4)" }}>
             <div className="text-h2" style={{ fontWeight: 900, color: "var(--accent)", marginBottom: "var(--space-1)" }}>
-              <Counter target={60000} suffix="+" />
+              &#8734;
             </div>
-            <div className="text-caption c-muted">מתכונים עם מחירים משווים</div>
+            <div className="text-caption c-muted">מתכונים באפליקציה + חילוצים</div>
           </div>
         </FadeIn>
 

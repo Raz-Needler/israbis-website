@@ -29,7 +29,7 @@ export default function GuideMatkonot() {
           </section>
 
           <section>
-            <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>60,000+ מתכונים — כולם עם מחירים</h2>
+            <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>מתכונים ללא הגבלה — כולם עם מחירים</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
               ב-IsraBis, כל מתכון כולל רשימת מרכיבים עם מחירים משווים בין 33 רשתות. אתם רואים בדיוק כמה עולה לבשל סמאש בורגר ברמי לוי לעומת שופרסל. כל מרכיב מתומחר, כל העגלה מחושבת.
             </p>

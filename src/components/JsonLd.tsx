@@ -75,7 +75,7 @@ function AppSchema() {
     operatingSystem: "iOS, ANDROID",
     applicationCategory: "FoodApplication",
     applicationSubCategory: "השוואת מחירי סופרמרקט",
-    description: "אפליקציית השוואת מחירי סופר בין 33 רשתות שיווק בישראל, 60,000+ מתכונים עם מחירים, כלי AI חכמים, וניהול קניות משפחתי.",
+    description: "אפליקציית השוואת מחירי סופר בין 33 רשתות שיווק בישראל, מתכונים ללא הגבלה עם מחירים, כלי AI חכמים, וניהול קניות משפחתי.",
     offers: {
       "@type": "Offer",
       price: "0",
