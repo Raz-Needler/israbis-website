@@ -76,7 +76,7 @@ export default function HomePage() {
           {/* Text */}
           <div className="flex-1 text-center md:text-right">
             <FadeIn>
-              <div className="badge" style={{ marginBottom: "var(--space-4)" }}>
+              <div className="badge" style={{ marginBottom: "var(--space-5)" }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)"><circle cx="12" cy="12" r="5"/></svg>
                 מבוסס על מאגר המחירים הממשלתי
               </div>

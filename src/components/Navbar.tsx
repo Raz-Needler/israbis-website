@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Sparkles, Cpu, Store, Download, ChevronLeft, ChefHat } from "lucide-react";
+import { Home, Sparkles, Cpu, Store, Download, ChevronLeft, ChefHat, Search } from "lucide-react";
 import { useTheme, THEMES, type ThemeName } from "./ThemeProvider";
+import PriceSearch from "./PriceSearch";
 
 const NAV = [
   { label: "בית", href: "/", icon: Home, color: "#34C759" },
@@ -22,6 +23,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 8);
@@ -31,11 +33,11 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
-  // Lock body scroll when mobile menu open
+  // Lock body scroll when mobile menu or search open
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflow = open || searchOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [open]);
+  }, [open, searchOpen]);
 
   return (
     <>
@@ -43,7 +45,7 @@ export default function Navbar() {
       <nav
         className="fixed top-0 inset-x-0 z-50"
         style={{
-          height: 56,
+          height: 60,
           background: scrolled || open ? "var(--bg)" : "transparent",
           backdropFilter: scrolled ? "saturate(180%) blur(20px)" : "none",
           WebkitBackdropFilter: scrolled ? "saturate(180%) blur(20px)" : "none",
@@ -52,13 +54,14 @@ export default function Navbar() {
         }}
       >
         <div className="w-1120 h-full flex items-center justify-between">
+          {/* Logo — bigger */}
           <Link href="/" className="shrink-0">
-            <Image src="/images/israbis-logo.png" alt="IsraBis" width={88} height={35} priority />
+            <Image src="/images/israbis-logo.png" alt="IsraBis" width={110} height={44} priority style={{ height: 38, width: "auto" }} />
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center" style={{ gap: "var(--space-1)" }}>
-            {NAV.slice(0, 4).map((n) => {
+            {NAV.slice(0, 5).map((n) => {
               const active = pathname === n.href;
               return (
                 <Link
@@ -79,8 +82,24 @@ export default function Navbar() {
               );
             })}
 
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="transition-all duration-200 hover:scale-110"
+              style={{
+                width: 34, height: 34, borderRadius: "var(--radius-pill)",
+                background: "var(--accent-10)", border: "1px solid var(--accent-20)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", marginInlineStart: "var(--space-2)",
+              }}
+              aria-label="חפשו מחירי מוצרים"
+              title="חפשו מחירי מוצרים"
+            >
+              <Search size={15} style={{ color: "var(--accent)" }} />
+            </button>
+
             {/* Theme dots */}
-            <div className="flex items-center" style={{ gap: 6, marginInlineStart: "var(--space-4)" }}>
+            <div className="flex items-center" style={{ gap: 6, marginInlineStart: "var(--space-3)" }}>
               {(Object.keys(THEMES) as ThemeName[]).map((k) => (
                 <button
                   key={k} onClick={() => setTheme(k)} title={THEMES[k].label}
@@ -100,21 +119,33 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden flex flex-col items-center justify-center"
-            style={{ width: 44, height: 44, gap: 5 }}
-            aria-label="menu"
-          >
-            <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", transform: open ? "rotate(45deg) translate(2.3px, 2.3px)" : "none" }} />
-            <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", opacity: open ? 0 : 0.6 }} />
-            <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", transform: open ? "rotate(-45deg) translate(2.3px, -2.3px)" : "none" }} />
-          </button>
+          {/* Mobile: search + hamburger */}
+          <div className="md:hidden flex items-center" style={{ gap: "var(--space-1)" }}>
+            <button
+              onClick={() => setSearchOpen(true)}
+              style={{
+                width: 40, height: 40, background: "none", border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+              aria-label="חיפוש מחירים"
+            >
+              <Search size={20} style={{ color: "var(--text-muted)" }} />
+            </button>
+            <button
+              onClick={() => setOpen(!open)}
+              className="flex flex-col items-center justify-center"
+              style={{ width: 40, height: 40, gap: 5 }}
+              aria-label="תפריט"
+            >
+              <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", transform: open ? "rotate(45deg) translate(2.3px, 2.3px)" : "none" }} />
+              <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", opacity: open ? 0 : 0.6 }} />
+              <span style={{ display: "block", width: 20, height: 1.5, borderRadius: 1, background: "var(--text)", transition: "all 0.3s", transform: open ? "rotate(-45deg) translate(2.3px, -2.3px)" : "none" }} />
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* ── Mobile fullscreen menu (app-style grouped rows) ── */}
+      {/* ── Mobile fullscreen menu ── */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -123,10 +154,35 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 md:hidden"
-            style={{ background: "var(--bg)", paddingTop: 56 }}
+            style={{ background: "var(--bg)", paddingTop: 60 }}
           >
             <div className="h-full overflow-y-auto" style={{ padding: "var(--space-5) var(--space-4) var(--space-12)" }}>
-              {/* Nav links — app-style rows */}
+
+              {/* Search bar in mobile menu */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                style={{ marginBottom: "var(--space-5)" }}
+              >
+                <button
+                  onClick={() => { setOpen(false); setTimeout(() => setSearchOpen(true), 200); }}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: "var(--space-3)",
+                    padding: "var(--space-4) var(--space-5)",
+                    borderRadius: "var(--radius-xl)",
+                    background: "var(--bg-secondary)",
+                    border: "1px solid var(--glass-border)",
+                    cursor: "pointer", fontFamily: "inherit",
+                    color: "var(--text-muted)", fontSize: "var(--font-body-sm)",
+                  }}
+                >
+                  <Search size={18} style={{ color: "var(--accent)" }} />
+                  <span>חפשו מחירי מוצרים...</span>
+                </button>
+              </motion.div>
+
+              {/* Nav links */}
               <div style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--glass-border)", marginBottom: "var(--space-6)" }}>
                 {NAV.map((n, i) => {
                   const active = pathname === n.href;
@@ -136,7 +192,7 @@ export default function Navbar() {
                       key={n.href}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.04 }}
+                      transition={{ delay: 0.08 + i * 0.04 }}
                     >
                       <Link
                         href={n.href}
@@ -150,7 +206,6 @@ export default function Navbar() {
                           gap: "var(--space-3)",
                         }}
                       >
-                        {/* Icon */}
                         <div style={{
                           width: 36, height: 36, borderRadius: "var(--radius-sm)",
                           background: n.color + "15",
@@ -159,13 +214,9 @@ export default function Navbar() {
                         }}>
                           <Icon size={18} color={n.color} />
                         </div>
-
-                        {/* Label */}
                         <span className="text-body" style={{ flex: 1, fontWeight: active ? 600 : 500, color: active ? "var(--accent)" : "var(--text)" }}>
                           {n.label}
                         </span>
-
-                        {/* Chevron */}
                         <ChevronLeft size={16} style={{ color: "var(--text-dimmer)", flexShrink: 0 }} />
                       </Link>
                     </motion.div>
@@ -177,7 +228,7 @@ export default function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
+                transition={{ delay: 0.35 }}
                 style={{ marginBottom: "var(--space-6)" }}
               >
                 <p className="text-caption c-muted" style={{ marginBottom: "var(--space-3)", fontWeight: 500 }}>ערכת נושא</p>
@@ -209,7 +260,7 @@ export default function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.4 }}
               >
                 <Link
                   href="/download"
@@ -225,8 +276,13 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
+      {/* ── Price Search Overlay ── */}
+      <AnimatePresence>
+        {searchOpen && <PriceSearch onClose={() => setSearchOpen(false)} />}
+      </AnimatePresence>
+
       {/* Nav spacer */}
-      <div style={{ height: 56 }} />
+      <div style={{ height: 60 }} />
     </>
   );
 }
