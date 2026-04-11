@@ -51,20 +51,20 @@ export async function GET(req: NextRequest) {
   try {
     const data = await postBackend<CompareSearchResponse>(
       "/api/prices/compare-search",
-      { query: parsed.data, limit: 12, offset: 0 }
+      { query: parsed.data, limit: 8, offset: 0 }
     );
 
-    // Strip to safe public fields only
+    // Strip to minimal fields — speed over completeness for web search
     const products = data.data.products.map((p) => ({
       barcode: p.barcode,
       name: p.name,
-      image: p.imageUrl || null,
+      image: p.hasRLImage && p.imageUrl ? p.imageUrl : null,
       minPrice: p.minPrice,
       maxPrice: p.maxPrice,
       savings: p.savings,
       savingsPct: p.savingsPct,
       chainCount: p.chainCount,
-      chains: p.chains.slice(0, 8).map((c) => ({
+      chains: p.chains.slice(0, 6).map((c) => ({
         key: c.chainKey,
         nameHe: c.nameHe,
         color: c.color,

@@ -243,7 +243,7 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
                   >
                     {/* Product image */}
                     {p.image ? (
-                      <Image src={p.image} alt={p.name} width={48} height={48} style={{ borderRadius: "var(--radius-md)", objectFit: "contain", flexShrink: 0, background: "#fff" }} unoptimized />
+                      <img src={p.image} alt={p.name} loading="lazy" width={48} height={48} style={{ borderRadius: "var(--radius-md)", objectFit: "contain", flexShrink: 0, background: "#fff" }} />
                     ) : (
                       <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--bg-secondary)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <Search size={16} style={{ color: "var(--text-dimmer)" }} />
@@ -285,7 +285,7 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
               {/* Product header */}
               <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", marginBottom: "var(--space-5)" }}>
                 {selectedProduct.image ? (
-                  <Image src={selectedProduct.image} alt={selectedProduct.name} width={64} height={64} style={{ borderRadius: "var(--radius-lg)", objectFit: "contain", background: "#fff" }} unoptimized />
+                  <img src={selectedProduct.image} alt={selectedProduct.name} loading="lazy" width={64} height={64} style={{ borderRadius: "var(--radius-lg)", objectFit: "contain", background: "#fff" }} />
                 ) : (
                   <div style={{ width: 64, height: 64, borderRadius: "var(--radius-lg)", background: "var(--bg-secondary)" }} />
                 )}

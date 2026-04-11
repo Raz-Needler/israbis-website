@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "img.rami-levy.co.il",
+      },
     ],
   },
   async headers() {
@@ -26,7 +30,7 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https://images.unsplash.com",
+              "img-src 'self' data: https://images.unsplash.com https://img.rami-levy.co.il",
               "font-src 'self' https://fonts.gstatic.com",
               "connect-src 'self'",
               "frame-ancestors 'none'",
