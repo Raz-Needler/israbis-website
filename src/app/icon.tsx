@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export const size = { width: 192, height: 192 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const logoData = await readFile(join(process.cwd(), "public/images/israbis-logo.png"));
+  const logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -13,21 +18,16 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #34C759, #248A3D)",
+          background: "#fff",
           borderRadius: 40,
         }}
       >
-        <div
-          style={{
-            fontSize: 110,
-            fontWeight: 900,
-            color: "#fff",
-            fontFamily: "sans-serif",
-            letterSpacing: "-0.05em",
-          }}
-        >
-          IB
-        </div>
+        <img
+          src={logoBase64}
+          width={150}
+          height={60}
+          style={{ objectFit: "contain" }}
+        />
       </div>
     ),
     { ...size }
