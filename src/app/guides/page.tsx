@@ -1,6 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "מדריכים לחיסכון בקניות סופרמרקט",
+  description: "מדריכים מקיפים להשוואת מחירים, חיסכון בסופר, ומתכונים עם מחירים",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, url: "https://israbis.com/guides/hashvaat-mechirei-super", name: "השוואת מחירי סופר בישראל — מדריך מלא 2026" },
+    { "@type": "ListItem", position: 2, url: "https://israbis.com/guides/matkonot-im-mechirim", name: "מתכונים עם מחירים — בשלו חכם, קנו בזול" },
+    { "@type": "ListItem", position: 3, url: "https://israbis.com/guides/aplikatziya-lematkonot", name: "אפליקציית מתכונים בעברית — המדריך לבחירה הנכונה" },
+    { "@type": "ListItem", position: 4, url: "https://israbis.com/guides/hisachon-bekniyot", name: "איך לחסוך בקניות סופר — 10 טיפים שעובדים" },
+    { "@type": "ListItem", position: 5, url: "https://israbis.com/guides/srikat-makrer-ai", name: "סריקת מקרר AI — איך זה עובד ולמה זה משנה" },
+    { "@type": "ListItem", position: 6, url: "https://israbis.com/guides/matkon-misirton", name: "מתכון מסרטון — מיוטיוב וטיקטוק למטבח שלכם" },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "מדריכים — השוואת מחירי סופר, מתכונים, חיסכון, AI",
   description: "מדריכים מקיפים לחיסכון בקניות סופרמרקט בישראל, השוואת מחירים בין רשתות שיווק, מתכונים חכמים עם מחירים, כלי AI לבישול, וטיפים לניהול תקציב מזון משפחתי.",
@@ -48,6 +63,8 @@ const GUIDES = [
 
 export default function GuidesPage() {
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
     <section className="sec">
       <div className="w-980">
         <h1 className="text-h1" style={{ marginBottom: "var(--space-3)" }}>
@@ -75,5 +92,6 @@ export default function GuidesPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

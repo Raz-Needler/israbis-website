@@ -11,7 +11,23 @@ export const metadata: Metadata = {
 export default function GuideHashvaa() {
   return (
     <>
-    <ArticleJsonLd title="השוואת מחירי סופר בישראל — מדריך מלא 2026" description="מדריך מקיף להשוואת מחירי סופרמרקט בישראל בין 33 רשתות שיווק" url="/guides/hashvaat-mechirei-super" />
+    <ArticleJsonLd
+      title="השוואת מחירי סופר בישראל — מדריך מלא 2026"
+      description="מדריך מקיף להשוואת מחירי סופרמרקט בישראל בין 33 רשתות שיווק"
+      url="/guides/hashvaat-mechirei-super"
+      howTo={{
+        name: "איך להשוות מחירי סופר בין 33 רשתות בישראל",
+        description: "מדריך שלב אחרי שלב להשוואת מחירי סופרמרקט בישראל עם IsraBis",
+        totalTime: "PT5M",
+        step: [
+          { "@type": "HowToStep", name: "הורידו את IsraBis", text: "הורידו את האפליקציה מ-App Store או Google Play — חינם", position: 1 },
+          { "@type": "HowToStep", name: "הפעילו מיקום", text: "אפשרו גישה למיקום כדי לקבל מחירים של הסניף הקרוב אליכם", position: 2 },
+          { "@type": "HowToStep", name: "בנו עגלת קניות", text: "חפשו מוצרים, סרקו ברקוד, או הוסיפו ממתכון", position: 3 },
+          { "@type": "HowToStep", name: "ראו השוואה מלאה", text: "המערכת מחשבת את עלות העגלה בכל 33 הרשתות ומדרגת מהזולה ליקרה", position: 4 },
+          { "@type": "HowToStep", name: "חסכו כסף", text: "בחרו את הרשת הזולה לעגלה שלכם ותחסכו ₪200-500 בחודש", position: 5 },
+        ],
+      }}
+    />
     <article className="sec">
       <div className="w-980" style={{ maxWidth: 760 }}>
         <div className="badge" style={{ marginBottom: "var(--space-4)" }}>השוואת מחירים</div>
