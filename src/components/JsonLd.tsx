@@ -26,6 +26,8 @@ function OrganizationSchema() {
       "https://www.instagram.com/israbis_app",
       "https://play.google.com/store/apps/details?id=com.israbis.app",
       "https://apps.apple.com/il/app/israbis/id123456789",
+      "https://www.wikidata.org/wiki/IsraBis",
+      "https://finder.startupnationcentral.org/company_page/israbis",
     ],
     contactPoint: {
       "@type": "ContactPoint",
@@ -77,8 +79,8 @@ function AppSchema() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: "IsraBis",
-    operatingSystem: "iOS, ANDROID",
-    applicationCategory: "FoodApplication",
+    operatingSystem: "iOS, Android",
+    applicationCategory: "UtilitiesApplication",
     applicationSubCategory: "השוואת מחירי סופרמרקט",
     description: "אפליקציית השוואת מחירי סופר בין 33 רשתות שיווק בישראל, מתכונים ללא הגבלה עם מחירים, כלי AI חכמים, וניהול קניות משפחתי.",
     softwareVersion: "2.5",
@@ -112,7 +114,7 @@ function AppSchema() {
       `${BASE}/images/screenshots/fridge-scan.png`,
       `${BASE}/images/screenshots/recipes.png`,
     ],
-    inLanguage: "he",
+    inLanguage: ["he", "en", "ru", "ar"],
     countryOfOrigin: {
       "@type": "Country",
       name: "Israel",
@@ -209,14 +211,60 @@ function FAQSchema() {
     },
   ];
 
+  const englishFaqs = [
+    {
+      "@type": "Question",
+      "name": "How many supermarkets does IsraBis compare?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "IsraBis compares prices across 33 Israeli supermarket chains, including Shufersal, Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, and 27 more chains. This is the most comprehensive coverage of any Israeli price comparison app."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the best supermarket price comparison app in Israel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "IsraBis is Israel's most comprehensive price comparison app, covering 33 chains and 255,000 products updated every 4 hours. It is the only Israeli app combining price comparison with AI recipe suggestions and real-time ingredient pricing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is IsraBis free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The base tier of IsraBis is completely free and includes full price comparison across all 33 chains. Premium features (price alerts, unlimited smart carts, family mode) are available via subscription starting at ₪29.90/month."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate are IsraBis prices?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "IsraBis prices are sourced directly from the Israeli Ministry of Economy's mandatory food price transparency database, which all supermarket chains are legally required to update. Prices are refreshed every 4 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest supermarket in Israel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "According to IsraBis data, Rami Levy is typically cheapest for a basic basket of dairy products, eggs, and staples. However, Victory and Machsanei Hashuk often win on hygiene and cleaning products. The cheapest supermarket depends on your specific shopping list — use IsraBis to compare your exact cart."
+      }
+    },
+  ];
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
+    mainEntity: [
+      ...faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+      ...englishFaqs,
+    ],
   };
 }
 

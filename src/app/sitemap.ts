@@ -39,5 +39,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    // Language landing pages
+    { url: `${base}/en`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/ru`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/ar`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/fr`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // English blog
+    { url: `${base}/en/blog/best-supermarket-apps-israel`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
+    // Chain comparison pages
+    { url: `${base}/stores/shufersal-vs-rami-levy`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/stores/victory-vs-osher-ad`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    // New guide pages
+    { url: `${base}/guides/mechirim-bepikuach`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${base}/guides/sal-kniyot-shavui`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/guides/mivtzaim-shavua`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 }

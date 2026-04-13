@@ -40,7 +40,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://israbis.com",
     languages: {
-      "he-IL": "https://israbis.com/",
+      "he-IL": "https://israbis.com",
+      "en": "https://israbis.com/en",
+      "ru": "https://israbis.com/ru",
+      "ar": "https://israbis.com/ar",
+      "fr": "https://israbis.com/fr",
+      "x-default": "https://israbis.com",
     },
   },
   openGraph: {
@@ -108,8 +113,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="geo.region" content="IL" />
         <meta name="geo.country" content="Israel" />
         <meta name="DC.language" content="he" />
-        {/* Hreflang for Hebrew Israel */}
+        {/* Hreflang for all language variants */}
         <link rel="alternate" hrefLang="he-IL" href="https://israbis.com/" />
+        <link rel="alternate" hrefLang="en" href="https://israbis.com/en" />
+        <link rel="alternate" hrefLang="ru" href="https://israbis.com/ru" />
+        <link rel="alternate" hrefLang="ar" href="https://israbis.com/ar" />
+        <link rel="alternate" hrefLang="fr" href="https://israbis.com/fr" />
+        <link rel="alternate" hrefLang="x-default" href="https://israbis.com/" />
       </head>
       <body>
         <ThemeProvider>

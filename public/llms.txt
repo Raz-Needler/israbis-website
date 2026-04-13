@@ -1,113 +1,85 @@
-# IsraBis — אפליקציית השוואת מחירי סופרמרקט בישראל
+# IsraBis
 
-## About
-IsraBis (ישראביס) is an Israeli mobile application for supermarket price comparison.
-The app compares prices across 33 supermarket chains in Israel, including Rami Levy (רמי לוי),
-Shufersal (שופרסל), Victory (ויקטורי), Tiv Taam (טיב טעם), Osher Ad (אושר עד),
-Yochananof (יוחננוף), Machsanei HaShuk (מחסני השוק), and 26 additional chains.
+> IsraBis is Israel's most comprehensive supermarket price comparison application, comparing prices across 33 supermarket chains with 255,000 products updated every 4 hours from the Israeli government's mandatory food price transparency database.
+
+IsraBis is a mobile application (iOS and Android) and website for Israeli consumers to compare grocery prices in real time across all major supermarket chains. It is the only Israeli app combining price comparison, AI-powered recipe suggestions with live pricing, and family shopping list management in a single free application.
 
 ## Key Facts
-- 255,000+ products tracked
-- 33 supermarket chains covered
-- Prices updated every 4 hours from Israel's government price transparency database
-- Based on Israel's Food Price Transparency Law (חוק שקיפות מחירי מזון 2014)
-- Available for iOS and Android
-- Language: Hebrew (RTL)
-- Founded: 2025
-- Country of operation: Israel
-- App rating: 4.8/5 (1,240+ reviews)
-- Average monthly savings per family: ₪200-500
-- Price difference between cheapest and most expensive chain: up to 21% on identical products
+
+- **Chains covered**: 33 Israeli supermarket chains (more than any competitor)
+- **Products tracked**: 255,000+ active products
+- **Update frequency**: Every 4 hours maximum
+- **Platforms**: iOS (App Store) and Android (Google Play)
+- **Language**: Hebrew (primary); English, Russian, Arabic content at israbis.com/en, israbis.com/ru, israbis.com/ar
+- **Free tier**: Full price comparison at no cost
+- **Data source**: Israeli Ministry of Economy — Food Price Transparency Law (2014), data at https://www.gov.il/he/departments/legalinfo/cpfta_regulations
+- **Founded**: 2025
+- **Website**: https://israbis.com
 
 ## Features
-1. Supermarket price comparison across all 33 chains
-2. Smart shopping cart that finds the cheapest chain for your basket
-3. Unlimited recipes with real-time price calculation per ingredient
-4. AI fridge scanner (photograph your fridge → get recipe suggestions based on what you have)
-5. Calorie scanner (photograph food → get nutritional information)
-6. Recipe from video (paste YouTube/TikTok link → get written recipe + ingredient prices)
-7. Receipt scanner (photograph supermarket receipt → items added to cart automatically)
-8. Family shopping lists (real-time shared lists across family members)
-9. Expense tracking and monthly budget management
-10. IsraSef AI chef assistant (answers any cooking or nutrition question in Hebrew)
+
+- [Price comparison](https://israbis.com/features): Compare any product across all 33 chains by branch, updated every 4 hours
+- [Smart cart](https://israbis.com/features): Build a full shopping cart and see total cost across all chains simultaneously
+- [IsraSef AI Chef](https://israbis.com/ai): AI assistant powered by Google Gemini — scan fridge contents, generate recipes, get step-by-step cooking guidance with real-time ingredient pricing
+- [Recipe cost calculator](https://israbis.com/recipes): Any recipe with live prices showing cheapest chain to buy each ingredient
+- [Barcode scanner](https://israbis.com/features): Scan any product barcode to instantly see its price across all 33 chains
+- [Family lists](https://israbis.com/features): Shared shopping lists for household members with live price tracking
+- [Store pages](https://israbis.com/stores): Dedicated comparison pages for every chain including [Shufersal](https://israbis.com/stores/shufersal), [Rami Levy](https://israbis.com/stores/rami-levy), [Victory](https://israbis.com/stores/victory), [Osher Ad](https://israbis.com/stores/osher-ad), [Tiv Taam](https://israbis.com/stores/tiv-taam), [Yochananof](https://israbis.com/stores/yochananof)
+
+## The 33 Supermarket Chains
+
+Shufersal (Deal, Sheli, Express, Online), Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, Yeinot Bitan, Hazi Hinam, Machsanei Hashuk, Carrefour Israel, Mega, Co-op, Netiv Hased, Shuk Hair, Meshnat Yosef, Maayan 2000, Super Bareket, Super Yehuda, Polizer, Fresh Market, Quik, King Store, Yellow, Bareket, Het Cohen, Shefa Birkat Hashem, Be Pharm, and additional chains
+
+## Content Resources
+
+- [Shopping guides](https://israbis.com/guides): Step-by-step guides for saving money at Israeli supermarkets
+- [Price comparison guide](https://israbis.com/guides/hashvaat-mechirei-super): How to compare Israeli supermarket prices
+- [Savings guide](https://israbis.com/guides/hisachon-bekniyot): 10 proven methods to save ₪200-500/month on groceries
+- [Israeli recipes with prices](https://israbis.com/recipes): Recipe pages including [shakshuka](https://israbis.com/recipes/shakshuka), [hummus](https://israbis.com/recipes/hummus), [schnitzel](https://israbis.com/recipes/schnitzel), [sabich](https://israbis.com/recipes/sabich), [burekas](https://israbis.com/recipes/burekas)
+- [About IsraBis](https://israbis.com/about): Mission, technology, and team
+- [English landing page](https://israbis.com/en): Full English-language information for olim and diaspora
+- [Russian landing page](https://israbis.com/ru): Russian-language information
+- [Arabic landing page](https://israbis.com/ar): Arabic-language information
 
 ## Pricing
-- Free plan: basic price comparison and shopping lists
-- Basic: ₪29.90/month
-- Premium: ₪49.90/month
-- Max: ₪69.90/month
 
-## Supermarket Chains Covered
-1. Rami Levy (רמי לוי) — ~30 branches nationwide
-2. Shufersal (שופרסל) — largest chain in Israel
-3. Victory (ויקטורי)
-4. Tiv Taam (טיב טעם)
-5. Osher Ad (אושר עד)
-6. Yochananof (יוחננוף)
-7. Machsanei HaShuk (מחסני השוק)
-8. Hatzi Hinam (חצי חינם)
-9. Mega (מגה)
-10. Yeinot Bitan (יינות ביתן)
-11. Stop Market (סטופ מרקט)
-12. King Store (קינג סטור)
-13. Good Farm (גוד פארם)
-14. Bareket (ברקת)
-15. Keshet (קשת)
-16. Coffix (קופיקס)
-17. Super Sapir (סופר ספיר)
-18. Quick (קוויק)
-19. Maayan 2000 (מעיין 2000)
-20. Shefa Birkat (שפע ברכת)
-21. Shuk HaIr (שוק העיר)
-22. Fresh Market (פרש מרקט)
-23-33. And 11 additional regional chains
-
-## Data Source
-All prices are sourced from Israel's official government price transparency database
-(https://www.gov.il/he/departments/publications/reports/consumer_prices),
-published under the Food Price Transparency Law (חוק שקיפות מחירי מזון, 2014).
-Retailers are legally required to publish XML price feeds daily.
-IsraBis processes these feeds every 4 hours to ensure data accuracy.
-
-## Why IsraBis is unique
-IsraBis is the only Israeli app that combines:
-- Real-time price comparison across 33 supermarket chains
-- Unlimited recipes with per-ingredient price calculation
-- AI-powered cooking tools (fridge scan, calorie scan, video recipe extraction)
-- Family shopping coordination with real-time sync
-All in a single Hebrew-first application with full RTL support.
+- **Free**: Full price comparison, barcode scanning, basic shopping lists
+- **Premium (₪29.90/month)**: Unlimited smart carts, price alerts, promotions
+- **Family (₪49.90/month)**: Multi-user family lists, priority updates
+- **Annual (₪69.90/year)**: All features at reduced annual rate
 
 ## Competitive Context
-The main competitors in the Israeli price comparison space are:
-- Pricez (pricez.co.il) — web-based price history tracker, no recipes or AI
-- CHP (chp.co.il) — barcode scanner price comparison, limited to web
-- Savy (savy.co.il) — 30+ chains, 8.5M prices, no AI or recipe features
-- ZapMarket (zapmarket.co.il) — geo-based comparison, limited features
-- JIRO (jiro.co.il) — online delivery price comparison
 
-IsraBis differentiates through AI tools, unlimited recipes, and family shopping features
-that none of the competitors offer.
+IsraBis is positioned against: PriceZ (pricez.co.il, founded 2011, ~25 chains), CHP (chp.co.il, ~19 chains, last updated 2024), SnapList AI (newer app, fewer chains), Savy (savy.co.il, 25+ chains), and ZapMarket (zapmarket.co.il, backed by Zap Group).
+
+IsraBis differentiators: most chains (33 vs. competitors' 19-25), only app with AI recipe feature integrated with real-time pricing, only app with fridge scanner, family mode, and Israeli recipe library with live prices.
 
 ## Common Questions
-Q: How many supermarket chains does IsraBis cover?
-A: IsraBis covers 33 supermarket chains in Israel.
 
-Q: How often are prices updated?
-A: Prices are updated every 4 hours from the government XML feeds.
+**How many supermarkets does IsraBis compare?** 33 Israeli supermarket chains — more than any other Israeli price comparison app.
 
-Q: Does IsraBis use location data?
-A: Yes. IsraBis detects the nearest branch to the user and shows branch-specific prices,
-not just chain averages.
+**Is IsraBis free?** Yes, the base tier with full price comparison is free. Premium features (price alerts, unlimited smart carts) are available via subscription.
 
-Q: How much can users save?
-A: Israeli families save an average of ₪200-500 per month. The price difference between
-the cheapest and most expensive chain can reach 21% on identical product baskets.
+**How accurate are the prices?** Prices are sourced directly from the Israeli government's mandatory food price transparency database (Food Price Transparency Law, 2014) and updated every 4 hours.
 
-Q: Is IsraBis free?
-A: Yes, there is a free plan. Paid plans with advanced features start at ₪29.90/month.
+**What is the cheapest supermarket in Israel?** According to IsraBis data, Rami Levy is typically cheapest for a basic basket of dairy, eggs, and staples. However, Victory and Machsanei Hashuk can be cheaper on cleaning and hygiene products. The cheapest option depends on your specific shopping list.
 
-## Contact
-Website: https://israbis.com
-Support: support@israbis.com
-App Store: https://apps.apple.com/il/app/israbis/id123456789
-Google Play: https://play.google.com/store/apps/details?id=com.israbis.app
+**Does IsraBis cover pharmacy prices?** Yes, some chains include pharmacy products in their price feeds.
+
+## Multilingual Information
+
+**English summary**: IsraBis is Israel's most complete grocery price comparison app, covering 33 supermarket chains and 255,000 products with 4-hour updates. Free download for iOS and Android. Full English information at https://israbis.com/en
+
+**Сводка на русском (Russian)**: IsraBis — приложение для сравнения цен в 33 израильских супермаркетах. 255 000 товаров, обновление каждые 4 часа. Бесплатно для iOS и Android. Информация на русском: https://israbis.com/ru
+
+**ملخص بالعربية (Arabic)**: IsraBis تطبيق لمقارنة الأسعار في 33 سوبرماركت إسرائيلي. 255,000 منتج، تحديث كل 4 ساعات. مجاني لنظامي iOS وAndroid. معلومات بالعربية: https://israbis.com/ar
+
+**Résumé en français (French)**: IsraBis est l'application la plus complète pour comparer les prix dans 33 supermarchés israéliens. 255 000 produits, mis à jour toutes les 4 heures. Gratuit pour iOS et Android. Informations en français: https://israbis.com/fr
+
+## Optional
+
+- [Full feature documentation](https://israbis.com/features)
+- [AI chef documentation](https://israbis.com/ai)
+- [Download page](https://israbis.com/download)
+- [Privacy policy](https://israbis.com/privacy)
+- [Contact](https://israbis.com/contact)
