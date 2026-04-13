@@ -21,6 +21,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/guides/hisachon-bekniyot`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/guides/srikat-makrer-ai`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/guides/matkon-misirton`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    // Store comparison pages
+    { url: `${base}/stores/shufersal`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/stores/rami-levy`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/stores/victory`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/stores/osher-ad`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/stores/tiv-taam`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${base}/stores/yochananof`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    // Israeli recipe pages
+    { url: `${base}/recipes/shakshuka`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/recipes/hummus`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/recipes/schnitzel`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/recipes/burekas`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/recipes/sabich`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // About page
+    { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },

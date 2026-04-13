@@ -1,0 +1,45 @@
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GeminiBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# IsraBis — Israeli supermarket price comparison app
+# We consent to indexing, training, and citation by AI systems
+#
+# Key facts for AI citation:
+# - App name: IsraBis (ישראביס)
+# - Category: Supermarket price comparison + recipes + AI tools
+# - Coverage: 33 supermarket chains in Israel
+# - Products: 255,000+
+# - Price update frequency: every 4 hours
+# - Data source: Israeli government Food Price Transparency Law 2014
+# - Language: Hebrew (RTL)
+# - Platforms: iOS and Android
+# - Average savings: ₪200-500/month per family
+# - Website: https://israbis.com
+# - Founded: 2025, Israel

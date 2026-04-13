@@ -32,11 +32,18 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const nameHe = RECIPE_NAMES_HE[id] || id;
+  const imageUrl = RECIPE_IMAGES[id] || null;
 
   return {
     title: `${nameHe} — מתכון עם מחירים בכל הרשתות`,
     description: `מתכון ${nameHe} עם רשימת מרכיבים מתומחרת, השוואת מחירים בין רשתות שיווק, הוראות הכנה צעד אחרי צעד, וערכים תזונתיים. גלו באיזו רשת הכי זול להכין את המנה.`,
     alternates: { canonical: `/recipes/${id}` },
+    openGraph: imageUrl
+      ? {
+          type: "article",
+          images: [{ url: imageUrl, width: 1200, height: 630, alt: nameHe }],
+        }
+      : undefined,
   };
 }
 
@@ -100,8 +107,57 @@ export default async function RecipeDetailPage({ params }: { params: Promise<{ i
 
   const otherRecipes = FEATURED_IDS.filter((r) => r !== id);
 
+  /* ── Recipe JSON-LD schema ── */
+  const recipeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": nameHe,
+    "description": recipe.description,
+    "image": imageUrl || undefined,
+    "author": { "@type": "Organization", "name": "IsraBis" },
+    "datePublished": "2026-04-01",
+    "inLanguage": "he",
+    "cookTime": `PT${recipe.cookTime}M`,
+    "prepTime": `PT${recipe.prepTime}M`,
+    "totalTime": `PT${recipe.prepTime + recipe.cookTime}M`,
+    "recipeYield": `${recipe.servings} מנות`,
+    "recipeCategory": recipe.category?.name || "מנה עיקרית",
+    "recipeCuisine": recipe.category?.name || "ישראלי",
+    "keywords": `${nameHe}, מתכון ${nameHe}, ${recipe.category?.name || "בישול ישראלי"}`,
+    ...(recipe.calories != null || recipe.protein != null || recipe.carbs != null || recipe.fat != null
+      ? {
+          "nutrition": {
+            "@type": "NutritionInformation",
+            ...(recipe.calories != null && { "calories": `${recipe.calories} kcal` }),
+            ...(recipe.protein != null && { "proteinContent": `${recipe.protein}g` }),
+            ...(recipe.carbs != null && { "carbohydrateContent": `${recipe.carbs}g` }),
+            ...(recipe.fat != null && { "fatContent": `${recipe.fat}g` }),
+          },
+        }
+      : {}),
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": recipe.socialStats.rating.toFixed(1),
+      "ratingCount": String(recipe.socialStats.ratingCount),
+      "bestRating": "5",
+    },
+    "recipeIngredient": recipe.ingredients
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((i) => `${i.amount} ${i.item}`),
+    "recipeInstructions": steps.map((s) => ({
+      "@type": "HowToStep",
+      "position": s.number,
+      "text": s.text,
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
+      />
+
       {/* Hero */}
       <section className="relative overflow-hidden" style={{ minHeight: 340, background: "var(--bg-secondary)" }}>
         {imageUrl && (

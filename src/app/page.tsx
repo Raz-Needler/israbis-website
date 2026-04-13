@@ -83,9 +83,9 @@ export default function HomePage() {
             </FadeIn>
             <FadeIn delay={0.06}>
               <h1 className="text-display" style={{ marginBottom: "var(--space-5)" }}>
-                האפליקציה שחוסכת
+                השוואת מחירי סופר ב-33 רשתות —
                 <br />
-                <span className="grad-text">לכם כסף אמיתי.</span>
+                <span className="grad-text">חוסכת לכם כסף אמיתי.</span>
               </h1>
             </FadeIn>
             <FadeIn delay={0.1}>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "מדיניות פרטיות",
-  description: "מדיניות הפרטיות של IsraBis — כיצד אנו שומרים על המידע שלכם.",
+  title: "מדיניות פרטיות — IsraBis | הגנה על המידע שלכם",
+  description: "מדיניות הפרטיות המלאה של IsraBis. כיצד אנו אוספים, מעבדים, ושומרים על המידע שלכם. תאימות לחוק הגנת הפרטיות הישראלי ו-GDPR.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

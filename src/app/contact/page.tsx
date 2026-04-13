@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "צור קשר",
-  description: "צרו קשר עם צוות IsraBis — נשמח לשמוע מכם.",
+  title: "צור קשר עם IsraBis — תמיכה, שיתוף פעולה, בקשות תכונות",
+  description: "צרו קשר עם צוות IsraBis. שאלות על האפליקציה? דיווח על בעיה? בקשת תכונה חדשה? שיתוף פעולה עסקי? אנחנו כאן בשבילכם.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
