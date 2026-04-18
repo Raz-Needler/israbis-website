@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://israbis.com/stores/yochananof" },
   openGraph: {
     title: "מחירים ביוחננוף לעומת 32 רשתות",
-    description: "בדקו מחירי יוחננוף מול שופרסל, רמי לוי, ועוד 30 רשתות — בלחיצה אחת.",
+    description: "בדקו מחירי יוחננוף מול שופרסל, רמי לוי, ועוד 46 רשתות — בלחיצה אחת.",
   },
 };
 
@@ -85,7 +85,7 @@ export default function YochananofPage() {
               ראו גם: <Link href="/stores/osher-ad" className="c-accent" style={{ textDecoration: "underline" }}>מחירי אושר עד</Link> &middot; <Link href="/stores/shufersal" className="c-accent" style={{ textDecoration: "underline" }}>מחירי שופרסל</Link> &middot; <Link href="/stores" className="c-accent" style={{ textDecoration: "underline" }}>כל הרשתות</Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת מה מחיר מוצר ספציפי ביוחננוף? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+              רוצים לדעת מה מחיר מוצר ספציפי ביוחננוף? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

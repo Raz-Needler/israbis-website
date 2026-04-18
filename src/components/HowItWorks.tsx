@@ -7,7 +7,7 @@ import SectionHeader from "./SectionHeader";
 
 const STEPS = [
   { num: "1", title: "בנו עגלה", desc: "הוסיפו מוצרים מקטגוריות, ממתכונים, או סרקו ברקוד.", svg: "/svg/composition_7.svg" },
-  { num: "2", title: "השוו בין 33 רשתות", desc: "המערכת מחשבת את העלות בכל רשת ומדרגת מהזול ליקר.", svg: "/svg/composition_1.svg" },
+  { num: "2", title: "השוו בין 49 רשתות", desc: "המערכת מחשבת את העלות בכל רשת ומדרגת מהזול ליקר.", svg: "/svg/composition_1.svg" },
   { num: "3", title: "חסכו כסף", desc: "בחרו את הרשת הזולה, שמרו את העגלה, ובצעו קנייה חכמה.", svg: "/svg/composition_4.svg" },
 ];
 

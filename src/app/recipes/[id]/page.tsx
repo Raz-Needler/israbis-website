@@ -274,7 +274,7 @@ export default async function RecipeDetailPage({ params }: { params: Promise<{ i
         <div className="w-980 text-center">
           <FadeIn>
             <h2 className="text-h2" style={{ color: "#fff", marginBottom: "var(--space-3)" }}>
-              רוצים טיימרים, רשימת קניות, ו-33 רשתות?
+              רוצים טיימרים, רשימת קניות, ו-49 רשתות?
             </h2>
             <p className="text-body" style={{ color: "rgba(255,255,255,0.85)", maxWidth: "42ch", margin: "0 auto var(--space-6)" }}>
               באפליקציה יש אלפי מתכונים נוספים, מצב בישול מונחה, סריקת מקרר, ועוד.

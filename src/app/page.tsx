@@ -29,7 +29,7 @@ function Counter({ target, suffix = "", prefix = "" }: { target: number; suffix?
 
 /* ── Hero typewriter lines ── */
 const HERO_LINES = [
-  "השוואת מחירים בין 33 רשתות",
+  "השוואת מחירים בין 49 רשתות",
   "מתכון מסרטון ביוטיוב בלחיצה",
   "סריקת מקרר וקבלת מתכונים",
   "עגלת קניות חכמה שחוסכת לכם",
@@ -50,7 +50,7 @@ const AI_LINES = [
 
 /* ── Feature data ── */
 const FEATURES = [
-  { title: "השוואת מחירים", desc: "33 רשתות. 255,000+ מוצרים. מחיר אחד הכי זול — מיד.", icon: BarChart3, color: "#06B6D4", href: "/features" },
+  { title: "השוואת מחירים", desc: "49 רשתות. 255,000+ מוצרים. מחיר אחד הכי זול — מיד.", icon: BarChart3, color: "#06B6D4", href: "/features" },
   { title: "עגלה חכמה", desc: "בנו עגלה מכל מקור. המערכת מוצאת את הרשת הזולה אוטומטית.", icon: ShoppingCart, color: "#34C759", href: "/features" },
   { title: "מתכון מסרטון", desc: "לינק מיוטיוב, טיקטוק, אינסטגרם = מתכון כתוב + רשימת קניות + מחירים.", icon: Camera, color: "#9B59B6", href: "/ai" },
   { title: "סריקת מקרר", desc: "צלמו את המקרר. AI מזהה מרכיבים ומציע מתכונים ממה שיש.", icon: Refrigerator, color: "#10B981", href: "/ai" },
@@ -83,7 +83,7 @@ export default function HomePage() {
             </FadeIn>
             <FadeIn delay={0.06}>
               <h1 className="text-display" style={{ marginBottom: "var(--space-5)" }}>
-                השוואת מחירי סופר ב-33 רשתות —
+                השוואת מחירי סופר ב-49 רשתות —
                 <br />
                 <span className="grad-text">חוסכת לכם כסף אמיתי.</span>
               </h1>
@@ -101,7 +101,7 @@ export default function HomePage() {
             </FadeIn>
             <FadeIn delay={0.14}>
               <p className="text-body c-muted" style={{ maxWidth: "48ch", margin: "0 auto var(--space-7)", lineHeight: "var(--leading-relaxed)" }}>
-                IsraBis משווה מחירים בין 33 רשתות שיווק בישראל, מוצאת את העגלה הזולה ביותר, מציעה מתכונים ללא הגבלה עם מחירים, וכוללת כלי AI חכמים — הכל בעברית, הכל בחינם.
+                IsraBis משווה מחירים בין 49 רשתות שיווק בישראל, מוצאת את העגלה הזולה ביותר, מציעה מתכונים ללא הגבלה עם מחירים, וכוללת כלי AI חכמים — הכל בעברית, הכל בחינם.
               </p>
             </FadeIn>
             <FadeIn delay={0.18}>
@@ -134,7 +134,7 @@ export default function HomePage() {
       <section style={{ borderTop: "1px solid var(--glass-border)", borderBottom: "1px solid var(--glass-border)", padding: "var(--space-7) 0" }}>
         <div className="w-1120 grid grid-cols-3 text-center" style={{ gap: "var(--space-4)" }}>
           <FadeIn delay={0}>
-            <div className="stat-number"><Counter target={33} /></div>
+            <div className="stat-number"><Counter target={49} /></div>
             <div className="text-body-sm" style={{ fontWeight: 600, marginTop: "var(--space-1)" }}>רשתות שיווק</div>
             <div className="text-caption c-dimmer" style={{ marginTop: 2 }}>עדכון יומי</div>
           </FadeIn>
@@ -273,7 +273,7 @@ export default function HomePage() {
         <div className="w-980">
           <SectionHeader
             label="רשתות"
-            title={<><span className="c-accent">33 רשתות.</span> מחיר אחד הכי זול.</>}
+            title={<><span className="c-accent">49 רשתות.</span> מחיר אחד הכי זול.</>}
           />
 
           <FadeIn>
@@ -300,7 +300,7 @@ export default function HomePage() {
           <FadeIn>
             <div className="text-center">
               <Link href="/stores" className="text-body-sm c-accent link-underline" style={{ fontWeight: 500 }}>
-                כל 33 הרשתות <ArrowLeft size={14} style={{ display: "inline", verticalAlign: "middle" }} />
+                כל 49 הרשתות <ArrowLeft size={14} style={{ display: "inline", verticalAlign: "middle" }} />
               </Link>
             </div>
           </FadeIn>
@@ -331,7 +331,7 @@ export default function HomePage() {
                 <tbody>
                   {[
                     { feat: "השוואת מחירים בין רשתות", us: true, p: true, m: true, c: false },
-                    { feat: "33 רשתות שיווק", us: true, p: false, m: false, c: false },
+                    { feat: "49 רשתות שיווק", us: true, p: false, m: false, c: false },
                     { feat: "מתכונים ללא הגבלה", us: true, p: false, m: false, c: false },
                     { feat: "מתכון מסרטון (AI)", us: true, p: false, m: false, c: false },
                     { feat: "סריקת מקרר (AI)", us: true, p: false, m: false, c: false },

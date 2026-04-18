@@ -273,7 +273,7 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
 
               <div style={{ marginTop: "var(--space-4)", padding: "var(--space-3)", borderRadius: "var(--radius-lg)", background: "var(--accent-10)", textAlign: "center" }}>
                 <p className="text-caption" style={{ fontWeight: 600, color: "var(--accent)" }}>
-                  רוצים סריקת ברקוד ו-33 רשתות? הורידו את IsraBis
+                  רוצים סריקת ברקוד ו-49 רשתות? הורידו את IsraBis
                 </p>
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function PriceSearch({ onClose }: { onClose: () => void }) {
               {/* App CTA */}
               <div style={{ marginTop: "var(--space-5)", textAlign: "center" }}>
                 <Link href="/download" onClick={onClose} className="btn btn-accent btn-sm">
-                  השוו בין כל 33 הרשתות באפליקציה
+                  השוו בין כל 49 הרשתות באפליקציה
                 </Link>
               </div>
             </div>

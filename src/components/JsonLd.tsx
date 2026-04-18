@@ -66,7 +66,7 @@ function SiteNavigationSchema() {
     itemListElement: [
       { "@type": "SiteNavigationElement", position: 1, name: "תכונות", description: "השוואת מחירים, עגלה חכמה, מתכונים, סריקת ברקוד", url: `${BASE}/features` },
       { "@type": "SiteNavigationElement", position: 2, name: "כלים חכמים", description: "סריקת מקרר, מתכון מסרטון, סריקת קלוריות, AI", url: `${BASE}/ai` },
-      { "@type": "SiteNavigationElement", position: 3, name: "רשתות", description: "33 רשתות שיווק — רמי לוי, שופרסל, ויקטורי", url: `${BASE}/stores` },
+      { "@type": "SiteNavigationElement", position: 3, name: "רשתות", description: "49 רשתות שיווק — רמי לוי, שופרסל, ויקטורי", url: `${BASE}/stores` },
       { "@type": "SiteNavigationElement", position: 4, name: "מדריכים", description: "השוואת מחירי סופר, מתכונים, חיסכון", url: `${BASE}/guides` },
       { "@type": "SiteNavigationElement", position: 5, name: "הורדה", description: "הורידו את IsraBis בחינם ל-iOS ו-Android", url: `${BASE}/download` },
     ],
@@ -82,7 +82,7 @@ function AppSchema() {
     operatingSystem: "iOS, Android",
     applicationCategory: "UtilitiesApplication",
     applicationSubCategory: "השוואת מחירי סופרמרקט",
-    description: "אפליקציית השוואת מחירי סופר בין 33 רשתות שיווק בישראל, מתכונים ללא הגבלה עם מחירים, כלי AI חכמים, וניהול קניות משפחתי.",
+    description: "אפליקציית השוואת מחירי סופר בין 49 רשתות שיווק בישראל, מתכונים ללא הגבלה עם מחירים, כלי AI חכמים, וניהול קניות משפחתי.",
     softwareVersion: "2.5",
     releaseNotes: "גרסה 2.5: ישרא שף AI משופר, מעקב הוצאות מורחב, שיפורי ביצועים",
     featureList: [
@@ -128,7 +128,7 @@ function ServiceSchema() {
     "@context": "https://schema.org",
     "@type": "Service",
     name: "השוואת מחירי סופרמרקט",
-    description: "שירות חינמי להשוואת מחירים בין 33 רשתות שיווק בישראל",
+    description: "שירות חינמי להשוואת מחירים בין 49 רשתות שיווק בישראל",
     provider: { "@type": "Organization", name: "IsraBis" },
     areaServed: { "@type": "Country", name: "Israel" },
     serviceType: "Price Comparison",
@@ -146,7 +146,7 @@ function DatasetSchema() {
     "@context": "https://schema.org",
     "@type": "Dataset",
     name: "מחירי סופרמרקט בישראל",
-    description: "מאגר נתוני מחירים של 255,000+ מוצרים מ-33 רשתות שיווק בישראל, מתעדכן יומית מהמאגר הממשלתי לפי חוק שקיפות מחירי מזון 2014.",
+    description: "מאגר נתוני מחירים של 255,000+ מוצרים מ-49 רשתות שיווק בישראל, מתעדכן יומית מהמאגר הממשלתי לפי חוק שקיפות מחירי מזון 2014.",
     url: BASE,
     license: "https://data.gov.il/",
     temporalCoverage: "2024/2026",
@@ -171,7 +171,7 @@ function FAQSchema() {
     },
     {
       q: "אילו רשתות נתמכות?",
-      a: "33 רשתות שיווק כולל רמי לוי, שופרסל, ויקטורי, טיב טעם, מחסני השוק, יוחננוף, אושר עד, חצי חינם, מגה, יינות ביתן, ועוד.",
+      a: "49 רשתות שיווק כולל רמי לוי, שופרסל, ויקטורי, טיב טעם, מחסני השוק, יוחננוף, אושר עד, חצי חינם, מגה, יינות ביתן, ועוד.",
     },
     {
       q: "מהם כלי ה-AI?",
@@ -183,7 +183,7 @@ function FAQSchema() {
     },
     {
       q: "איך עובדת העגלה החכמה?",
-      a: "מוסיפים מוצרים מקטגוריות, ממתכונים, מסריקת ברקוד, או מסריקת קבלה. המערכת משווה את העלות הכוללת בכל 33 הרשתות ומציגה את הזולה ביותר.",
+      a: "מוסיפים מוצרים מקטגוריות, ממתכונים, מסריקת ברקוד, או מסריקת קבלה. המערכת משווה את העלות הכוללת בכל 49 הרשתות ומציגה את הזולה ביותר.",
     },
     {
       q: "האם אפשר להשתמש עם המשפחה?",
@@ -203,7 +203,7 @@ function FAQSchema() {
     },
     {
       q: "כמה רשתות שיווק כלולות?",
-      a: "33 רשתות שיווק, כולל ענקיות כמו רמי לוי, שופרסל, ויקטורי, ועד רשתות קטנות ועצמאיות.",
+      a: "49 רשתות שיווק, כולל ענקיות כמו רמי לוי, שופרסל, ויקטורי, ועד רשתות קטנות ועצמאיות.",
     },
     {
       q: "האם המחירים מדויקים?",
@@ -225,7 +225,7 @@ function FAQSchema() {
       "name": "What is the best supermarket price comparison app in Israel?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "IsraBis is Israel's most comprehensive price comparison app, covering 33 chains and 255,000 products updated every 4 hours. It is the only Israeli app combining price comparison with AI recipe suggestions and real-time ingredient pricing."
+        "text": "IsraBis is Israel's most comprehensive price comparison app, covering 49 chains and 255,000 products updated every 4 hours. It is the only Israeli app combining price comparison with AI recipe suggestions and real-time ingredient pricing."
       }
     },
     {
@@ -233,7 +233,7 @@ function FAQSchema() {
       "name": "Is IsraBis free?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The base tier of IsraBis is completely free and includes full price comparison across all 33 chains. Premium features (price alerts, unlimited smart carts, family mode) are available via subscription starting at ₪29.90/month."
+        "text": "Yes. The base tier of IsraBis is completely free and includes full price comparison across all 49 chains. Premium features (price alerts, unlimited smart carts, family mode) are available via subscription starting at ₪29.90/month."
       }
     },
     {

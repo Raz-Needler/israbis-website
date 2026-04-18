@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "מתכון חומוס ביתי — רשימת מרכיבים עם מחירים בכל הרשתות | IsraBis",
-  description: "מתכון חומוס ביתי אמיתי עם חומוס מבושל, טחינה, שמן זית ולימון — רשימת קניות עם מחירים עדכניים מ-33 רשתות. כמה עולה לבשל חומוס בבית? גלו ב-IsraBis.",
+  description: "מתכון חומוס ביתי אמיתי עם חומוס מבושל, טחינה, שמן זית ולימון — רשימת קניות עם מחירים עדכניים מ-49 רשתות. כמה עולה לבשל חומוס בבית? גלו ב-IsraBis.",
   alternates: { canonical: "https://israbis.com/recipes/hummus" },
   openGraph: {
     type: "article",
     title: "מתכון חומוס ביתי עם מחירים עדכניים | IsraBis",
-    description: "חומוס ביתי קרמי ומושלם — רשימת מרכיבים מתומחרת מ-33 רשתות שיווק. בדקו כמה עולה להכין חומוס בבית.",
+    description: "חומוס ביתי קרמי ומושלם — רשימת מרכיבים מתומחרת מ-49 רשתות שיווק. בדקו כמה עולה להכין חומוס בבית.",
     images: [{ url: "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?w=1200&q=80&auto=format&fit=crop", width: 1200, height: 630, alt: "חומוס ביתי" }],
   },
 };
@@ -134,7 +134,7 @@ export default function HummusPage() {
                 ראו גם: <Link href="/recipes/shakshuka" className="c-accent" style={{ textDecoration: "underline" }}>מתכון שקשוקה</Link> &middot; <Link href="/recipes/sabich" className="c-accent" style={{ textDecoration: "underline" }}>מתכון סביח</Link> &middot; <Link href="/recipes/burekas" className="c-accent" style={{ textDecoration: "underline" }}>מתכון בורקס</Link> &middot; <Link href="/recipes" className="c-accent" style={{ textDecoration: "underline" }}>כל המתכונים</Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לדעת כמה בדיוק עולים מרכיבי החומוס שלכם בכל רשת? הורידו את IsraBis — 33 רשתות, מחירים בזמן אמת.
+                רוצים לדעת כמה בדיוק עולים מרכיבי החומוס שלכם בכל רשת? הורידו את IsraBis — 49 רשתות, מחירים בזמן אמת.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

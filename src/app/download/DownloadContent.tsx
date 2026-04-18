@@ -66,7 +66,7 @@ export default function DownloadContent() {
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {[
-              { title: "השוואת מחירים", desc: "33 רשתות, 255,000+ מוצרים" },
+              { title: "השוואת מחירים", desc: "49 רשתות, 255,000+ מוצרים" },
               { title: "עגלה חכמה", desc: "מוצאת את הרשת הזולה אוטומטית" },
               { title: "מתכונים ללא הגבלה", desc: "עם מרכיבים מתומחרים ומצב בישול" },
               { title: "כלי AI חכמים", desc: "סריקת מקרר, קלוריות, קבלה, סרטון" },

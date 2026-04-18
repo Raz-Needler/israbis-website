@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://israbis.com/stores/rami-levy" },
   openGraph: {
     title: "מחירים ב-רמי לוי לעומת 32 רשתות",
-    description: "בדקו מחירי רמי לוי מול שופרסל, ויקטורי, ועוד 30 רשתות — בלחיצה אחת.",
+    description: "בדקו מחירי רמי לוי מול שופרסל, ויקטורי, ועוד 46 רשתות — בלחיצה אחת.",
   },
 };
 
@@ -67,7 +67,7 @@ export default function RamiLevyPage() {
           <section>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>קניות חכמות ברמי לוי עם IsraBis</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              IsraBis לא רק מראה לכם מחירים — היא עוזרת לכם לתכנן קניות חכמות. בנו עגלת קניות שלמה עם כל המוצרים שאתם צריכים השבוע, ו-IsraBis תחשב את העלות הכוללת בכל 33 הרשתות. אם רמי לוי הכי זולה לעגלה שלכם — תדעו. אם ויקטורי חוסכת לכם ₪80 על אותה עגלה — תדעו גם את זה.
+              IsraBis לא רק מראה לכם מחירים — היא עוזרת לכם לתכנן קניות חכמות. בנו עגלת קניות שלמה עם כל המוצרים שאתם צריכים השבוע, ו-IsraBis תחשב את העלות הכוללת בכל 49 הרשתות. אם רמי לוי הכי זולה לעגלה שלכם — תדעו. אם ויקטורי חוסכת לכם ₪80 על אותה עגלה — תדעו גם את זה.
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginTop: "var(--space-4)" }}>
               בנוסף, IsraBis מציעה מתכונים ללא הגבלה עם מחירים בזמן אמת — כך שכשאתם מתכננים ארוחה, אתם יודעים מראש כמה היא תעלה ברמי לוי לעומת שאר הרשתות. חיסכון ממוצע למשפחה: ₪200-500 בחודש.
@@ -79,7 +79,7 @@ export default function RamiLevyPage() {
               ראו גם: <Link href="/stores/shufersal" className="c-accent" style={{ textDecoration: "underline" }}>מחירי שופרסל</Link> &middot; <Link href="/stores/victory" className="c-accent" style={{ textDecoration: "underline" }}>מחירי ויקטורי</Link> &middot; <Link href="/stores" className="c-accent" style={{ textDecoration: "underline" }}>כל הרשתות</Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת מה מחיר מוצר ספציפי ברמי לוי? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+              רוצים לדעת מה מחיר מוצר ספציפי ברמי לוי? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

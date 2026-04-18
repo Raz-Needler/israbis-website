@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "אודות IsraBis — הסיפור שמאחורי האפליקציה | IsraBis",
   description:
-    "IsraBis היא אפליקציית השוואת מחירי הסופר החכמה של ישראל. גלו את הסיפור שמאחורינו, המשימה שלנו, הטכנולוגיה שפיתחנו, ולמה 255,000 מוצרים מ-33 רשתות זמינים בחינם.",
+    "IsraBis היא אפליקציית השוואת מחירי הסופר החכמה של ישראל. גלו את הסיפור שמאחורינו, המשימה שלנו, הטכנולוגיה שפיתחנו, ולמה 255,000 מוצרים מ-49 רשתות זמינים בחינם.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "אודות IsraBis — מי אנחנו ומה המשימה שלנו",
@@ -18,7 +18,7 @@ const organizationJsonLd = {
   name: "IsraBis",
   alternateName: "ישראביס",
   description:
-    "IsraBis היא אפליקציית השוואת מחירי סופרמרקט בישראל, המשווה מחירים בין 33 רשתות שיווק על בסיס נתוני הממשלה.",
+    "IsraBis היא אפליקציית השוואת מחירי סופרמרקט בישראל, המשווה מחירים בין 49 רשתות שיווק על בסיס נתוני הממשלה.",
   foundingDate: "2025",
   url: "https://israbis.com",
   email: "support@israbis.com",
@@ -76,7 +76,7 @@ export default function AboutPage() {
               בשם אחר.
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginTop: "var(--space-3)" }}>
-              הבסיס כולל כ-255,000 מוצרים פעילים מ-33 רשתות שיווק, כולל שופרסל, רמי לוי, ויקטורי,
+              הבסיס כולל כ-255,000 מוצרים פעילים מ-49 רשתות שיווק, כולל שופרסל, רמי לוי, ויקטורי,
               אושר עד, יינות ביתן, חצי חינם, מחסני השוק, קארפור, וכן פרמקס, ניקו מרקט, ורשתות
               נוספות. המחירים מתרעננים כל 4 שעות לכל היותר.
             </p>
@@ -136,7 +136,7 @@ export default function AboutPage() {
               style={{ gap: "var(--space-4)" }}
             >
               {[
-                { value: "33", label: "רשתות שיווק" },
+                { value: "49", label: "רשתות שיווק" },
                 { value: "255,000+", label: "מוצרים פעילים" },
                 { value: "4 שעות", label: "עדכון מחירים מקסימלי" },
                 { value: "יומי", label: "עיבוד נתוני ממשלה" },

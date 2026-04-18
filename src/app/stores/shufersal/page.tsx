@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://israbis.com/stores/shufersal" },
   openGraph: {
     title: "מחירים בשופרסל לעומת 32 רשתות",
-    description: "בדקו מחירי שופרסל מול רמי לוי, ויקטורי, ועוד 30 רשתות — בלחיצה אחת.",
+    description: "בדקו מחירי שופרסל מול רמי לוי, ויקטורי, ועוד 46 רשתות — בלחיצה אחת.",
   },
 };
 
@@ -79,7 +79,7 @@ export default function ShufersalPage() {
               ראו גם: <Link href="/stores/rami-levy" className="c-accent" style={{ textDecoration: "underline" }}>מחירי רמי לוי</Link> &middot; <Link href="/stores/victory" className="c-accent" style={{ textDecoration: "underline" }}>מחירי ויקטורי</Link> &middot; <Link href="/stores" className="c-accent" style={{ textDecoration: "underline" }}>כל הרשתות</Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת מה מחיר מוצר ספציפי בשופרסל? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+              רוצים לדעת מה מחיר מוצר ספציפי בשופרסל? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

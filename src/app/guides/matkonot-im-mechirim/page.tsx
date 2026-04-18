@@ -4,14 +4,14 @@ import ArticleJsonLd from "@/components/ArticleJsonLd";
 
 export const metadata: Metadata = {
   title: "מתכונים עם מחירים — בשלו חכם וקנו בזול | IsraBis",
-  description: "מתכונים עם השוואת מחירים בין 33 רשתות שיווק. כל מתכון כולל רשימת מרכיבים מתומחרת — דעו בדיוק כמה עולה לבשל כל מנה ובאיזו רשת הכי זול.",
+  description: "מתכונים עם השוואת מחירים בין 49 רשתות שיווק. כל מתכון כולל רשימת מרכיבים מתומחרת — דעו בדיוק כמה עולה לבשל כל מנה ובאיזו רשת הכי זול.",
   alternates: { canonical: "/guides/matkonot-im-mechirim" },
 };
 
 export default function GuideMatkonot() {
   return (
     <>
-    <ArticleJsonLd title="מתכונים עם מחירים — בשלו חכם וקנו בזול" description="מתכונים עם השוואת מחירים בין 33 רשתות שיווק" url="/guides/matkonot-im-mechirim" />
+    <ArticleJsonLd title="מתכונים עם מחירים — בשלו חכם וקנו בזול" description="מתכונים עם השוואת מחירים בין 49 רשתות שיווק" url="/guides/matkonot-im-mechirim" />
     <article className="sec">
       <div className="w-980" style={{ maxWidth: 760 }}>
         <div className="badge" style={{ marginBottom: "var(--space-4)" }}>מתכונים</div>
@@ -31,7 +31,7 @@ export default function GuideMatkonot() {
           <section>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>מתכונים ללא הגבלה — כולם עם מחירים</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              ב-IsraBis, כל מתכון כולל רשימת מרכיבים עם מחירים משווים בין 33 רשתות. אתם רואים בדיוק כמה עולה לבשל סמאש בורגר ברמי לוי לעומת שופרסל. כל מרכיב מתומחר, כל העגלה מחושבת.
+              ב-IsraBis, כל מתכון כולל רשימת מרכיבים עם מחירים משווים בין 49 רשתות. אתם רואים בדיוק כמה עולה לבשל סמאש בורגר ברמי לוי לעומת שופרסל. כל מרכיב מתומחר, כל העגלה מחושבת.
             </p>
           </section>
 

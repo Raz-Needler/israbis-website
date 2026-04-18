@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "מתכון בורקס — רשימת מרכיבים עם מחירים בכל הרשתות | IsraBis",
-  description: "מתכון בורקס גבינה ותפוח אדמה ביתי — בצק פריך, מילוי עשיר, ומחירים עדכניים מ-33 רשתות. כמה עולה לאפות בורקס בבית? גלו ב-IsraBis.",
+  description: "מתכון בורקס גבינה ותפוח אדמה ביתי — בצק פריך, מילוי עשיר, ומחירים עדכניים מ-49 רשתות. כמה עולה לאפות בורקס בבית? גלו ב-IsraBis.",
   alternates: { canonical: "https://israbis.com/recipes/burekas" },
   openGraph: {
     type: "article",
     title: "מתכון בורקס ביתי עם מחירים עדכניים | IsraBis",
-    description: "בורקס גבינה ותפוח אדמה ביתי — רשימת מרכיבים מתומחרת מ-33 רשתות שיווק.",
+    description: "בורקס גבינה ותפוח אדמה ביתי — רשימת מרכיבים מתומחרת מ-49 רשתות שיווק.",
     images: [{ url: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1200&q=80&auto=format&fit=crop", width: 1200, height: 630, alt: "בורקס" }],
   },
 };
@@ -131,7 +131,7 @@ export default function BurekasPage() {
                 ראו גם: <Link href="/recipes/shakshuka" className="c-accent" style={{ textDecoration: "underline" }}>מתכון שקשוקה</Link> &middot; <Link href="/recipes/hummus" className="c-accent" style={{ textDecoration: "underline" }}>מתכון חומוס</Link> &middot; <Link href="/recipes/sabich" className="c-accent" style={{ textDecoration: "underline" }}>מתכון סביח</Link> &middot; <Link href="/recipes" className="c-accent" style={{ textDecoration: "underline" }}>כל המתכונים</Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לדעת כמה עולה בצק עלים בסניף הקרוב אליכם? הורידו את IsraBis — 33 רשתות, מחירים בזמן אמת.
+                רוצים לדעת כמה עולה בצק עלים בסניף הקרוב אליכם? הורידו את IsraBis — 49 רשתות, מחירים בזמן אמת.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

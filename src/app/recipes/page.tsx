@@ -143,7 +143,7 @@ export default function RecipesPage() {
                 אלפי מתכונים נוספים באפליקציה
               </h2>
               <p className="text-body c-muted" style={{ maxWidth: "50ch", margin: "0 auto var(--space-6)", lineHeight: "var(--leading-relaxed)" }}>
-                מתכונים מהאפליקציה, מתכונים מסרטוני יוטיוב וטיקטוק, מתכונים שהמשתמשים יצרו, ומתכונים מכל העולם — כולם עם השוואת מחירים בין 33 רשתות.
+                מתכונים מהאפליקציה, מתכונים מסרטוני יוטיוב וטיקטוק, מתכונים שהמשתמשים יצרו, ומתכונים מכל העולם — כולם עם השוואת מחירים בין 49 רשתות.
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 <Link href="/download" className="btn btn-accent btn-lg">

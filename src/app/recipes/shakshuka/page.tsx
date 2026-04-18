@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "מתכון שקשוקה ישראלית קלאסית — עם מחירים ב-33 רשתות | IsraBis",
+  title: "מתכון שקשוקה ישראלית קלאסית — עם מחירים ב-49 רשתות | IsraBis",
   description: "מתכון שקשוקה ישראלית קלאסית עם ביצים, עגבניות, ופלפלים. עלות: ₪15-20 לפי IsraBis. זמן הכנה: 30 דקות. ל-2 מנות. ראו מחירים בזמן אמת.",
   alternates: { canonical: "https://israbis.com/recipes/shakshuka" },
   openGraph: {
@@ -174,7 +174,7 @@ export default function ShakshukaPage() {
                 עלות מתכון השקשוקה לפי IsraBis: <strong style={{ color: "var(--text)" }}>₪15-20</strong> ל-2 מנות, בהתאם לרשת הקנייה. ביצים (4): כ-₪4.5-6 בהתאם לגודל ורשת. עגבניות (3): כ-₪3-5. פלפלים (2): כ-₪4-7. ביצאו מכך עלות של כ-₪7.50-10 למנה.
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginTop: "var(--space-4)" }}>
-                הורידו את IsraBis וראו את המחיר המדויק של כל מרכיב בכל 33 הרשתות — בזמן אמת, לפי הסניף הקרוב אליכם.
+                הורידו את IsraBis וראו את המחיר המדויק של כל מרכיב בכל 49 הרשתות — בזמן אמת, לפי הסניף הקרוב אליכם.
               </p>
             </section>
 

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://israbis.com/stores/osher-ad" },
   openGraph: {
     title: "מחירים באושר עד לעומת 32 רשתות",
-    description: "בדקו מחירי אושר עד מול רמי לוי, שופרסל, ויקטורי, ועוד 29 רשתות — בלחיצה אחת.",
+    description: "בדקו מחירי אושר עד מול רמי לוי, שופרסל, ויקטורי, ועוד 45 רשתות — בלחיצה אחת.",
   },
 };
 
@@ -85,7 +85,7 @@ export default function OsherAdPage() {
               ראו גם: <Link href="/stores/rami-levy" className="c-accent" style={{ textDecoration: "underline" }}>מחירי רמי לוי</Link> &middot; <Link href="/stores/tiv-taam" className="c-accent" style={{ textDecoration: "underline" }}>מחירי טיב טעם</Link> &middot; <Link href="/stores" className="c-accent" style={{ textDecoration: "underline" }}>כל הרשתות</Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת מה מחיר מוצר ספציפי באושר עד? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+              רוצים לדעת מה מחיר מוצר ספציפי באושר עד? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

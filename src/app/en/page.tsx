@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "IsraBis — Compare Grocery Prices Across 33 Israeli Supermarkets | Free App",
   description:
-    "IsraBis compares grocery prices across all 33 Israeli supermarket chains — Shufersal, Rami Levy, Victory, Osher Ad and 29 more. 255,000 products updated every 4 hours. Free.",
+    "IsraBis compares grocery prices across all 49 Israeli supermarket chains — Shufersal, Rami Levy, Victory, Osher Ad and 45 more. 255,000 products updated every 4 hours. Free.",
   keywords:
     "israel price comparison, cheapest supermarket israel, shufersal vs rami levy, israel grocery app, food prices israel",
   alternates: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Find the Cheapest Supermarket in Israel — IsraBis",
     description:
-      "IsraBis compares grocery prices across all 33 Israeli supermarket chains. 255,000 products updated every 4 hours. Free app for iOS and Android.",
+      "IsraBis compares grocery prices across all 49 Israeli supermarket chains. 255,000 products updated every 4 hours. Free app for iOS and Android.",
     url: "https://israbis.com/en",
     siteName: "IsraBis",
     locale: "en_US",
@@ -30,7 +30,7 @@ const softwareAppSchema = {
   "@type": "SoftwareApplication",
   name: "IsraBis",
   description:
-    "Israel's most comprehensive supermarket price comparison app. Compare prices across 33 chains, 255,000 products, updated every 4 hours.",
+    "Israel's most comprehensive supermarket price comparison app. Compare prices across 49 chains, 255,000 products, updated every 4 hours.",
   operatingSystem: "iOS, Android",
   applicationCategory: "UtilitiesApplication",
   inLanguage: ["he", "en"],
@@ -52,7 +52,7 @@ const faqSchema = {
       name: "What supermarkets does IsraBis cover?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "IsraBis covers all 33 major Israeli supermarket chains, including Shufersal Deal, Shufersal Sheli, Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, Yeinot Bitan, Hazi Hinam, Machsanei Hashuk, Carrefour, Mega, Co-op, and 20 more.",
+        text: "IsraBis covers all 49 major Israeli supermarket chains, including Shufersal Deal, Shufersal Sheli, Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, Yeinot Bitan, Hazi Hinam, Machsanei Hashuk, Carrefour, Mega, Co-op, and 36 more.",
       },
     },
     {
@@ -118,8 +118,8 @@ export default function EnglishLandingPage() {
           </h1>
 
           <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-4)" }}>
-            IsraBis compares grocery prices across all 33 Israeli supermarket chains — Shufersal,
-            Rami Levy, Victory, Osher Ad, Tiv Taam, and 28 more. With 255,000 products updated
+            IsraBis compares grocery prices across all 49 Israeli supermarket chains — Shufersal,
+            Rami Levy, Victory, Osher Ad, Tiv Taam, and 45 more. With 255,000 products updated
             every 4 hours directly from Israel&apos;s government price database, you always know
             where to shop for less.
           </p>
@@ -150,7 +150,7 @@ export default function EnglishLandingPage() {
                   Most chains — 33 vs competitors&apos; 25
                 </h3>
                 <p className="text-body-sm c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-                  No other Israeli price comparison app covers all 33 supermarket chains. Most competitors
+                  No other Israeli price comparison app covers all 49 supermarket chains. Most competitors
                   cover around 25. IsraBis ingests data from every chain legally required to publish
                   prices under Israel&apos;s 2014 Food Price Transparency Law — giving you the most
                   complete picture.
@@ -187,7 +187,7 @@ export default function EnglishLandingPage() {
                   IsraBis includes IsraSef — an AI chef that generates recipes, scans your fridge to
                   suggest meals from what you have, and can extract a recipe from a YouTube or TikTok
                   link. Every recipe comes with a full shopping list and live price comparison across
-                  all 33 chains.
+                  all 49 chains.
                 </p>
               </div>
             </div>
@@ -318,11 +318,11 @@ export default function EnglishLandingPage() {
               {[
                 {
                   q: "What supermarkets does IsraBis cover?",
-                  a: "IsraBis covers all 33 major Israeli supermarket chains, including Shufersal Deal, Shufersal Sheli, Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, Yeinot Bitan, Hazi Hinam, Machsanei Hashuk, Carrefour, Mega, Co-op, and 20 more. It is the only Israeli price comparison app with full coverage of all 33 chains.",
+                  a: "IsraBis covers all 49 major Israeli supermarket chains, including Shufersal Deal, Shufersal Sheli, Rami Levy, Victory, Osher Ad, Tiv Taam, Yochananof, Yeinot Bitan, Hazi Hinam, Machsanei Hashuk, Carrefour, Mega, Co-op, and 36 more. It is the only Israeli price comparison app with full coverage of all 49 chains.",
                 },
                 {
                   q: "Is IsraBis free?",
-                  a: "Yes. IsraBis is free to download and use on both iOS and Android. The free base tier includes full price comparison across all 33 chains with no limit on products or searches.",
+                  a: "Yes. IsraBis is free to download and use on both iOS and Android. The free base tier includes full price comparison across all 49 chains with no limit on products or searches.",
                 },
                 {
                   q: "How often are prices updated?",
@@ -334,7 +334,7 @@ export default function EnglishLandingPage() {
                 },
                 {
                   q: "How accurate are the prices?",
-                  a: "Very accurate. Prices come directly from the official government price database that all 33 chains publish by law, updated every few hours. This means prices reflect actual shelf prices within the same day. Note that promotional prices and loyalty card discounts may vary by branch.",
+                  a: "Very accurate. Prices come directly from the official government price database that all 49 chains publish by law, updated every few hours. This means prices reflect actual shelf prices within the same day. Note that promotional prices and loyalty card discounts may vary by branch.",
                 },
               ].map(({ q, a }) => (
                 <div key={q} style={{ borderBottom: "1px solid var(--glass-border)", paddingBottom: "var(--space-5)" }}>
@@ -351,7 +351,7 @@ export default function EnglishLandingPage() {
               Start saving on Israeli groceries today
             </h2>
             <p className="text-body c-muted" style={{ maxWidth: "44ch", margin: "0 auto var(--space-7)", lineHeight: "var(--leading-relaxed)" }}>
-              Download IsraBis free on iOS and Android. Compare prices across all 33 supermarket
+              Download IsraBis free on iOS and Android. Compare prices across all 49 supermarket
               chains in seconds.
             </p>
             <div style={{ display: "flex", gap: "var(--space-3)", justifyContent: "center", flexWrap: "wrap" }}>

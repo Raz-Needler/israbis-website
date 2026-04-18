@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "מתכון שניצל — רשימת מרכיבים עם מחירים בכל הרשתות | IsraBis",
-  description: "מתכון שניצל עוף קריספי וטעים — רשימת קניות עם מחירים עדכניים מ-33 רשתות שיווק. כמה עולה לבשל שניצל ביתי לארבעה? גלו ב-IsraBis.",
+  description: "מתכון שניצל עוף קריספי וטעים — רשימת קניות עם מחירים עדכניים מ-49 רשתות שיווק. כמה עולה לבשל שניצל ביתי לארבעה? גלו ב-IsraBis.",
   alternates: { canonical: "https://israbis.com/recipes/schnitzel" },
   openGraph: {
     type: "article",
     title: "מתכון שניצל עוף עם מחירים עדכניים | IsraBis",
-    description: "שניצל עוף קריספי ביתי — רשימת מרכיבים מתומחרת מ-33 רשתות שיווק.",
+    description: "שניצל עוף קריספי ביתי — רשימת מרכיבים מתומחרת מ-49 רשתות שיווק.",
     images: [{ url: "https://images.unsplash.com/photo-1585325701165-c1d48d7c0b32?w=1200&q=80&auto=format&fit=crop", width: 1200, height: 630, alt: "שניצל עוף" }],
   },
 };
@@ -131,7 +131,7 @@ export default function SchnitzelPage() {
                 ראו גם: <Link href="/recipes/shakshuka" className="c-accent" style={{ textDecoration: "underline" }}>מתכון שקשוקה</Link> &middot; <Link href="/recipes/hummus" className="c-accent" style={{ textDecoration: "underline" }}>מתכון חומוס</Link> &middot; <Link href="/recipes/burekas" className="c-accent" style={{ textDecoration: "underline" }}>מתכון בורקס</Link> &middot; <Link href="/recipes" className="c-accent" style={{ textDecoration: "underline" }}>כל המתכונים</Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לדעת כמה בדיוק עולה חזה עוף בסניף הקרוב אליכם? הורידו את IsraBis — 33 רשתות, מחירים בזמן אמת.
+                רוצים לדעת כמה בדיוק עולה חזה עוף בסניף הקרוב אליכם? הורידו את IsraBis — 49 רשתות, מחירים בזמן אמת.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

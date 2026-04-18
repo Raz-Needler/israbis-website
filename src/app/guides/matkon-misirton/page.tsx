@@ -4,7 +4,7 @@ import ArticleJsonLd from "@/components/ArticleJsonLd";
 
 export const metadata: Metadata = {
   title: "מתכון מסרטון — מיוטיוב וטיקטוק למטבח שלכם | IsraBis",
-  description: "הדביקו לינק של סרטון בישול מיוטיוב, טיקטוק, או אינסטגרם — וקבלו מתכון כתוב מסודר עם רשימת מרכיבים, כמויות, הוראות בישול, ומחירים בכל 33 הרשתות.",
+  description: "הדביקו לינק של סרטון בישול מיוטיוב, טיקטוק, או אינסטגרם — וקבלו מתכון כתוב מסודר עם רשימת מרכיבים, כמויות, הוראות בישול, ומחירים בכל 49 הרשתות.",
   alternates: { canonical: "/guides/matkon-misirton" },
 };
 
@@ -38,7 +38,7 @@ export default function GuideMatkonMisirton() {
           <section>
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>וגם מחירים בכל הרשתות</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              הפיצ&apos;ר הייחודי: כל מרכיב שה-AI מזהה מקושר אוטומטית למוצר המתאים ב-33 רשתות השיווק. אתם רואים מיד כמה עולה לבשל את המנה, באיזו רשת הכי זול, ויכולים להוסיף הכל לעגלה בלחיצה אחת.
+              הפיצ&apos;ר הייחודי: כל מרכיב שה-AI מזהה מקושר אוטומטית למוצר המתאים ב-49 רשתות השיווק. אתם רואים מיד כמה עולה לבשל את המנה, באיזו רשת הכי זול, ויכולים להוסיף הכל לעגלה בלחיצה אחת.
             </p>
           </section>
 

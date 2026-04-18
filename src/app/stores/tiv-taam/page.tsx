@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://israbis.com/stores/tiv-taam" },
   openGraph: {
     title: "מחירים בטיב טעם לעומת 32 רשתות",
-    description: "בדקו מחירי טיב טעם מול שופרסל, ויקטורי, ועוד 30 רשתות — בלחיצה אחת.",
+    description: "בדקו מחירי טיב טעם מול שופרסל, ויקטורי, ועוד 46 רשתות — בלחיצה אחת.",
   },
 };
 
@@ -78,7 +78,7 @@ export default function TivTaamPage() {
               <li style={{ marginBottom: "var(--space-3)" }}>הורידו את IsraBis בחינם (iOS או Android)</li>
               <li style={{ marginBottom: "var(--space-3)" }}>הפעילו מיקום — IsraBis תמצא את הסניף הקרוב</li>
               <li style={{ marginBottom: "var(--space-3)" }}>חפשו מוצרים ספציפיים שאתם קונים בטיב טעם</li>
-              <li style={{ marginBottom: "var(--space-3)" }}>ראו השוואה מלאה לכל 33 הרשתות</li>
+              <li style={{ marginBottom: "var(--space-3)" }}>ראו השוואה מלאה לכל 49 הרשתות</li>
               <li style={{ marginBottom: "var(--space-3)" }}>חסכו כסף על מה שאפשר, קנו בטיב טעם מה שייחודי לה</li>
             </ol>
           </section>
@@ -88,7 +88,7 @@ export default function TivTaamPage() {
               ראו גם: <Link href="/stores/victory" className="c-accent" style={{ textDecoration: "underline" }}>מחירי ויקטורי</Link> &middot; <Link href="/stores/yochananof" className="c-accent" style={{ textDecoration: "underline" }}>מחירי יוחננוף</Link> &middot; <Link href="/stores" className="c-accent" style={{ textDecoration: "underline" }}>כל הרשתות</Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת מה מחיר מוצר ספציפי בטיב טעם? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+              רוצים לדעת מה מחיר מוצר ספציפי בטיב טעם? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

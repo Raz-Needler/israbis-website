@@ -195,7 +195,7 @@ export default function ShufersalVsRamiLevyPage() {
                 </Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לראות את ההשוואה המדויקת על הסל שלכם? הורידו את IsraBis — השוואת מחירים בין 33 רשתות, בחינם, בעברית.
+                רוצים לראות את ההשוואה המדויקת על הסל שלכם? הורידו את IsraBis — השוואת מחירים בין 49 רשתות, בחינם, בעברית.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

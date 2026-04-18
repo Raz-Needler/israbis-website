@@ -28,7 +28,7 @@ export default function TermsPage() {
             <h2 className="text-h3" style={{ marginBottom: "var(--space-3)" }}>2. תיאור השירות</h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>IsraBis היא פלטפורמה המאפשרת:</p>
             <ul className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", paddingInlineStart: "var(--space-5)", marginTop: "var(--space-2)" }}>
-              <li>השוואת מחירי מוצרי מזון ב-33 רשתות סופרמרקט בישראל</li>
+              <li>השוואת מחירי מוצרי מזון ב-49 רשתות סופרמרקט בישראל</li>
               <li>ניהול רשימות קניות ועגלות קניות חכמות</li>
               <li>חיפוש וגילוי מתכונים מהאפליקציה ומהאינטרנט</li>
               <li>סריקת ערכים תזונתיים מתמונות מזון באמצעות בינה מלאכותית (AI)</li>

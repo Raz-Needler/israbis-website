@@ -43,7 +43,7 @@ const howToSchema = {
     {
       "@type": "HowToStep",
       name: "השוו מחירים בין הרשתות",
-      text: "IsraBis מציגה את עלות העגלה הכוללת בכל 33 הרשתות — בחרו את הזולה ביותר עבור הסל שלכם.",
+      text: "IsraBis מציגה את עלות העגלה הכוללת בכל 49 הרשתות — בחרו את הזולה ביותר עבור הסל שלכם.",
       position: 4,
     },
     {
@@ -240,7 +240,7 @@ export default function SalKniyotShavuiPage() {
                 </Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לדעת כמה יעלה הסל השבועי שלכם? הורידו את IsraBis — בנו עגלה וראו השוואה מלאה בין 33 רשתות.
+                רוצים לדעת כמה יעלה הסל השבועי שלכם? הורידו את IsraBis — בנו עגלה וראו השוואה מלאה בין 49 רשתות.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

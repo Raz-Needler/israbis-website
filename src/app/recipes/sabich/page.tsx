@@ -3,12 +3,12 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "מתכון סביח — רשימת מרכיבים עם מחירים בכל הרשתות | IsraBis",
-  description: "מתכון סביח ישראלי קלאסי עם חצילים מטוגנים, ביצה קשה, חומוס וטחינה — רשימת קניות עם מחירים עדכניים מ-33 רשתות. כמה עולה להכין סביח בבית?",
+  description: "מתכון סביח ישראלי קלאסי עם חצילים מטוגנים, ביצה קשה, חומוס וטחינה — רשימת קניות עם מחירים עדכניים מ-49 רשתות. כמה עולה להכין סביח בבית?",
   alternates: { canonical: "https://israbis.com/recipes/sabich" },
   openGraph: {
     type: "article",
     title: "מתכון סביח ישראלי עם מחירים עדכניים | IsraBis",
-    description: "סביח קלאסי עם חצילים מטוגנים, ביצה קשה, חומוס וטחינה — רשימת מרכיבים מתומחרת מ-33 רשתות.",
+    description: "סביח קלאסי עם חצילים מטוגנים, ביצה קשה, חומוס וטחינה — רשימת מרכיבים מתומחרת מ-49 רשתות.",
     images: [{ url: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=1200&q=80&auto=format&fit=crop", width: 1200, height: 630, alt: "סביח" }],
   },
 };
@@ -146,7 +146,7 @@ export default function SabichPage() {
                 ראו גם: <Link href="/recipes/hummus" className="c-accent" style={{ textDecoration: "underline" }}>מתכון חומוס ביתי</Link> &middot; <Link href="/recipes/shakshuka" className="c-accent" style={{ textDecoration: "underline" }}>מתכון שקשוקה</Link> &middot; <Link href="/recipes/burekas" className="c-accent" style={{ textDecoration: "underline" }}>מתכון בורקס</Link> &middot; <Link href="/recipes" className="c-accent" style={{ textDecoration: "underline" }}>כל המתכונים</Link>
               </p>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-                רוצים לדעת כמה עולים חצילים וביצים בסניף הקרוב אליכם? הורידו את IsraBis — 33 רשתות, מחירים בזמן אמת.
+                רוצים לדעת כמה עולים חצילים וביצים בסניף הקרוב אליכם? הורידו את IsraBis — 49 רשתות, מחירים בזמן אמת.
               </p>
               <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
             </section>

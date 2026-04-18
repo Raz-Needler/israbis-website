@@ -41,7 +41,7 @@ export default function StoresContent() {
         <div className="w-980 text-center">
           <SectionHeader
             label="רשתות"
-            title={<>כל <span className="c-accent">33 הרשתות</span> במקום אחד.</>}
+            title={<>כל <span className="c-accent">49 הרשתות</span> במקום אחד.</>}
             subtitle="IsraBis סורקת מחירים מכל רשתות השיווק בישראל מדי יום, ישירות ממאגר המחירים הממשלתי לפי חוק שקיפות מחירי מזון 2014."
           />
         </div>
@@ -78,7 +78,7 @@ export default function StoresContent() {
           </div>
           <FadeIn delay={0.3}>
             <p className="text-center text-caption c-muted" style={{ marginTop: "var(--space-8)" }}>
-              ועוד 9 רשתות נוספות. המחירים מתעדכנים מדי יום.
+              ועוד 25 רשתות נוספות. המחירים מתעדכנים מדי יום.
             </p>
           </FadeIn>
         </div>

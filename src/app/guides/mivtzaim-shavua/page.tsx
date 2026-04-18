@@ -83,7 +83,7 @@ export default function MivtzaimShavuaPage() {
               כיצד IsraBis חושף מבצעי בלוף
             </h2>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
-              IsraBis מקבלת מחירים עדכניים מ-33 רשתות כל יום. כשאתם רואים "מבצע" בסופר — פשוט פתחו את IsraBis וחפשו את המוצר. תוך שניות תראו:
+              IsraBis מקבלת מחירים עדכניים מ-49 רשתות כל יום. כשאתם רואים "מבצע" בסופר — פשוט פתחו את IsraBis וחפשו את המוצר. תוך שניות תראו:
             </p>
             <ul className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", paddingRight: "var(--space-6)", marginTop: "var(--space-3)" }}>
               <li style={{ marginBottom: "var(--space-3)" }}>את מחיר ה"מבצע" שאתם רואים</li>
@@ -157,7 +157,7 @@ export default function MivtzaimShavuaPage() {
               </Link>
             </p>
             <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-5)" }}>
-              רוצים לדעת אם מבצע שאתם רואים בסופר באמת משתלם? הורידו את IsraBis — בדיקת מחיר בשניות, 33 רשתות, בחינם.
+              רוצים לדעת אם מבצע שאתם רואים בסופר באמת משתלם? הורידו את IsraBis — בדיקת מחיר בשניות, 49 רשתות, בחינם.
             </p>
             <Link href="/download" className="btn btn-accent">הורידו בחינם</Link>
           </section>

@@ -106,7 +106,7 @@ export default function BestSupermarketAppsIsrael() {
                   </thead>
                   <tbody>
                     {[
-                      { app: "IsraBis", chains: "33", products: "255,000+", ai: "IsraSef, fridge scan, recipe from video", free: "Yes", highlight: true },
+                      { app: "IsraBis", chains: "49", products: "255,000+", ai: "IsraSef, fridge scan, recipe from video", free: "Yes", highlight: true },
                       { app: "PriceZ", chains: "~25", products: "N/A", ai: "Barcode scan", free: "Yes", highlight: false },
                       { app: "CHP", chains: "19", products: "N/A", ai: "Location-first", free: "Yes", highlight: false },
                       { app: "SnapList", chains: "Fewer", products: "N/A", ai: "AI list creation", free: "Yes", highlight: false },
@@ -143,7 +143,7 @@ export default function BestSupermarketAppsIsrael() {
               </h2>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-4)" }}>
                 IsraBis stands apart from every other Israeli price comparison app for one core
-                reason: it covers all 33 supermarket chains in Israel. Every other app on this list
+                reason: it covers all 49 supermarket chains in Israel. Every other app on this list
                 covers somewhere between 19 and 25. If you shop at a chain the other apps miss —
                 and many Israelis do — you&apos;re flying blind without IsraBis.
               </p>
@@ -154,7 +154,7 @@ export default function BestSupermarketAppsIsrael() {
                 <li className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
                   <strong style={{ color: "var(--text)" }}>IsraSef AI Chef:</strong> Ask any cooking
                   question, get recipes, and IsraBis automatically prices the ingredient list across
-                  all 33 chains so you know where to buy each item.
+                  all 49 chains so you know where to buy each item.
                 </li>
                 <li className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)" }}>
                   <strong style={{ color: "var(--text)" }}>Fridge scanner:</strong> Photograph your
@@ -271,7 +271,7 @@ export default function BestSupermarketAppsIsrael() {
               </h2>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-4)" }}>
                 For most Israeli shoppers, the choice is clear: <strong style={{ color: "var(--text)" }}>IsraBis</strong> offers the
-                broadest chain coverage (all 33), the largest product database (255,000+), 4-hour
+                broadest chain coverage (all 49), the largest product database (255,000+), 4-hour
                 price updates, and the only AI-powered recipe and fridge scanning features available
                 in any Israeli grocery app. It is free and works on both iOS and Android.
               </p>
@@ -293,7 +293,7 @@ export default function BestSupermarketAppsIsrael() {
                 Download IsraBis
               </h2>
               <p className="text-body c-muted" style={{ lineHeight: "var(--leading-relaxed)", marginBottom: "var(--space-6)" }}>
-                IsraBis is free on iOS and Android. Compare prices across all 33 Israeli supermarket
+                IsraBis is free on iOS and Android. Compare prices across all 49 Israeli supermarket
                 chains, use the AI chef, scan your fridge, and share shopping lists with your family.
                 No subscription required.
               </p>
