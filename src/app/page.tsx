@@ -14,7 +14,6 @@ import FAQ from "@/components/FAQ";
 import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
 import TypeWriter from "@/components/TypeWriter";
-import HeroCard from "@/components/HeroCard";
 
 /* ── Counter ── */
 function Counter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
@@ -157,17 +156,12 @@ export default function HomePage() {
 
       {/* ═══ 5. FEATURES GRID ═══ */}
       <section className="sec" style={{ background: "var(--bg-secondary)" }}>
-        <div className="w-1120" style={{ marginBottom: "var(--space-8)" }}>
-          <FadeIn>
-            <HeroCard
-              variant="solar-arc"
-              eyebrow="IsraBis · תכונות"
-              title={<>כל מה שצריך. <span className="grad-text">באפליקציה אחת.</span></>}
-              subtitle="השוואת מחירים בין 33 רשתות, מתכונים ללא הגבלה, כלי AI מתקדמים, וניהול קניות משפחתי — במקום אחד."
-              cta={{ label: "גלו את כל התכונות", href: "/features" }}
-              comp="comp_1"
-            />
-          </FadeIn>
+        <div className="w-980">
+          <SectionHeader
+            label="תכונות"
+            title={<>כל מה שצריך.<br /><span className="grad-text">באפליקציה אחת.</span></>}
+            subtitle="IsraBis היא לא רק השוואת מחירים. היא מערכת שלמה לניהול קניות, בישול, ותקציב משפחתי."
+          />
         </div>
 
         <div className="w-1120 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: "var(--space-5)" }}>
@@ -208,25 +202,18 @@ export default function HomePage() {
       {/* ═══ 6. AI SECTION — with typewriter ═══ */}
       <section className="sec relative overflow-hidden">
         <div className="glow" style={{ width: 400, height: 400, top: "10%", left: -100, background: "var(--accent)", opacity: 0.06 }} />
-        <div className="w-1120" style={{ marginBottom: "var(--space-8)" }}>
-          <FadeIn>
-            <HeroCard
-              variant="spotlight-ring"
-              eyebrow="IsraBis · AI"
-              title={<>כלים חכמים ש<span className="c-accent">עושים את העבודה.</span></>}
-              subtitle="5 כלי AI שמקצרים הכל — מסריקת מקרר וסריקת קבלה, דרך חילוץ מתכון מסרטון, ועד ישרא-שף שעונה על כל שאלה."
-              cta={{ label: "גלו את כל הכלים החכמים", href: "/ai" }}
-              comp="comp_6"
-            />
-          </FadeIn>
-        </div>
         <div className="w-1120">
-          <div className="text-center" style={{ marginBottom: "var(--space-8)" }}>
+          <div className="text-center" style={{ marginBottom: "var(--space-10)" }}>
             <FadeIn>
               <div className="badge" style={{ marginBottom: "var(--space-4)" }}>
                 <Cpu size={12} />
                 בינה מלאכותית מתקדמת
               </div>
+            </FadeIn>
+            <FadeIn delay={0.05}>
+              <h2 className="text-h1" style={{ marginBottom: "var(--space-4)" }}>
+                כלים חכמים ש<span className="c-accent">עושים את העבודה.</span>
+              </h2>
             </FadeIn>
             <FadeIn delay={0.1}>
               <div style={{ minHeight: "1.8em" }}>
@@ -283,24 +270,11 @@ export default function HomePage() {
 
       {/* ═══ 7. STORES PREVIEW ═══ */}
       <section className="sec" style={{ background: "var(--bg-secondary)" }}>
-        <div className="w-1120" style={{ marginBottom: "var(--space-8)" }}>
-          <FadeIn>
-            <HeroCard
-              variant="panorama-strip"
-              eyebrow="IsraBis · רשתות"
-              title={<><span className="c-accent">33 רשתות.</span> מחיר אחד הכי זול.</>}
-              subtitle="הפרש של עד 21% על סל של 50 מוצרים בסיסיים בין הרשתות הזולות ליקרות — לפי חוק שקיפות מחירי מזון."
-              stats={[
-                { value: "33", label: "רשתות" },
-                { value: "21%", label: "פערים" },
-                { value: "יומי", label: "עדכון" },
-                { value: "∞", label: "סניפים" },
-              ]}
-              cta={{ label: "כל 33 הרשתות", href: "/stores" }}
-            />
-          </FadeIn>
-        </div>
         <div className="w-980">
+          <SectionHeader
+            label="רשתות"
+            title={<><span className="c-accent">33 רשתות.</span> מחיר אחד הכי זול.</>}
+          />
 
           <FadeIn>
             <div className="text-center" style={{ marginTop: "calc(-1 * var(--space-4))", marginBottom: "var(--space-3)" }}>

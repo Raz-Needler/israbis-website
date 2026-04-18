@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import SectionHeader from "@/components/SectionHeader";
-import HeroCard from "@/components/HeroCard";
 
 const TOOLS = [
   {
@@ -43,19 +42,14 @@ const TOOLS = [
 export default function AIContent() {
   return (
     <>
-      {/* Header — HeroCard */}
+      {/* Header */}
       <section className="sec" style={{ paddingBottom: "var(--space-6)", background: "var(--bg-secondary)" }}>
-        <div className="w-1120">
-          <FadeIn>
-            <HeroCard
-              variant="prism-beam"
-              eyebrow="IsraBis · AI"
-              title={<>כלים חכמים <span className="c-accent">שעובדים בשבילך.</span></>}
-              subtitle="צלמו, סרקו, הדביקו — והמערכת עושה את השאר. 5 כלים מבוססי בינה מלאכותית מתקדמת לסריקת מקרר, חילוץ מתכון מסרטון, סריקת קבלה, זיהוי קלוריות, וישרא-שף."
-              cta={{ label: "הורידו וגלו", href: "/download" }}
-              comp="comp_3"
-            />
-          </FadeIn>
+        <div className="w-980 text-center">
+          <SectionHeader
+            label="AI"
+            title={<>כלים חכמים <span className="c-accent">שעובדים בשבילך.</span></>}
+            subtitle="צלמו, סרקו, הדביקו — והמערכת עושה את השאר. כל הכלים מבוססי בינה מלאכותית מתקדמת."
+          />
         </div>
       </section>
 

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import SectionHeader from "@/components/SectionHeader";
-import HeroCard from "@/components/HeroCard";
 
 const FEATURES = [
   {
@@ -62,19 +61,14 @@ const FEATURES = [
 export default function FeaturesContent() {
   return (
     <>
-      {/* Header — HeroCard */}
+      {/* Header */}
       <section className="sec" style={{ paddingBottom: "var(--space-7)", background: "var(--bg-secondary)" }}>
-        <div className="w-1120">
-          <FadeIn>
-            <HeroCard
-              variant="ribbon-flag"
-              eyebrow="IsraBis · תכונות"
-              title={<>כל מה ש-<span className="grad-text">IsraBis</span> יודעת לעשות.</>}
-              subtitle="7 כלים מלאים — השוואת מחירים בין 33 רשתות, מתכונים ללא הגבלה עם מחירים, סריקות AI, ניהול קניות משפחתי ותקציב חודשי. הכל בעברית."
-              cta={{ label: "התחילו עכשיו — חינם", href: "/download" }}
-              comp="comp_10"
-            />
-          </FadeIn>
+        <div className="w-980 text-center">
+          <SectionHeader
+            label="תכונות"
+            title={<>כל מה ש-<span className="grad-text">IsraBis</span> יודעת לעשות.</>}
+            subtitle="7 כלים שהופכים קניות לחוויה חכמה"
+          />
         </div>
       </section>
 

@@ -124,12 +124,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <JsonLd />
-          {/* Accessibility: keyboard users can skip repeated nav chrome and
-              jump straight to the page's main content. The link is visually
-              hidden until focused (see .skip-link in globals.css). */}
-          <a href="#main" className="skip-link">דלגו לתוכן הראשי</a>
           <Navbar />
-          <main id="main">{children}</main>
+          <main>{children}</main>
           <Footer />
         </ThemeProvider>
       </body>
