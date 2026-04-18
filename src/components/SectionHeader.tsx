@@ -15,7 +15,7 @@ export default function SectionHeader({ label, title, subtitle, align = "center"
   const isCenter = align === "center";
 
   return (
-    <div className={className} style={{ textAlign: isCenter ? "center" : "right", marginBottom: "var(--space-8)" }}>
+    <div className={className} style={{ textAlign: isCenter ? "center" : "right", marginBottom: "var(--space-10)" }}>
       <FadeIn>
         <p className="text-overline" style={{ marginBottom: "var(--space-2)" }}>{label}</p>
       </FadeIn>

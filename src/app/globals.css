@@ -159,20 +159,38 @@ img { max-width: 100%; height: auto; }
    LAYOUT
    ═══════════════════════════════════════════════════════════════════ */
 
-.w-980  { max-width: 980px; margin: 0 auto; padding: 0 var(--space-4); width: 100%; }
-.w-1120 { max-width: 1120px; margin: 0 auto; padding: 0 var(--space-4); width: 100%; }
+/* Containers — more generous horizontal breathing room on every
+   viewport. Mobile: 20px gutters (was 16). Tablet: 32px (was 24).
+   Desktop: 48px. Large desktop: 64px. Makes the page feel less
+   cramped against the viewport edges on every device. */
+.w-980  { max-width: 980px; margin: 0 auto; padding: 0 var(--space-5); width: 100%; }
+.w-1120 { max-width: 1120px; margin: 0 auto; padding: 0 var(--space-5); width: 100%; }
 @media (min-width: 640px) {
-  .w-980  { padding: 0 var(--space-6); }
-  .w-1120 { padding: 0 var(--space-6); }
+  .w-980  { padding: 0 var(--space-7); }
+  .w-1120 { padding: 0 var(--space-7); }
+}
+@media (min-width: 1024px) {
+  .w-980  { padding: 0 var(--space-9); }
+  .w-1120 { padding: 0 var(--space-9); }
+}
+@media (min-width: 1280px) {
+  .w-980  { padding: 0 var(--space-11); }
+  .w-1120 { padding: 0 var(--space-11); }
 }
 
-.sec    { padding: var(--space-11) 0; }
-.sec-sm { padding: var(--space-8) 0; }
-.sec-lg { padding: var(--space-12) 0; }
+/* Section vertical rhythm — more air between sections so every
+   block has room to breathe. Mobile 80px → desktop 140px. */
+.sec    { padding: var(--space-12) 0; }
+.sec-sm { padding: var(--space-9) 0; }
+.sec-lg { padding: var(--space-13) 0; }
 @media (min-width: 768px) {
-  .sec    { padding: var(--space-13) 0; }
-  .sec-sm { padding: var(--space-10) 0; }
-  .sec-lg { padding: var(--space-14) 0; }
+  .sec    { padding: var(--space-14) 0; }
+  .sec-sm { padding: var(--space-11) 0; }
+  .sec-lg { padding: 140px 0; }
+}
+@media (min-width: 1280px) {
+  .sec    { padding: 140px 0; }
+  .sec-lg { padding: 160px 0; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
