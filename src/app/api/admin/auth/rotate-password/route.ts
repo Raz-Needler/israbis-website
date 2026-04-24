@@ -6,7 +6,7 @@
  */
 
 import { NextResponse, type NextRequest } from 'next/server';
-import { verify as argonVerify, hash as argonHash } from '@node-rs/argon2';
+import { hashPassword, verifyPassword } from '@/lib/admin/password';
 import { admin } from '@/lib/admin/supabase';
 import { verifySession, sessionCookieName, signSession, buildSessionCookie } from '@/lib/admin/auth';
 import { audit } from '@/lib/admin/audit';
@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
   const userRes = await admin().from('admin_users').select('id, password_hash, role, username').eq('id', claims.sub).maybeSingle();
   if (userRes.error || !userRes.data) return NextResponse.json({ error: 'internal' }, { status: 500 });
 
-  const ok = await argonVerify(userRes.data.password_hash, current_password).catch(() => false);
+  const ok = await verifyPassword(userRes.data.password_hash, current_password);
   if (!ok) return NextResponse.json({ error: 'invalid_credentials' }, { status: 401 });
 
-  const newHash = await argonHash(new_password, { memoryCost: 65536, timeCost: 3, parallelism: 4 });
+  const newHash = await hashPassword(new_password);
   const upd = await admin()
     .from('admin_users')
     .update({ password_hash: newHash, password_changed_at: new Date().toISOString() })

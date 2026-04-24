@@ -5,7 +5,7 @@
  */
 
 import { NextResponse, type NextRequest } from 'next/server';
-import { verify as argonVerify } from '@node-rs/argon2';
+import { verifyPassword } from '@/lib/admin/password';
 import { admin, adminSupabase } from '@/lib/admin/supabase';
 import { signSession, buildSessionCookie, type AdminRole } from '@/lib/admin/auth';
 import { audit, hashIp, hashUserAgent } from '@/lib/admin/audit';
@@ -68,9 +68,8 @@ export async function POST(req: NextRequest) {
     return json({ error: 'locked', until: u.locked_until }, 423);
   }
 
-  // Verify argon2 hash
-  let valid = false;
-  try { valid = await argonVerify(u.password_hash, password); } catch { valid = false; }
+  // Verify argon2 hash (pure WASM — works on any runtime)
+  const valid = await verifyPassword(u.password_hash, password);
   if (!valid) {
     await recordAttempt(ipHash, username, false, 'bad_password');
     await admin()
