@@ -1,6 +1,7 @@
 import { sql } from '@/lib/admin/sql';
 import { RetentionGrid } from '../_components/Charts';
 import { StatCard } from '../_components/StatCard';
+import { EmptyCallout } from '../_components/EmptyCallout';
 import '../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -83,6 +84,13 @@ export default async function RetentionPage({ searchParams }: { searchParams: Pr
         <StatCard label="Avg Week-1 retention" value={avgW1Mean.toFixed(1)} unit="%" accent="green" />
         <StatCard label="Window" value={days} unit="days" accent="gold" />
       </div>
+
+      {totalCohorts === 0 && !error && (
+        <EmptyCallout
+          headline="No retention cohorts in this window."
+          subline="The cohort grid needs analytics.events to compute week-over-week return rates. Seed simulated data to see cohorts form and decay realistically."
+        />
+      )}
 
       <div className="admin-card">
         <div className="admin-card-head">

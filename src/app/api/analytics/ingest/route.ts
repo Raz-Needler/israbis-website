@@ -8,6 +8,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { adminSupabase } from '@/lib/admin/supabase';
 import { hashIp } from '@/lib/admin/audit';
+import { rateLimit, ipKey } from '@/lib/admin/rateLimit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -47,8 +48,15 @@ export async function POST(req: NextRequest) {
   const ip = (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || 'unknown';
   const ipHash = await hashIp(ip);
 
-  // TODO: IP-based rate limit via a tiny in-memory LRU or Supabase sliding window.
-  // For Phase 1 we rely on Vercel's built-in rate limiting + upstream WAF.
+  // Per-IP rate limit: 60 batches / minute (each batch up to 100 events = 6k eps).
+  // This is per-instance — Vercel edge/WAF handles global throttling.
+  const rl = rateLimit(ipKey(ip, 'ingest'), 60, 60);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'rate_limited', retry_after_seconds: rl.retryAfterSeconds },
+      { status: 429, headers: { ...corsHeaders, 'retry-after': String(rl.retryAfterSeconds) } }
+    );
+  }
 
   let body: { events?: IncomingEvent[] };
   try { body = await req.json(); } catch {

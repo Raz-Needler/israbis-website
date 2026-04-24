@@ -84,9 +84,15 @@ async function handleLogin(req: NextRequest) {
   const valid = await verifyPassword(u.password_hash, password);
   if (!valid) {
     await recordAttempt(ipHash, username, false, 'bad_password');
+    const prevFails = (u as { failed_login_count?: number }).failed_login_count ?? 0;
+    const nextFails = prevFails + 1;
+    // Auto-lock at 10 consecutive failures: 15-minute timeout, doubled on each retry
+    const autoLock = nextFails >= 10
+      ? new Date(Date.now() + 15 * 60 * 1000 * Math.min(8, Math.pow(2, nextFails - 10))).toISOString()
+      : null;
     await admin()
       .from('admin_users')
-      .update({ failed_login_count: (u as { failed_login_count?: number }).failed_login_count ?? 0 + 1 })
+      .update({ failed_login_count: nextFails, ...(autoLock ? { locked_until: autoLock } : {}) })
       .eq('id', u.id);
     return json({ error: 'invalid_credentials' }, 401);
   }

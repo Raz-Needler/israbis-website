@@ -1,6 +1,7 @@
 import { sql } from '@/lib/admin/sql';
 import { FunnelChart } from '../_components/Charts';
 import { StatCard } from '../_components/StatCard';
+import { EmptyCallout } from '../_components/EmptyCallout';
 import '../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -92,6 +93,7 @@ export default async function FunnelsPage({ searchParams }: { searchParams: Prom
   const days = Math.max(1, Math.min(365, parseInt(sp.days ?? '30', 10)));
 
   const funnels = await Promise.all(FUNNELS.map(async f => ({ def: f, steps: await countFunnel(f, days) })));
+  const totalReached = funnels.reduce((s, f) => s + f.steps.reduce((s2, st) => s2 + st.value, 0), 0);
 
   return (
     <div>
@@ -116,6 +118,13 @@ export default async function FunnelsPage({ searchParams }: { searchParams: Prom
         <StatCard label="Total steps"           value={FUNNELS.reduce((s, f) => s + f.steps.length, 0)} accent="purple" />
         <StatCard label="Window (days)"         value={days} accent="gold" />
       </div>
+
+      {totalReached === 0 && (
+        <EmptyCallout
+          headline="No funnel data yet."
+          subline="Every funnel here reads from analytics.events. Seed 500 synthetic users to see all six funnels populate with realistic signup → purchase, AI engagement, and scan flows."
+        />
+      )}
 
       <div className="chart-grid cols-1-1">
         {funnels.map(({ def, steps }) => (

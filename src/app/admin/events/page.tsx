@@ -1,4 +1,5 @@
 import { adminSupabase } from '@/lib/admin/supabase';
+import { EmptyCallout } from '../_components/EmptyCallout';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,6 +74,13 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
       </form>
 
       {error && <div style={s.error}>{error}</div>}
+
+      {total === 0 && !error && (
+        <EmptyCallout
+          headline="No analytics events in this window."
+          subline="Either the mobile SDK hasn't been wired up yet, or the filter is too narrow. Seed a synthetic user population to unlock every analytics page — no production data is touched."
+        />
+      )}
 
       <div style={s.tableCard}>
         <table style={s.table}>

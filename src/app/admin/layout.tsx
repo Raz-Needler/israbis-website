@@ -24,6 +24,7 @@ const NAV: NavItem[] = [
   { href: '/admin/subscriptions',    label: 'Subscriptions',   group: 'Revenue',   icon: '₪' },
   { href: '/admin/geo',              label: 'Geography',       group: 'Product',   icon: '◉' },
   { href: '/admin/sql',              label: 'SQL Console',     group: 'Ops', minRole: 'master', icon: '⌘' },
+  { href: '/admin/demo',             label: 'Simulated Data',  group: 'Ops', minRole: 'master', icon: '⌁' },
   { href: '/admin/exports',          label: 'Exports',         group: 'Ops',       icon: '⇩' },
   { href: '/admin/audit-log',        label: 'Audit Log',       group: 'Ops',       icon: '◈' },
   { href: '/admin/settings',         label: 'Settings',        group: 'Ops',       icon: '⚙' },

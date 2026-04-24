@@ -2,6 +2,7 @@ import { sql } from '@/lib/admin/sql';
 import { adminSupabase } from '@/lib/admin/supabase';
 import { StatCard } from '../_components/StatCard';
 import { HBarChart, AreaSeriesChart } from '../_components/Charts';
+import { EmptyCallout } from '../_components/EmptyCallout';
 import '../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -58,6 +59,13 @@ export default async function ScannersPage({ searchParams }: { searchParams: Pro
           <button type="submit" className="btn btn-primary">Apply</button>
         </form>
       </header>
+
+      {scanFreq.rows.length === 0 && (receiptRes.count ?? 0) === 0 && (
+        <EmptyCallout
+          headline="No scanner activity in this window."
+          subline="The barcode, fridge, calorie, and receipt scanners fire analytics.scan.* events. Seed simulated data to see the scan funnel populate."
+        />
+      )}
 
       <div className="stat-grid cols-5">
         <StatCard label="Calorie scans"    value={byFeature.calorie_scan ?? 0} accent="green" source="ApiUsage" />
