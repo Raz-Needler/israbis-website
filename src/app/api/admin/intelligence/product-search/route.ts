@@ -58,50 +58,50 @@ export async function GET(req: NextRequest) {
   // If the query looks like a barcode (digits only), skip the name search.
   const isBarcode = /^\d{5,}$/.test(q);
 
-  const sqlQuery = isBarcode
-    ? `
-      WITH candidates AS (
-        SELECT barcode FROM public.product_prices
-        WHERE barcode = '${sqlEscape}'
-        GROUP BY barcode
-        LIMIT ${limit}
-      )
-      SELECT pp.barcode,
-             (ARRAY_AGG(pp.product_name ORDER BY pp.last_updated DESC NULLS LAST))[1] AS product_name,
-             pp.chain_key,
-             MIN(pp.price_nis)::numeric(10,2) AS min_price,
-             MAX(pp.price_nis)::numeric(10,2) AS max_price,
-             AVG(pp.price_nis)::numeric(10,2) AS avg_price,
-             COUNT(DISTINCT pp.store_id)::int AS store_count
-      FROM public.product_prices pp
-      JOIN candidates c USING (barcode)
-      WHERE pp.price_nis IS NOT NULL AND pp.price_nis > 0
-      GROUP BY pp.barcode, pp.chain_key
-    `
-    : `
-      WITH candidates AS (
-        SELECT DISTINCT ON (barcode) barcode, product_name
-        FROM public.product_prices
-        WHERE product_name ILIKE '%${sqlEscape}%'
-          AND price_nis IS NOT NULL AND price_nis > 0
-          AND barcode IS NOT NULL
-        ORDER BY barcode, last_updated DESC
-        LIMIT ${limit * 3}
-      )
-      SELECT pp.barcode,
-             (ARRAY_AGG(pp.product_name ORDER BY pp.last_updated DESC NULLS LAST))[1] AS product_name,
-             pp.chain_key,
-             MIN(pp.price_nis)::numeric(10,2) AS min_price,
-             MAX(pp.price_nis)::numeric(10,2) AS max_price,
-             AVG(pp.price_nis)::numeric(10,2) AS avg_price,
-             COUNT(DISTINCT pp.store_id)::int AS store_count
-      FROM public.product_prices pp
-      JOIN candidates c USING (barcode)
-      WHERE pp.price_nis IS NOT NULL AND pp.price_nis > 0
-      GROUP BY pp.barcode, pp.chain_key
-    `;
+  // Two-phase query. Phase 1: find candidate barcodes fast. Phase 2: enrich
+  // with per-chain prices. The earlier one-shot approach used
+  // `DISTINCT ON (barcode) ORDER BY barcode, last_updated DESC` which forced
+  // Postgres to sort every matching row before deduping — fine for common
+  // terms like "חלב" but timing out on rarer ones like "עגבניה" because the
+  // trigram index returned enough matches to blow past the 30s RPC budget.
+  //
+  // Phase 1 now uses a simple `LIMIT` (no ORDER BY, no DISTINCT) — the
+  // trigram GIN index returns candidates fast and we de-duplicate barcodes
+  // in JS. Over-fetching a bit (limit × 8) is cheap compared to a sort.
+  const phase1Query = isBarcode
+    ? `SELECT barcode FROM public.product_prices WHERE barcode = '${sqlEscape}' GROUP BY barcode LIMIT ${limit}`
+    : `SELECT barcode FROM public.product_prices WHERE product_name ILIKE '%${sqlEscape}%' AND barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0 LIMIT ${limit * 8}`;
 
-  const { data, error } = await sb.schema('admin').rpc('run_readonly_sql', { q: sqlQuery, p: [] });
+  const phase1 = await sb.schema('admin').rpc('run_readonly_sql', { q: phase1Query, p: [] });
+  if (phase1.error) {
+    return NextResponse.json({ error: 'search_failed', detail: phase1.error.message }, { status: 500 });
+  }
+
+  const candidateSet = new Set<string>();
+  for (const r of ((phase1.data as Array<{ barcode: string }> | null) ?? [])) {
+    if (r.barcode) candidateSet.add(r.barcode);
+    if (candidateSet.size >= limit) break;
+  }
+  if (candidateSet.size === 0) {
+    return NextResponse.json({ ok: true, query: q, kind: isBarcode ? 'barcode' : 'name', count: 0, hits: [] });
+  }
+
+  // Phase 2: enrich. Barcode IN-list drives the indexed lookup.
+  const barcodeList = Array.from(candidateSet).map(b => `'${b.replace(/'/g, "''")}'`).join(',');
+  const phase2Query = `
+    SELECT pp.barcode,
+           (ARRAY_AGG(pp.product_name ORDER BY pp.last_updated DESC NULLS LAST))[1] AS product_name,
+           pp.chain_key,
+           MIN(pp.price_nis)::numeric(10,2) AS min_price,
+           MAX(pp.price_nis)::numeric(10,2) AS max_price,
+           AVG(pp.price_nis)::numeric(10,2) AS avg_price,
+           COUNT(DISTINCT pp.store_id)::int AS store_count
+    FROM public.product_prices pp
+    WHERE pp.barcode IN (${barcodeList})
+      AND pp.price_nis IS NOT NULL AND pp.price_nis > 0
+    GROUP BY pp.barcode, pp.chain_key
+  `;
+  const { data, error } = await sb.schema('admin').rpc('run_readonly_sql', { q: phase2Query, p: [] });
   if (error) return NextResponse.json({ error: 'search_failed', detail: error.message }, { status: 500 });
 
   const rows = (data as unknown as RawRow[]) ?? [];
