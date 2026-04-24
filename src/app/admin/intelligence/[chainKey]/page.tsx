@@ -169,6 +169,30 @@ export default async function IntelligenceChainPage(
     avg_price: Number(r.avg_price),
     sku_count: Number(r.sku_count),
   }));
+
+  // Dedicated query for the target chain — it may not appear in the
+  // last-updated-100k sample if its catalog is small (YOCHANANOF has only
+  // ~1,300 rows of the 4.5M). We query directly using the indexed chain_key
+  // so priceRows always includes the target.
+  if (!priceRows.find(r => r.chain === chainKey)) {
+    const selfRes = await sql<{ avg_price: number; sku_count: number }>(`
+      SELECT AVG(price_nis)::numeric(10,2) AS avg_price,
+             COUNT(*)::int AS sku_count
+      FROM public.product_prices
+      WHERE chain_key = '${chainKey.replace(/'/g, '')}'
+        AND price_nis IS NOT NULL AND price_nis > 0
+      LIMIT 1
+    `);
+    const row = selfRes.rows[0];
+    if (row && row.sku_count > 0) {
+      priceRows.push({
+        chain: chainKey,
+        avg_price: Number(row.avg_price),
+        sku_count: Number(row.sku_count),
+      });
+    }
+  }
+
   const leaderByPrice = [...priceRows].sort((a, b) => a.avg_price - b.avg_price)[0] ?? null;
   const selfPrice = priceRows.find(r => r.chain === chainKey) ?? null;
   const avgVsLeader = selfPrice && leaderByPrice
