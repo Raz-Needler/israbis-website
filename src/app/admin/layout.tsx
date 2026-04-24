@@ -16,6 +16,7 @@ const NAV: NavItem[] = [
   { href: '/admin/funnels',          label: 'Funnels',         group: 'Analytics', icon: '▼' },
   { href: '/admin/retention',        label: 'Retention',       group: 'Analytics', icon: '◆' },
   { href: '/admin/intent-baskets',   label: 'Intent Baskets',  group: 'Analytics', icon: '★' },
+  { href: '/admin/intelligence',     label: 'Intelligence',    group: 'Product',   icon: '◉' },
   { href: '/admin/chains',           label: 'Chains',          group: 'Product',   icon: '⛓' },
   { href: '/admin/recipes',          label: 'Recipes',         group: 'Product',   icon: '❖' },
   { href: '/admin/ai',               label: 'Miki AI',         group: 'Product',   icon: '✧' },
