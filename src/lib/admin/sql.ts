@@ -20,7 +20,7 @@ export async function sql<T = Record<string, unknown>>(
   try {
     const { data, error } = await adminSupabase()
       .schema('admin')
-      .rpc('run_readonly_sql', { q: query, p: JSON.stringify(params) });
+      .rpc('run_readonly_sql', { q: query, p: params });
 
     if (error) return { rows: [], error: error.message, durationMs: Date.now() - t0 };
     return { rows: (data as unknown as T[]) ?? [], error: null, durationMs: Date.now() - t0 };

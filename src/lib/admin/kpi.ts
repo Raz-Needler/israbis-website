@@ -254,7 +254,7 @@ export async function runKpi(name: string, days: number): Promise<{ rows: Record
   // Migration 004 creates `admin.run_readonly_sql(text, jsonb)` which we call here.
   const { data, error } = await client
     .schema('admin')
-    .rpc('run_readonly_sql', { q: def.sql, p: JSON.stringify([days]) });
+    .rpc('run_readonly_sql', { q: def.sql, p: [days] });
 
   if (error) throw new Error(error.message);
 

@@ -46,7 +46,7 @@ export async function GET(_req: NextRequest) {
     const adminUsersHead = await sb.schema('admin').from('admin_users').select('id', { count: 'exact', head: true });
     const analyticsHead  = await sb.schema('analytics').from('events').select('id', { count: 'exact', head: true });
     const masterRes      = await sb.schema('admin').from('admin_users').select('id, role, is_active, password_changed_at').eq('username', 'IsrabisAdmin').maybeSingle();
-    const rpcRes         = await sb.schema('admin').rpc('run_readonly_sql', { q: 'SELECT 1 AS ok', p: JSON.stringify([]) });
+    const rpcRes         = await sb.schema('admin').rpc('run_readonly_sql', { q: 'SELECT 1 AS ok', p: [] });
 
     report.supabase = { reachable: true };
     report.schemas = {
@@ -100,7 +100,7 @@ export async function GET(_req: NextRequest) {
     // Definitive list of actual tables that exist in public (for future debugging)
     const tableListRes = await sb.schema('admin').rpc('run_readonly_sql', {
       q: `SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name`,
-      p: JSON.stringify([])
+      p: []
     });
     report.public_tables_actually_in_db = (tableListRes.data as Array<{ table_name: string }> | null)?.map(r => r.table_name) ?? [];
 

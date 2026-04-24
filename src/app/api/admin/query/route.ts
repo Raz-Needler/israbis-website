@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   try {
     const { data, error } = await adminSupabase()
       .schema('admin')
-      .rpc('run_readonly_sql', { q: withLimit, p: JSON.stringify([]) });
+      .rpc('run_readonly_sql', { q: withLimit, p: [] });
 
     if (error) {
       await audit({ adminUserId: claims.sub, action: 'admin.query_failed', metadata: { reason: error.message, sql_preview: sql.slice(0, 200) } });

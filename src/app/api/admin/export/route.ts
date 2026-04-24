@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   const started = Date.now();
   const sb = adminSupabase();
-  const { data, error } = await sb.schema('admin').rpc('run_readonly_sql', { q: def.query, p: JSON.stringify([]) });
+  const { data, error } = await sb.schema('admin').rpc('run_readonly_sql', { q: def.query, p: [] });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   const rows = (data as unknown as Record<string, unknown>[]) ?? [];
 
