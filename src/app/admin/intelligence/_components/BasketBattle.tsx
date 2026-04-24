@@ -9,10 +9,27 @@ interface Props {
   chainKey: string;
 }
 
+interface ItemCoverage {
+  barcode: string;
+  productName: string;
+  quantity: number;
+  originalBarcode?: string;
+  substituted: boolean;
+  chainCount: number;
+  chainsWithPrice: string[];
+  missingFromTarget: boolean;
+}
+interface Substitution {
+  from: string;
+  to: string;
+  fromName?: string;
+  toName?: string;
+}
 interface SimulateResponse {
   ok: boolean;
   duration_ms: number;
   source: 'explicit' | 'preset' | 'csv';
+  mode: 'strict' | 'fair';
   preset?: string;
   cart: CartLine[];
   coverage: {
@@ -20,6 +37,9 @@ interface SimulateResponse {
     barcodes_with_any_price: number;
     chains_observed: number;
   };
+  item_coverage: ItemCoverage[];
+  substitutions: Substitution[];
+  min_chains_per_item: number;
   scenario: { userCount: number; conversionPct: number };
   battle: BattleResult;
 }
@@ -30,6 +50,8 @@ export function BasketBattle({ chainKey }: Props) {
   const [csvText, setCsvText] = useState<string>('');
   const [userCount, setUserCount] = useState<number>(10000);
   const [conversionPct, setConversionPct] = useState<number>(15);
+  const [mode, setMode] = useState<'strict' | 'fair'>('fair');
+  const [minChains, setMinChains] = useState<number>(3);
   const [result, setResult] = useState<SimulateResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +65,13 @@ export function BasketBattle({ chainKey }: Props) {
       const body: Record<string, unknown> = {
         targetChain: chainKey,
         scenario: { userCount, conversionPct },
+        mode,                          // 'strict' | 'fair'
+        minChainsPerItem: minChains,   // fair-trade threshold
       };
+      // CSV uploads override the mode back to 'strict' — respect the user's
+      // own barcodes, don't substitute.
       if (source === 'preset') body.presetKey = preset;
-      else body.csv = csvText;
+      else { body.csv = csvText; body.mode = 'strict'; }
 
       const res = await fetch('/api/admin/intelligence/basket-simulate', {
         method: 'POST',
@@ -97,6 +123,41 @@ export function BasketBattle({ chainKey }: Props) {
             {PRESET_BASKETS[preset]?.description}
           </div>
         </div>
+      </div>
+
+      <div style={modeRowStyles}>
+        <div style={{ flex: 1 }}>
+          <div style={labelStyles}>Fairness mode</div>
+          <div style={modeToggleStyles}>
+            <button
+              type="button"
+              onClick={() => setMode('fair')}
+              style={{ ...modeBtnStyles, ...(mode === 'fair' ? activeModeStyles(profile.color) : {}) }}
+            >
+              ⚖︎ Fair Trade
+              <span style={modeSubStyles}>substitute until every item has {minChains}+ chains</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('strict')}
+              style={{ ...modeBtnStyles, ...(mode === 'strict' ? activeModeStyles(profile.color) : {}) }}
+            >
+              🔒 Strict
+              <span style={modeSubStyles}>keep exact barcodes, no substitution</span>
+            </button>
+          </div>
+        </div>
+        {mode === 'fair' && (
+          <div style={{ width: 130 }}>
+            <div style={labelStyles}>Min chains / item</div>
+            <input
+              type="number" min={1} max={10} step={1}
+              value={minChains}
+              onChange={e => setMinChains(Math.max(1, Math.min(10, Number(e.target.value))))}
+              style={inputStyles}
+            />
+          </div>
+        )}
       </div>
 
       <div style={scenarioRowStyles}>
@@ -191,9 +252,86 @@ function Results({ result, chainKey }: { result: SimulateResponse; chainKey: str
           )}
         </div>
         <div style={{ fontSize: 12.5, opacity: 0.9, marginTop: 6 }}>
-          {cart.length} items · {coverage.barcodes_with_any_price}/{coverage.barcodes_in_cart} barcodes found in product_prices · {coverage.chains_observed} chains compared · {result.duration_ms}ms
+          {cart.length} items · {coverage.barcodes_with_any_price}/{coverage.barcodes_in_cart} barcodes found in product_prices · {coverage.chains_observed} chains compared · {result.mode === 'fair' ? `⚖︎ fair-trade (${result.min_chains_per_item}+ chains/item)` : '🔒 strict'} · {result.duration_ms}ms
         </div>
       </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+           Per-item coverage — the "advanced view" that shows every basket
+           line with its chain coverage and substitution status.
+          ───────────────────────────────────────────────────────────── */}
+      {result.item_coverage && result.item_coverage.length > 0 && (
+        <div style={{ marginTop: 14 }}>
+          <div style={sectionHeadStyles}>
+            Item coverage · each line across all chains
+          </div>
+          <div style={{ fontSize: 11.5, color: '#8E8E93', marginBottom: 10 }}>
+            Blue dots = chains where this exact barcode exists. Substituted rows are marked — hover for the original.
+          </div>
+          <div style={itemCoverageList}>
+            {result.item_coverage.map((item, idx) => {
+              const ok = item.chainCount >= (result.min_chains_per_item ?? 3);
+              return (
+                <div key={idx} style={coverageRowStyles(ok)}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {item.productName}
+                      {item.substituted && (
+                        <span style={subChipStyles} title={`original barcode: ${item.originalBarcode}`}>
+                          substituted
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: 10.5, color: '#B0B0B5', fontFamily: 'ui-monospace, monospace' }}>
+                      {item.barcode} · qty {item.quantity}
+                    </div>
+                  </div>
+                  <div style={{ minWidth: 140, display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+                    {item.chainsWithPrice.slice(0, 6).map(ch => (
+                      <span key={ch} style={chainDotStyles(profile.color, ch === chainKey)} title={ch}>
+                        {ch.slice(0, 2)}
+                      </span>
+                    ))}
+                    {item.chainsWithPrice.length > 6 && (
+                      <span style={{ fontSize: 10, color: '#8E8E93', marginLeft: 2 }}>
+                        +{item.chainsWithPrice.length - 6}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ minWidth: 100, textAlign: 'right' }}>
+                    {item.missingFromTarget ? (
+                      <span style={{ fontSize: 11, color: '#FF3B30', fontWeight: 700 }}>
+                        missing at {profile.displayName}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: 11.5, color: '#34C759', fontWeight: 700 }}>
+                        ✓ stocked · {item.chainCount} chains
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {result.substitutions && result.substitutions.length > 0 && (
+            <details style={subDetailsStyles}>
+              <summary style={{ fontSize: 11.5, fontWeight: 700, cursor: 'pointer' }}>
+                {result.substitutions.length} substitutions made (fair-trade mode)
+              </summary>
+              <div style={{ paddingTop: 8, fontSize: 11 }}>
+                {result.substitutions.map((s, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 6, padding: '4px 0', borderTop: i > 0 ? '1px dashed #EEF0F3' : 'none' }}>
+                    <span style={{ color: '#B0B0B5', fontFamily: 'ui-monospace, monospace' }}>{s.from}</span>
+                    <span>→</span>
+                    <span style={{ color: '#1A1A1A', fontFamily: 'ui-monospace, monospace', fontWeight: 700 }}>{s.to}</span>
+                    <span style={{ color: '#8E8E93', marginLeft: 'auto', maxWidth: '50%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{s.toName}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
+        </div>
+      )}
 
       <div style={{ marginTop: 14 }}>
         <div style={sectionHeadStyles}>Total basket cost by chain</div>
@@ -316,6 +454,57 @@ const labelStyles: React.CSSProperties = {
 };
 const scenarioRowStyles: React.CSSProperties = {
   display: 'grid', gridTemplateColumns: '1fr 1fr 1.3fr', gap: 12, marginBottom: 14, alignItems: 'end',
+};
+const modeRowStyles: React.CSSProperties = {
+  display: 'flex', gap: 12, marginBottom: 14, alignItems: 'flex-end',
+};
+const modeToggleStyles: React.CSSProperties = {
+  display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6,
+};
+const modeBtnStyles: React.CSSProperties = {
+  padding: '9px 12px',
+  background: '#FFFFFF',
+  border: '1.5px solid #E5E7EB',
+  borderRadius: 10,
+  fontSize: 12.5,
+  fontWeight: 700,
+  color: '#1A1A1A',
+  cursor: 'pointer',
+  display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3,
+  transition: 'all 140ms',
+};
+const activeModeStyles = (color: string): React.CSSProperties => ({
+  borderColor: color,
+  background: `${color}10`,
+  boxShadow: `0 4px 14px ${color}22`,
+});
+const modeSubStyles: React.CSSProperties = {
+  fontSize: 10, color: '#8E8E93', fontWeight: 500, textTransform: 'none',
+};
+const itemCoverageList: React.CSSProperties = {
+  display: 'flex', flexDirection: 'column', gap: 4,
+};
+const coverageRowStyles = (ok: boolean): React.CSSProperties => ({
+  display: 'flex', alignItems: 'center', gap: 10,
+  padding: '8px 12px',
+  background: ok ? '#fff' : '#FFFAF0',
+  border: `1px solid ${ok ? '#EEF0F3' : '#F6E1A5'}`,
+  borderRadius: 8,
+});
+const subChipStyles: React.CSSProperties = {
+  marginLeft: 6, padding: '1px 6px',
+  background: '#FFFAF0', color: '#8B4F00', border: '1px solid #F6E1A5',
+  borderRadius: 999, fontSize: 9, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase',
+};
+const chainDotStyles = (selfColor: string, isSelf: boolean): React.CSSProperties => ({
+  width: 20, height: 20, borderRadius: '50%',
+  background: isSelf ? selfColor : '#9BA2AA',
+  color: '#fff', fontSize: 8.5, fontWeight: 800,
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+});
+const subDetailsStyles: React.CSSProperties = {
+  marginTop: 10, padding: '8px 14px',
+  background: '#FAFBFC', border: '1px solid #EEF0F3', borderRadius: 8,
 };
 const scenarioCellStyles: React.CSSProperties = {};
 const inputStyles: React.CSSProperties = {

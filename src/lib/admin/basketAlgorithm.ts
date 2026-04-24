@@ -16,6 +16,11 @@ export interface CartLine {
   barcode: string;
   quantity: number;
   productName?: string;
+  /**
+   * If the barcode was substituted (fair-trade mode in the API), the
+   * pre-substitution barcode is preserved here for traceability.
+   */
+  originalBarcode?: string;
 }
 
 /**

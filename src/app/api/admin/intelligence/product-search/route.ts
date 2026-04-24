@@ -35,6 +35,17 @@ interface ProductHit {
   priceSpread: number;  // most - cheap
 }
 
+const CACHE_TTL_SECONDS = 3600;      // 1 hour
+const HISTORY_TABLE = 'search_history';
+const CACHE_TABLE = 'search_cache';
+
+// Normalize a query for cache key stability. Same effective search →
+// same cache hit. We lowercase, trim, and collapse whitespace.
+function normalizeQueryKey(q: string, limit: number): string {
+  const norm = q.trim().toLowerCase().replace(/\s+/g, ' ');
+  return `v1:${norm}|${limit}`;
+}
+
 export async function GET(req: NextRequest) {
   const token = req.cookies.get(sessionCookieName())?.value;
   const claims = token ? await verifySession(token) : null;
@@ -47,7 +58,47 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: true, hits: [], message: 'query_too_short' });
   }
 
+  const queryKey = normalizeQueryKey(q, limit);
   const sb = adminSupabase();
+  const t0 = Date.now();
+
+  // ─────────────────────────────────────────────────────────────
+  // CACHE HIT PATH — check if we've already computed this query
+  // within the TTL window.
+  // ─────────────────────────────────────────────────────────────
+  try {
+    const cacheHit = await sb.schema('admin').from(CACHE_TABLE)
+      .select('result_json, result_count, kind, created_at, expires_at, duration_ms')
+      .eq('query_key', queryKey)
+      .gt('expires_at', new Date().toISOString())
+      .maybeSingle();
+
+    if (cacheHit.data) {
+      const elapsed = Date.now() - t0;
+      // Log the history entry (fire-and-forget, never blocks the response)
+      void sb.schema('admin').from(HISTORY_TABLE).insert({
+        admin_user_id: claims.sub,
+        query_raw:     q,
+        query_key:     queryKey,
+        kind:          cacheHit.data.kind,
+        result_count:  cacheHit.data.result_count,
+        served_from:   'cache',
+        duration_ms:   elapsed,
+      });
+      return NextResponse.json({
+        ok: true,
+        query: q,
+        kind: cacheHit.data.kind,
+        count: cacheHit.data.result_count,
+        hits: cacheHit.data.result_json,
+        served_from: 'cache',
+        duration_ms: elapsed,
+        cached_at: cacheHit.data.created_at,
+      });
+    }
+  } catch {
+    // Cache table may not exist yet (migration not applied). Fall through to DB.
+  }
   const sqlEscape = q.replace(/'/g, "''");
 
   // Strategy:
@@ -145,12 +196,50 @@ export async function GET(req: NextRequest) {
 
   // Sort by widest spread first — interesting products bubble up
   hits.sort((a, b) => b.priceSpread - a.priceSpread);
+  const finalHits = hits.slice(0, limit);
+  const durationMs = Date.now() - t0;
+  const kind = isBarcode ? 'barcode' : 'name';
+
+  // ─────────────────────────────────────────────────────────────
+  // CACHE WRITE + HISTORY LOG (fire-and-forget — never blocks the response)
+  // ─────────────────────────────────────────────────────────────
+  try {
+    const expiresAt = new Date(Date.now() + CACHE_TTL_SECONDS * 1000).toISOString();
+    void sb.schema('admin').from(CACHE_TABLE).upsert({
+      query_key:    queryKey,
+      query_raw:    q,
+      kind,
+      result_count: finalHits.length,
+      result_json:  finalHits,
+      duration_ms:  durationMs,
+      expires_at:   expiresAt,
+    }, { onConflict: 'query_key' });
+
+    void sb.schema('admin').from(HISTORY_TABLE).insert({
+      admin_user_id: claims.sub,
+      query_raw:     q,
+      query_key:     queryKey,
+      kind,
+      result_count:  finalHits.length,
+      served_from:   'db',
+      duration_ms:   durationMs,
+    });
+
+    // Light housekeeping: clear expired cache entries once in a while
+    if (Math.random() < 0.05) {
+      void sb.schema('admin').from(CACHE_TABLE).delete().lt('expires_at', new Date().toISOString());
+    }
+  } catch {
+    // Cache / history tables might not exist yet — non-fatal.
+  }
 
   return NextResponse.json({
     ok: true,
     query: q,
-    kind: isBarcode ? 'barcode' : 'name',
-    count: hits.length,
-    hits: hits.slice(0, limit),
+    kind,
+    count: finalHits.length,
+    hits: finalHits,
+    served_from: 'db',
+    duration_ms: durationMs,
   });
 }

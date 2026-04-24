@@ -1,9 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { profileFor } from '@/lib/admin/chainProfiles';
 import { ChainLogo } from '../../_components/ChainLogo';
 import { ProductImage } from '../../_components/ProductImage';
+
+interface HistoryRow {
+  query_raw: string;
+  kind: 'name' | 'barcode';
+  result_count: number;
+  served_from: 'cache' | 'db';
+  duration_ms: number;
+  searched_at: string;
+}
 
 interface ChainPrice {
   chain: string;
@@ -28,6 +37,9 @@ interface SearchResponse {
   kind: 'name' | 'barcode';
   count: number;
   hits: ProductHit[];
+  served_from?: 'cache' | 'db';
+  duration_ms?: number;
+  cached_at?: string;
 }
 
 /**
@@ -44,20 +56,38 @@ export function ProductExplorer({ targetChain }: { targetChain: string }) {
   const [loading, setLoading] = useState(false);
   const [res, setRes] = useState<SearchResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<HistoryRow[]>([]);
 
-  async function search(e?: React.FormEvent) {
+  useEffect(() => {
+    loadHistory();
+  }, []);
+
+  async function loadHistory() {
+    try {
+      const r = await fetch('/api/admin/intelligence/search-history?limit=15');
+      const j = await r.json();
+      if (j.ok && Array.isArray(j.history)) setHistory(j.history);
+    } catch {
+      // ignore — history is best-effort
+    }
+  }
+
+  async function search(e?: React.FormEvent, explicitQuery?: string) {
     e?.preventDefault();
-    if (q.trim().length < 2) return;
+    const query = (explicitQuery ?? q).trim();
+    if (query.length < 2) return;
+    if (explicitQuery) setQ(explicitQuery);
     setLoading(true);
     setError(null);
     try {
-      const r = await fetch(`/api/admin/intelligence/product-search?q=${encodeURIComponent(q)}&limit=15`);
+      const r = await fetch(`/api/admin/intelligence/product-search?q=${encodeURIComponent(query)}&limit=15`);
       const j = await r.json();
       if (!r.ok) {
         setError(j.error ?? `HTTP ${r.status}`);
         setRes(null);
       } else {
         setRes(j);
+        loadHistory(); // refresh sidebar
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'search_failed');
@@ -86,7 +116,43 @@ export function ProductExplorer({ targetChain }: { targetChain: string }) {
         Tip: spread = biggest price gap across chains. Wider spread = bigger savings opportunity for the app.
       </div>
 
+      {history.length > 0 && (
+        <div style={historyWrapStyles}>
+          <div style={historyLabelStyles}>Recent searches</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {history.slice(0, 10).map((h, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => search(undefined, h.query_raw)}
+                style={historyChipStyles}
+                title={`${h.result_count} results · ${h.duration_ms}ms · ${h.served_from}`}
+              >
+                <span style={{ fontWeight: 600 }}>{h.query_raw}</span>
+                <span style={{ fontSize: 9.5, color: '#8E8E93' }}>
+                  {h.result_count}·{h.served_from === 'cache' ? '⚡' : '🗄'}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {error && <div style={errStyles}>Error: {error}</div>}
+
+      {res && res.served_from && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 10, fontSize: 11 }}>
+          {res.served_from === 'cache' ? (
+            <span style={{ padding: '3px 9px', background: '#F0F9F1', color: 'var(--green-deep, #248A3D)', borderRadius: 999, fontWeight: 700 }}>
+              ⚡ served from cache · {res.duration_ms}ms
+            </span>
+          ) : (
+            <span style={{ padding: '3px 9px', background: '#F3F5F7', color: '#3C3C43', borderRadius: 999, fontWeight: 600 }}>
+              🗄 live DB query · {res.duration_ms}ms · cached for 1h
+            </span>
+          )}
+        </div>
+      )}
 
       {res && res.count === 0 && (
         <div style={emptyStyles}>No results for &quot;{res.query}&quot;. Try a more common word (חלב, לחם, עגבניה).</div>
@@ -175,6 +241,19 @@ const searchBtn: React.CSSProperties = {
 };
 const hintStyles: React.CSSProperties = {
   fontSize: 11, color: '#8E8E93', marginBottom: 14,
+};
+const historyWrapStyles: React.CSSProperties = {
+  marginBottom: 14, padding: '10px 14px',
+  background: '#FAFBFC', border: '1px solid #EEF0F3', borderRadius: 8,
+};
+const historyLabelStyles: React.CSSProperties = {
+  fontSize: 10, fontWeight: 800, color: '#8E8E93',
+  letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 6,
+};
+const historyChipStyles: React.CSSProperties = {
+  padding: '4px 10px', background: '#fff', border: '1px solid #E5E7EB',
+  borderRadius: 999, fontSize: 11.5, color: '#1A1A1A',
+  cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6,
 };
 const errStyles: React.CSSProperties = {
   padding: '10px 14px', background: '#FFF1EF', color: '#B42318',
