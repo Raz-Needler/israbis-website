@@ -17,6 +17,18 @@ const MAX_ATTEMPTS = parseInt(process.env.ADMIN_MAX_LOGIN_ATTEMPTS ?? '10', 10);
 const WINDOW_SEC   = parseInt(process.env.ADMIN_MAX_LOGIN_WINDOW_SEC ?? '900', 10);
 
 export async function POST(req: NextRequest) {
+  try {
+    return await handleLogin(req);
+  } catch (err) {
+    // Surface the actual error to the client for diagnosis (does NOT leak env values or hashes)
+    const message = err instanceof Error ? err.message : 'unknown';
+    const name    = err instanceof Error ? err.name : 'Error';
+    console.error('[admin.login] fatal', err);
+    return NextResponse.json({ error: 'login_failed', reason: name, detail: message }, { status: 500 });
+  }
+}
+
+async function handleLogin(req: NextRequest) {
   const ipHeader = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
   const ip = ipHeader.split(',')[0]?.trim() || 'unknown';
   const ipHash = await hashIp(ip);

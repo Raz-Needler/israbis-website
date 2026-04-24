@@ -10,6 +10,7 @@ import { verifySession, sessionCookieName } from '@/lib/admin/auth';
 const PUBLIC_ADMIN_PATHS = new Set<string>([
   '/admin/login',
   '/api/admin/auth/login',
+  '/api/admin/_diag',
 ]);
 
 export async function middleware(req: NextRequest) {
