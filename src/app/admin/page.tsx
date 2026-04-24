@@ -137,45 +137,31 @@ export default async function OverviewPage() {
         <Freshness minutesAgo={data.freshness} />
       </header>
 
+      <div style={{ fontSize: 11, color: '#8E8E93', fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 10 }}>
+        Platform state · reading direct from Supabase
+      </div>
+      <div className="stat-grid cols-4">
+        <StatCard label="App users · total"   value={data.totalUsers}   source="public.User"          accent="green" />
+        <StatCard label="Stores tracked"      value={data.totalStores}  source="public.StoreBranch"   accent="green" />
+        <StatCard label="Prices in DB"        value={data.totalPrices}  source="public.ProductPrice"  accent="green" />
+        <StatCard label="Signups today"       value={data.signupsToday} source="public.User.joinDate" accent="green" />
+      </div>
+
+      <div style={{ fontSize: 11, color: '#8E8E93', fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase', margin: '22px 0 10px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
+        Activity analytics · populates once the mobile SDK is wired
+        {data.freshness === null && <span className="pill pill-gold" style={{ fontSize: 9 }}>SDK not live yet</span>}
+      </div>
       <div className="stat-grid cols-5">
-        <StatCard
-          label="App users · total"
-          value={data.totalUsers}
-          source="public.User"
-          accent="green"
-        />
-        <StatCard
-          label="Signups today"
-          value={data.signupsToday}
-          source="public.User"
-          accent="green"
-        />
         <StatCard
           label="DAU today"
           value={sc.dau_today}
           delta={dauDelta !== null ? { value: dauDelta, kind: dauDelta > 0 ? 'up' : dauDelta < 0 ? 'down' : 'flat', label: 'vs yesterday' } : undefined}
-          source="analytics.events"
-          accent="blue"
+          source="analytics.events" accent="blue"
         />
-        <StatCard
-          label="Events today"
-          value={sc.events_today}
-          source="analytics.events"
-          accent="purple"
-        />
-        <StatCard
-          label="Paid conversions · today"
-          value={sc.paid_conversions_today}
-          source="subs.checkout_completed"
-          accent="gold"
-        />
-      </div>
-
-      <div className="stat-grid cols-4">
-        <StatCard label="WAU · last 7 days"   value={sc.wau}               source="analytics.events"   accent="blue" />
-        <StatCard label="MAU · last 30 days"  value={sc.mau}               source="analytics.events"   accent="blue" />
-        <StatCard label="Stores tracked"      value={data.totalStores}     source="public.StoreBranch" accent="green" />
-        <StatCard label="Prices in DB"        value={data.totalPrices}     source="public.ProductPrice" accent="green" />
+        <StatCard label="WAU · 7 days"             value={sc.wau}   source="analytics.events" accent="blue" />
+        <StatCard label="MAU · 30 days"            value={sc.mau}   source="analytics.events" accent="blue" />
+        <StatCard label="Events today"             value={sc.events_today} source="analytics.events" accent="purple" />
+        <StatCard label="Paid conversions · today" value={sc.paid_conversions_today} source="subs.checkout_completed" accent="gold" />
       </div>
 
       <div className="chart-grid cols-2">

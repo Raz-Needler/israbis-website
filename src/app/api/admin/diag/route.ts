@@ -73,13 +73,37 @@ export async function GET(_req: NextRequest) {
       error:    rpcRes.error?.message,
     };
 
+    // Check public (Worldbite app data) tables — this is the data the admin portal reads
+    const [userH, storeH, priceH, recipeH, famH, basketH, purchaseH, userRecH] = await Promise.all([
+      sb.from('User').select('id', { count: 'exact', head: true }),
+      sb.from('StoreBranch').select('id', { count: 'exact', head: true }),
+      sb.from('ProductPrice').select('id', { count: 'exact', head: true }),
+      sb.from('Recipe').select('id', { count: 'exact', head: true }),
+      sb.from('Family').select('id', { count: 'exact', head: true }),
+      sb.from('SavedBasket').select('id', { count: 'exact', head: true }),
+      sb.from('PurchaseHistory').select('id', { count: 'exact', head: true }),
+      sb.from('UserRecipe').select('id', { count: 'exact', head: true }),
+    ]);
+
+    report.public = {
+      User:            { ok: !userH.error,     count: userH.count ?? 0,     error: userH.error?.message },
+      StoreBranch:     { ok: !storeH.error,    count: storeH.count ?? 0,    error: storeH.error?.message },
+      ProductPrice:    { ok: !priceH.error,    count: priceH.count ?? 0,    error: priceH.error?.message },
+      Recipe:          { ok: !recipeH.error,   count: recipeH.count ?? 0,   error: recipeH.error?.message },
+      Family:          { ok: !famH.error,      count: famH.count ?? 0,      error: famH.error?.message },
+      SavedBasket:     { ok: !basketH.error,   count: basketH.count ?? 0,   error: basketH.error?.message },
+      PurchaseHistory: { ok: !purchaseH.error, count: purchaseH.count ?? 0, error: purchaseH.error?.message },
+      UserRecipe:      { ok: !userRecH.error,  count: userRecH.count ?? 0,  error: userRecH.error?.message },
+    };
+
     const allOk =
       report.env &&
       (report.supabase as { reachable: boolean }).reachable &&
       (report.schemas as { admin: { reachable: boolean } }).admin.reachable &&
       (report.schemas as { analytics: { reachable: boolean } }).analytics.reachable &&
       (report.master_admin as { exists: boolean }).exists &&
-      (report.readonly_sql_rpc as { callable: boolean }).callable;
+      (report.readonly_sql_rpc as { callable: boolean }).callable &&
+      !userH.error && !storeH.error && !priceH.error;
 
     report.all_ok = allOk;
     return NextResponse.json(report, { status: allOk ? 200 : 500 });
