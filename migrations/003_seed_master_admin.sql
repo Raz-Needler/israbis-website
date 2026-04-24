@@ -14,15 +14,15 @@
 -- This seed is idempotent — running it again after the admin rotates their password will NOT overwrite.
 -- ═══════════════════════════════════════════════════════════════
 
--- Hash generated with @node-rs/argon2 (m=65536, t=3, p=4) for password "is Password" on 2026-04-24
--- NOTE: argon2id includes the salt; even the same input yields a different hash each run.
+-- Hash is the one-way argon2id hash of the chosen master password.
+-- Plaintext is never stored here or anywhere in the repo.
 INSERT INTO admin.admin_users (username, password_hash, role, is_active, password_changed_at)
 VALUES (
   'IsrabisAdmin',
-  '$argon2id$v=19$m=65536,t=3,p=4$rAsJOi9i/4R0ETdP+aKltQ$4gpK8XrLIBt2Dk18rFqAQsBrL3+ojupsYGu6c5CS+io',
+  '$argon2id$v=19$m=65536,t=3,p=4$srlP+Pf4gGPMLtEltXpskg$n+Jc1PNy5FrovjzhYwPCeXECIkv/i//sdAPF/LBK0SY',
   'master',
   true,
-  NULL              -- NULL password_changed_at → forces rotation on first login
+  now()
 )
 ON CONFLICT (username) DO NOTHING;
 

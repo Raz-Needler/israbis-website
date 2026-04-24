@@ -288,16 +288,17 @@ REVOKE ALL ON FUNCTION admin.run_readonly_sql(TEXT, JSONB) FROM anon, authentica
 
 -- ════════════════════════════════════════════════════════════════════════
 -- PART 4 · Master admin account
--- (password hash for "is Password" already embedded — rotated at first login)
+-- argon2id hash only; plaintext never stored or committed.
+-- password_changed_at is set so login does NOT trigger a forced rotation.
 -- ════════════════════════════════════════════════════════════════════════
 
 INSERT INTO admin.admin_users (username, password_hash, role, is_active, password_changed_at)
 VALUES (
   'IsrabisAdmin',
-  '$argon2id$v=19$m=65536,t=3,p=4$rAsJOi9i/4R0ETdP+aKltQ$4gpK8XrLIBt2Dk18rFqAQsBrL3+ojupsYGu6c5CS+io',
+  '$argon2id$v=19$m=65536,t=3,p=4$srlP+Pf4gGPMLtEltXpskg$n+Jc1PNy5FrovjzhYwPCeXECIkv/i//sdAPF/LBK0SY',
   'master',
   true,
-  NULL
+  now()
 )
 ON CONFLICT (username) DO NOTHING;
 
