@@ -89,8 +89,12 @@ export async function POST(req: NextRequest) {
     const covered = new Set((coverageRes.data ?? []).map(r => (r as { barcode: string }).barcode));
     const uncovered = cart.filter(l => !covered.has(l.barcode));
     if (uncovered.length > 0) {
+      // Chain-anchored substitution — pick `uncovered.length` barcodes from
+      // the target chain (indexed). These will always have at least the
+      // target's price, and most will exist in rivals too via overlap.
+      const anchor = targetChain.replace(/'/g, '');
       const fallbackRes = await sb.schema('admin').rpc('run_readonly_sql', {
-        q: `SELECT barcode, (ARRAY_AGG(product_name ORDER BY last_updated DESC NULLS LAST))[1] AS product_name FROM public.product_prices WHERE barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0 GROUP BY barcode HAVING COUNT(DISTINCT chain_key) >= 2 ORDER BY COUNT(DISTINCT chain_key) DESC, COUNT(*) DESC LIMIT ${uncovered.length}`,
+        q: `SELECT DISTINCT ON (barcode) barcode, product_name FROM public.product_prices WHERE chain_key = '${anchor}' AND price_nis IS NOT NULL AND price_nis > 0 AND barcode IS NOT NULL ORDER BY barcode, last_updated DESC LIMIT ${Math.min(uncovered.length, 50)}`,
         p: [],
       });
       type FallbackRow = { barcode: string; product_name: string | null };

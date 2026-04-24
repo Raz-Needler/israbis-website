@@ -90,12 +90,19 @@ export async function GET(
   }
 
   // --- Price position vs market (avg shelf price) ---
+  // Sampled via last_updated to avoid full-table GROUP BY timeouts.
   const priceRes = await sql<{ chain: string; avg_price: number; sku_count: number }>(`
+    WITH sample AS (
+      SELECT chain_key, price_nis
+      FROM public.product_prices
+      WHERE price_nis IS NOT NULL AND price_nis > 0
+      ORDER BY last_updated DESC NULLS LAST
+      LIMIT 100000
+    )
     SELECT chain_key AS chain,
            AVG(price_nis)::numeric(10,2) AS avg_price,
            COUNT(*)::int AS sku_count
-    FROM public.product_prices
-    WHERE price_nis IS NOT NULL AND price_nis > 0
+    FROM sample
     GROUP BY chain_key
     ORDER BY sku_count DESC
   `);
@@ -110,31 +117,32 @@ export async function GET(
     ? Number((selfPrice.avg_price - leaderByPrice.avg_price).toFixed(2))
     : 0;
 
-  // --- 20 common-basket barcodes: who wins each? ---
-  // Pick 20 barcodes with the widest chain coverage to form a fair matrix.
+  // --- Common-basket barcodes: who wins each? ---
+  // Chain-anchored query — pick 40 barcodes from the strongest-catalog chain
+  // (indexed fast-path), then enrich with every other chain's price for the
+  // same barcode. Avoids the full-table GROUP BY that times out.
+  const anchorChain = chainsRanked.find(c => c.chain === chainKey) ? chainKey : (chainsRanked[0]?.chain ?? 'RAMI_LEVY');
   const matrixRes = await sql<{
     barcode: string;
     product_name: string | null;
     chain_key: string;
     min_price: number;
-    chain_count: number;
   }>(`
-    WITH top_barcodes AS (
-      SELECT barcode
+    WITH sample AS (
+      SELECT DISTINCT ON (barcode) barcode, product_name
       FROM public.product_prices
-      WHERE barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0
-      GROUP BY barcode
-      HAVING COUNT(DISTINCT chain_key) >= 2
-      ORDER BY COUNT(DISTINCT chain_key) DESC, COUNT(*) DESC
-      LIMIT 20
+      WHERE chain_key = '${anchorChain.replace(/'/g, "")}'
+        AND price_nis IS NOT NULL AND price_nis > 0
+        AND barcode IS NOT NULL
+      ORDER BY barcode, last_updated DESC
+      LIMIT 40
     )
     SELECT pp.barcode,
            (ARRAY_AGG(pp.product_name ORDER BY pp.last_updated DESC NULLS LAST))[1] AS product_name,
            pp.chain_key,
-           MIN(pp.price_nis)::numeric(10,2) AS min_price,
-           (SELECT COUNT(DISTINCT chain_key) FROM public.product_prices WHERE barcode = pp.barcode) AS chain_count
+           MIN(pp.price_nis)::numeric(10,2) AS min_price
     FROM public.product_prices pp
-    JOIN top_barcodes tb USING (barcode)
+    JOIN sample USING (barcode)
     WHERE pp.price_nis IS NOT NULL AND pp.price_nis > 0
     GROUP BY pp.barcode, pp.chain_key
     ORDER BY pp.barcode, min_price ASC

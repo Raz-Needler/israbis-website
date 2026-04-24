@@ -73,13 +73,22 @@ export default async function IntelligenceChainPage(
     battlegrounds.sort((a, b) => b.density - a.density);
   }
 
-  // Price position
+  // Price position — sampled. A full GROUP BY on 4.5M rows times out at the
+  // 30s RPC limit, so we sample 100k rows via `last_updated` (indexed) to get
+  // a representative average shelf price per chain. Sample size >> chain count
+  // so the per-chain averages remain stable.
   const priceRes = await sql<{ chain: string; avg_price: number; sku_count: number }>(`
+    WITH sample AS (
+      SELECT chain_key, price_nis
+      FROM public.product_prices
+      WHERE price_nis IS NOT NULL AND price_nis > 0
+      ORDER BY last_updated DESC NULLS LAST
+      LIMIT 100000
+    )
     SELECT chain_key AS chain,
            AVG(price_nis)::numeric(10,2) AS avg_price,
            COUNT(*)::int AS sku_count
-    FROM public.product_prices
-    WHERE price_nis IS NOT NULL AND price_nis > 0
+    FROM sample
     GROUP BY chain_key
     ORDER BY sku_count DESC
   `);
@@ -94,32 +103,34 @@ export default async function IntelligenceChainPage(
     ? Number((selfPrice.avg_price - leaderByPrice.avg_price).toFixed(2))
     : 0;
 
-  // Pricing matrix — top-20 widest-coverage barcodes. Threshold is 2+ chains
-  // because real shelf-price data in this DB has sparse cross-chain overlap
-  // (most barcodes appear in 1-2 chains, a handful reach 3+). When the target
-  // chain itself lacks SKU data, we still show the matrix so the rival chains
-  // have a story; the UI surfaces "not stocked" clearly for the target.
+  // Pricing matrix — chain-anchored to survive the 4.5M-row product_prices
+  // table without timing out. We sample 30 barcodes from whichever chain has
+  // the deepest catalog (indexed via `product_prices_chain_key_store_id_idx`),
+  // then enrich each barcode's prices across every other chain. The original
+  // "widest-coverage barcodes" query used `GROUP BY barcode` over the full
+  // table which scanned 4.5M rows and always hit the 30s RPC timeout.
+  const anchorChain = chainsRanked.find(c => c.chain === chainKey) ? chainKey : (chainsRanked[0]?.chain ?? 'RAMI_LEVY');
   const matrixRes = await sql<{
     barcode: string;
     product_name: string | null;
     chain_key: string;
     min_price: number;
   }>(`
-    WITH top_barcodes AS (
-      SELECT barcode
+    WITH sample AS (
+      SELECT DISTINCT ON (barcode) barcode, product_name
       FROM public.product_prices
-      WHERE barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0
-      GROUP BY barcode
-      HAVING COUNT(DISTINCT chain_key) >= 2
-      ORDER BY COUNT(DISTINCT chain_key) DESC, COUNT(*) DESC
-      LIMIT 20
+      WHERE chain_key = '${anchorChain.replace(/'/g, "")}'
+        AND price_nis IS NOT NULL AND price_nis > 0
+        AND barcode IS NOT NULL
+      ORDER BY barcode, last_updated DESC
+      LIMIT 40
     )
     SELECT pp.barcode,
            (ARRAY_AGG(pp.product_name ORDER BY pp.last_updated DESC NULLS LAST))[1] AS product_name,
            pp.chain_key,
            MIN(pp.price_nis)::numeric(10,2) AS min_price
     FROM public.product_prices pp
-    JOIN top_barcodes tb USING (barcode)
+    JOIN sample USING (barcode)
     WHERE pp.price_nis IS NOT NULL AND pp.price_nis > 0
     GROUP BY pp.barcode, pp.chain_key
     ORDER BY pp.barcode, min_price ASC
