@@ -215,6 +215,7 @@ export async function seedDemoData(opts: SeedOptions = {}): Promise<SeedResult> 
   }
 
   // Insert users in chunks
+  const nowIso = new Date().toISOString();
   const userRows = users.map(u => ({
     id:            u.id,
     name:          u.name,
@@ -222,6 +223,8 @@ export async function seedDemoData(opts: SeedOptions = {}): Promise<SeedResult> 
     password_hash: null,                        // demo users don't log in
     avatar_color:  pickOne(['#7A8B6F', '#D4A853', '#AF52DE', '#007AFF', '#FF9500', '#34C759', '#FF3B30'], rng),
     join_date:     u.joinedAt.toISOString(),
+    created_at:    u.joinedAt.toISOString(),
+    updated_at:    nowIso,
     provider:      'email',
   }));
 
@@ -238,25 +241,20 @@ export async function seedDemoData(opts: SeedOptions = {}): Promise<SeedResult> 
   // 2. USER PREFERENCES (location_city)
   // ──────────────────────────────────────────────
   const prefRows = users.map(u => ({
-    id:                 crypto.randomUUID(),
-    user_id:            u.id,
-    theme:              'system',
-    measurement_system: 'metric',
-    language:           u.locale,
-    location_city:      u.city.nameHe,
+    id:                  crypto.randomUUID(),
+    user_id:             u.id,
+    dark_mode:           rng() < 0.4,
+    notifications:       rng() < 0.7,
+    preferred_store:     pickOne(CHAINS, rng),
+    location_city:       u.city.nameHe,
+    location_lat:        u.city.lat + (rng() - 0.5) * 0.04,
+    location_lng:        u.city.lng + (rng() - 0.5) * 0.04,
     location_updated_at: new Date().toISOString(),
   }));
   for (const chunk of chunks(prefRows, 500)) {
     const ins = await sb.from('user_preferences').insert(chunk).select('id');
     if (ins.error) {
-      // Some deployments have missing columns; retry with the smallest shape.
-      const minChunk = chunk.map(r => ({ id: r.id, user_id: r.user_id, location_city: r.location_city }));
-      const retry = await sb.from('user_preferences').insert(minChunk).select('id');
-      if (retry.error) {
-        result.errors.push(`prefs_insert: ${ins.error.message} (retry: ${retry.error.message})`);
-      } else {
-        result.preferences_created += retry.data?.length ?? 0;
-      }
+      result.errors.push(`prefs_insert: ${ins.error.message}`);
       continue;
     }
     result.preferences_created += ins.data?.length ?? 0;
@@ -585,6 +583,16 @@ export async function clearDemoData(): Promise<ClearResult> {
   }
   const userIds = (demoUsers.data ?? []).map(r => r.id as string);
 
+  // Always purge orphan analytics events + fact rows first — they may exist
+  // from failed seed attempts where users were never created but events were.
+  const delByAnon = await sb.schema('analytics').from('events').delete({ count: 'exact' }).like('anonymous_id', `${DEMO_MARKERS.anonymousIdPrefix}%`);
+  result.events_deleted += delByAnon.count ?? 0;
+  if (delByAnon.error) result.errors.push(`events_delete_by_anon: ${delByAnon.error.message}`);
+
+  const delFactByAnon = await sb.schema('analytics').from('fact_intent_basket').delete({ count: 'exact' }).like('anonymous_id', `${DEMO_MARKERS.anonymousIdPrefix}%`);
+  result.fact_intent_baskets_deleted += delFactByAnon.count ?? 0;
+  if (delFactByAnon.error) result.errors.push(`fact_intent_basket_delete_by_anon: ${delFactByAnon.error.message}`);
+
   if (userIds.length === 0) {
     result.duration_ms = Date.now() - t0;
     return result;
@@ -636,15 +644,12 @@ export async function clearDemoData(): Promise<ClearResult> {
     if (del.error) result.errors.push(`fact_intent_basket_delete: ${del.error.message}`);
   }
 
-  // analytics.events by user_id OR anonymous_id prefix (handles anon-only events too)
+  // analytics.events by user_id (anonymous_id prefix cleanup already ran above)
   for (const chunk of chunks(userIds, 500)) {
     const del = await sb.schema('analytics').from('events').delete({ count: 'exact' }).in('user_id', chunk);
     result.events_deleted += del.count ?? 0;
     if (del.error) result.errors.push(`events_delete_by_user: ${del.error.message}`);
   }
-  const delByAnon = await sb.schema('analytics').from('events').delete({ count: 'exact' }).like('anonymous_id', `${DEMO_MARKERS.anonymousIdPrefix}%`);
-  result.events_deleted += delByAnon.count ?? 0;
-  if (delByAnon.error) result.errors.push(`events_delete_by_anon: ${delByAnon.error.message}`);
 
   // Finally delete the users themselves
   for (const chunk of chunks(userIds, 500)) {
