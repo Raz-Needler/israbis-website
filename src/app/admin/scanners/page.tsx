@@ -12,9 +12,9 @@ export default async function ScannersPage({ searchParams }: { searchParams: Pro
   const sb = adminSupabase();
 
   const [apiRes, fridgeRes, receiptRes] = await Promise.all([
-    sb.from('ApiUsage').select('feature, count'),
-    sb.from('FridgeScan').select('id', { count: 'exact', head: true }),
-    sb.from('ReceiptScan').select('id, totalAmount, confidence, addedToExpenses', { count: 'exact' }).order('createdAt', { ascending: false }).limit(50),
+    sb.from('api_usage').select('feature, count'),
+    sb.from('fridge_scans').select('id', { count: 'exact', head: true }),
+    sb.from('receipt_scans').select('id, total_amount, confidence, added_to_expenses', { count: 'exact' }).order('created_at', { ascending: false }).limit(50),
   ]);
 
   type A = { feature: string; count: number };
@@ -40,9 +40,9 @@ export default async function ScannersPage({ searchParams }: { searchParams: Pro
     GROUP BY day ORDER BY day
   `);
 
-  const receipts = receiptRes.data as Array<{ id: string; totalAmount: number; confidence: number; addedToExpenses: boolean }> | null ?? [];
+  const receipts = receiptRes.data as Array<{ id: string; total_amount: number; confidence: number; added_to_expenses: boolean }> | null ?? [];
   const avgConfidence = receipts.length ? receipts.reduce((s, r) => s + (r.confidence ?? 0), 0) / receipts.length : 0;
-  const addedRate = receipts.length ? receipts.filter(r => r.addedToExpenses).length / receipts.length : 0;
+  const addedRate = receipts.length ? receipts.filter(r => r.added_to_expenses).length / receipts.length : 0;
 
   return (
     <div>
@@ -89,7 +89,7 @@ export default async function ScannersPage({ searchParams }: { searchParams: Pro
             <tbody>
               {receipts.slice(0, 20).map(r => (
                 <tr key={r.id}>
-                  <td style={{ fontWeight: 600 }}>₪ {Number(r.totalAmount ?? 0).toFixed(2)}</td>
+                  <td style={{ fontWeight: 600 }}>₪ {Number(r.total_amount ?? 0).toFixed(2)}</td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{ width: 120, height: 6, background: '#F5F5F5', borderRadius: 3, overflow: 'hidden' }}>
@@ -98,7 +98,7 @@ export default async function ScannersPage({ searchParams }: { searchParams: Pro
                       <span className="muted">{Number(r.confidence ?? 0).toFixed(2)}</span>
                     </div>
                   </td>
-                  <td>{r.addedToExpenses ? <span className="pill pill-green">yes</span> : <span className="pill pill-neutral">no</span>}</td>
+                  <td>{r.added_to_expenses ? <span className="pill pill-green">yes</span> : <span className="pill pill-neutral">no</span>}</td>
                 </tr>
               ))}
             </tbody>

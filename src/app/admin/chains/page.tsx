@@ -51,12 +51,12 @@ export default async function ChainsPage({ searchParams }: { searchParams: Promi
     GROUP BY 1 ORDER BY success DESC LIMIT 15
   `);
 
-  // Store counts by chain (from public.StoreBranch)
-  const branchRes = await sb.from('StoreBranch').select('chainKey');
-  type B = { chainKey: string | null };
+  // Store counts by chain (from public.store_branches)
+  const branchRes = await sb.from('store_branches').select('chain_key');
+  type B = { chain_key: string | null };
   const branchRows: B[] = (branchRes.data as B[] | null) ?? [];
   const chainBranchMap = branchRows.reduce((acc, b) => {
-    const k = b.chainKey ?? 'UNKNOWN';
+    const k = b.chain_key ?? 'UNKNOWN';
     acc[k] = (acc[k] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);

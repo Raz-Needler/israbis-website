@@ -11,8 +11,8 @@ export default async function AIPage({ searchParams }: { searchParams: Promise<{
   const days = Math.max(1, Math.min(365, parseInt(sp.days ?? '30', 10)));
   const sb = adminSupabase();
 
-  const convRes = await sb.from('AssistantConversation').select('id', { count: 'exact', head: true });
-  const msgRes  = await sb.from('AssistantMessage').select('id', { count: 'exact', head: true });
+  const convRes = await sb.from('assistant_conversations').select('id', { count: 'exact', head: true });
+  const msgRes  = await sb.from('assistant_messages').select('id', { count: 'exact', head: true });
 
   const dailyRes = await sql<{ day: string; msgs: number }>(`
     SELECT day::text AS day, COUNT(*)::int AS msgs

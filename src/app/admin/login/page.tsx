@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div style={styles.root}>
+    <div dir="ltr" style={styles.root}>
       <form onSubmit={submit} style={styles.card}>
         <div style={styles.brand}>
           <span style={styles.brandDot} />

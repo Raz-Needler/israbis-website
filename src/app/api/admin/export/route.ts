@@ -15,10 +15,10 @@ export const dynamic = 'force-dynamic';
 const DATASETS: Record<string, { query: string; schema?: 'public' | 'analytics' }> = {
   intent_baskets: { schema: 'analytics', query: `SELECT * FROM analytics.fact_intent_basket ORDER BY built_at DESC LIMIT 250000` },
   events:         { schema: 'analytics', query: `SELECT event_id, event_name, event_category, occurred_at, user_id, anonymous_id, platform, app_version, props FROM analytics.events ORDER BY occurred_at DESC LIMIT 250000` },
-  users:          { query: `SELECT id, name, email, provider, "joinDate" FROM public."User" ORDER BY "joinDate" DESC LIMIT 250000` },
-  purchases:      { query: `SELECT id, "userId", "storeName", "totalCost", "itemCount", "purchasedAt" FROM public."PurchaseHistory" ORDER BY "purchasedAt" DESC LIMIT 250000` },
-  families:       { query: `SELECT id, name, "ownerId", "subscriptionTier", "seatCount", "createdAt" FROM public."Family" ORDER BY "createdAt" DESC LIMIT 250000` },
-  prices:         { query: `SELECT barcode, "chainKey", "storeId", "priceNIS", "productName", "lastUpdated" FROM public."ProductPrice" ORDER BY "lastUpdated" DESC LIMIT 100000` },
+  users:          { query: `SELECT id, name, email, provider, join_date FROM public.users ORDER BY join_date DESC LIMIT 250000` },
+  purchases:      { query: `SELECT id, user_id, store_name, total_cost, item_count, purchased_at FROM public.purchase_history ORDER BY purchased_at DESC LIMIT 250000` },
+  families:       { query: `SELECT id, name, owner_id, subscription_tier, seat_count, created_at FROM public.families ORDER BY created_at DESC LIMIT 250000` },
+  prices:         { query: `SELECT barcode, chain_key, store_id, price_nis, product_name, last_updated FROM public.product_prices ORDER BY last_updated DESC LIMIT 100000` },
 };
 
 export async function POST(req: NextRequest) {

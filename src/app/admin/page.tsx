@@ -12,9 +12,9 @@ async function loadOverview() {
   const sb = adminSupabase();
 
   // Worldbite user counts (authoritative — not from events)
-  const usersHead = await sb.from('User').select('id', { count: 'exact', head: true });
+  const usersHead = await sb.from('users').select('id', { count: 'exact', head: true });
   const today = new Date().toISOString().slice(0, 10);
-  const signupsTodayHead = await sb.from('User').select('id', { count: 'exact', head: true }).gte('joinDate', today);
+  const signupsTodayHead = await sb.from('users').select('id', { count: 'exact', head: true }).gte('join_date', today);
 
   // Event-based scorecards (gracefully handle empty analytics)
   const sc = await sqlOne<Scorecard>(`
@@ -42,16 +42,16 @@ async function loadOverview() {
     GROUP BY day ORDER BY day
   `);
 
-  // 30-day new signups (from public.User)
+  // 30-day new signups (from public.users)
   const signupsRes = await sb
-    .from('User')
-    .select('joinDate')
-    .gte('joinDate', new Date(Date.now() - 30 * 86400_000).toISOString())
-    .order('joinDate', { ascending: true });
+    .from('users')
+    .select('join_date')
+    .gte('join_date', new Date(Date.now() - 30 * 86400_000).toISOString())
+    .order('join_date', { ascending: true });
 
-  type SignupRow = { joinDate: string };
+  type SignupRow = { join_date: string };
   const signupRows: SignupRow[] = (signupsRes.data as SignupRow[] | null) ?? [];
-  const signupSeries = bucketByDay(signupRows, r => r.joinDate, 30);
+  const signupSeries = bucketByDay(signupRows, r => r.join_date, 30);
 
   // Combined activity chart (DAU vs signups)
   const combined = mergeSeries(dau.rows, signupSeries);
@@ -80,8 +80,8 @@ async function loadOverview() {
   const freshness = await eventFreshness();
 
   // Stores + chain counts for operational context
-  const storesHead = await sb.from('StoreBranch').select('id', { count: 'exact', head: true });
-  const pricesHead = await sb.from('ProductPrice').select('id', { count: 'exact', head: true });
+  const storesHead = await sb.from('store_branches').select('id', { count: 'exact', head: true });
+  const pricesHead = await sb.from('product_prices').select('id', { count: 'exact', head: true });
 
   return {
     totalUsers: usersHead.count ?? 0,

@@ -11,11 +11,11 @@ export default async function SubscriptionsPage({ searchParams }: { searchParams
   const days = Math.max(1, Math.min(365, parseInt(sp.days ?? '30', 10)));
   const sb = adminSupabase();
 
-  const familyRes = await sb.from('Family').select('subscriptionTier');
-  type F = { subscriptionTier: string | null };
+  const familyRes = await sb.from('families').select('subscription_tier');
+  type F = { subscription_tier: string | null };
   const familyRows: F[] = (familyRes.data as F[] | null) ?? [];
   const tierCount = familyRows.reduce((acc, f) => {
-    const t = f.subscriptionTier ?? 'basic';
+    const t = f.subscription_tier ?? 'basic';
     acc[t] = (acc[t] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);

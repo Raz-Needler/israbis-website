@@ -15,26 +15,26 @@ async function loadUsers(params: SearchParams) {
   const from = (page - 1) * PAGE_SIZE;
   const to   = from + PAGE_SIZE - 1;
 
-  let q = sb.from('User').select('id, name, email, provider, joinDate, avatarColor', { count: 'exact' });
+  let q = sb.from('users').select('id, name, email, provider, join_date, avatar_color', { count: 'exact' });
   if (params.q) {
     const needle = `%${params.q}%`;
     q = q.or(`email.ilike.${needle},name.ilike.${needle}`);
   }
   if (params.provider) q = q.eq('provider', params.provider);
-  q = q.order('joinDate', { ascending: false }).range(from, to);
+  q = q.order('join_date', { ascending: false }).range(from, to);
 
   const listRes = await q;
 
   // last-30-day signup series
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400_000).toISOString();
-  const trendRes = await sb.from('User').select('joinDate').gte('joinDate', thirtyDaysAgo);
+  const trendRes = await sb.from('users').select('join_date').gte('join_date', thirtyDaysAgo);
 
   // provider breakdown
-  const providerRes = await sb.from('User').select('provider');
+  const providerRes = await sb.from('users').select('provider');
 
-  type U = { joinDate: string };
+  type U = { join_date: string };
   const trendRows: U[] = (trendRes.data as U[] | null) ?? [];
-  const series = bucketByDay(trendRows.map(r => r.joinDate), 30);
+  const series = bucketByDay(trendRows.map(r => r.join_date), 30);
 
   type P = { provider: string | null };
   const providerRows: P[] = (providerRes.data as P[] | null) ?? [];
@@ -131,7 +131,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                     <span style={{
                       width: 28, height: 28, borderRadius: '50%', display: 'inline-flex',
                       alignItems: 'center', justifyContent: 'center',
-                      background: (u.avatarColor as string) ?? '#34C759',
+                      background: (u.avatar_color as string) ?? '#34C759',
                       color: '#fff', fontSize: 12, fontWeight: 700
                     }}>
                       {((u.name as string) ?? '?').charAt(0).toUpperCase()}
@@ -141,7 +141,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                 </td>
                 <td className="muted">{u.email as string}</td>
                 <td><span className="pill pill-neutral">{(u.provider as string) ?? 'email'}</span></td>
-                <td className="muted">{fmtDate(u.joinDate as string)}</td>
+                <td className="muted">{fmtDate(u.join_date as string)}</td>
                 <td><Link href={`/admin/users/${u.id}`} style={{ fontSize: 12.5, fontWeight: 600 }}>View →</Link></td>
               </tr>
             ))}

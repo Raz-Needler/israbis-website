@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic';
 export default async function GeoPage() {
   const sb = adminSupabase();
 
-  const branchRes = await sb.from('StoreBranch').select('chainKey, city, lat, lng');
-  type B = { chainKey: string; city: string; lat: number; lng: number };
+  const branchRes = await sb.from('store_branches').select('chain_key, city, lat, lng');
+  type B = { chain_key: string; city: string; lat: number; lng: number };
   const branches: B[] = (branchRes.data as B[] | null) ?? [];
 
   const cityMap = branches.reduce((acc, b) => {
@@ -20,11 +20,11 @@ export default async function GeoPage() {
   const cities = Object.entries(cityMap).sort((a, b) => b[1] - a[1]).slice(0, 20).map(([city, n]) => ({ city, n }));
 
   // User locations from preferences
-  const prefsRes = await sb.from('UserPreferences').select('locationCity');
-  type P = { locationCity: string | null };
+  const prefsRes = await sb.from('user_preferences').select('location_city');
+  type P = { location_city: string | null };
   const prefs: P[] = (prefsRes.data as P[] | null) ?? [];
   const userCityMap = prefs.reduce((acc, p) => {
-    const c = (p.locationCity ?? 'unset').trim();
+    const c = (p.location_city ?? 'unset').trim();
     acc[c] = (acc[c] ?? 0) + 1;
     return acc;
   }, {} as Record<string, number>);
@@ -49,7 +49,7 @@ export default async function GeoPage() {
       <div className="stat-grid cols-4">
         <StatCard label="Branches"          value={branches.length} accent="green" source="StoreBranch" />
         <StatCard label="Cities with branches" value={Object.keys(cityMap).length} accent="blue" />
-        <StatCard label="Users with location" value={prefs.filter(p => p.locationCity).length} accent="purple" />
+        <StatCard label="Users with location" value={prefs.filter(p => p.location_city).length} accent="purple" />
         <StatCard label="Unique user cities"  value={Object.keys(userCityMap).length - 1} accent="gold" />
       </div>
 
@@ -77,7 +77,7 @@ export default async function GeoPage() {
   );
 }
 
-function BranchMap({ branches, minLat, maxLat, minLng, maxLng }: { branches: Array<{ chainKey: string; lat: number; lng: number }>; minLat: number; maxLat: number; minLng: number; maxLng: number }) {
+function BranchMap({ branches, minLat, maxLat, minLng, maxLng }: { branches: Array<{ chain_key: string; lat: number; lng: number }>; minLat: number; maxLat: number; minLng: number; maxLng: number }) {
   const w = 860, h = 460;
   if (branches.length === 0) {
     return <div style={{ height: h, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8E8E93' }}>No branch coordinates.</div>;
@@ -87,7 +87,7 @@ function BranchMap({ branches, minLat, maxLat, minLng, maxLng }: { branches: Arr
   const pad = 30;
 
   // Chain → color map
-  const chains = Array.from(new Set(branches.map(b => b.chainKey)));
+  const chains = Array.from(new Set(branches.map(b => b.chain_key)));
   const palette = ['#34C759', '#007AFF', '#AF52DE', '#FF9500', '#FF3B30', '#5AC8FA', '#D4A853', '#248A3D'];
   const colorFor = new Map(chains.map((c, i) => [c, palette[i % palette.length]]));
 
@@ -101,7 +101,7 @@ function BranchMap({ branches, minLat, maxLat, minLng, maxLng }: { branches: Arr
           return (
             <circle
               key={i} cx={x} cy={y} r={3.5}
-              fill={colorFor.get(b.chainKey)}
+              fill={colorFor.get(b.chain_key)}
               fillOpacity={0.7}
               stroke="#FFFFFF" strokeWidth={0.5}
             />

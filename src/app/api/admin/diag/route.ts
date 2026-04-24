@@ -73,28 +73,36 @@ export async function GET(_req: NextRequest) {
       error:    rpcRes.error?.message,
     };
 
-    // Check public (Worldbite app data) tables — this is the data the admin portal reads
+    // Check public (Worldbite app data) tables using the ACTUAL snake_case table names
+    // (Prisma maps PascalCase models to snake_case tables via @@map)
     const [userH, storeH, priceH, recipeH, famH, basketH, purchaseH, userRecH] = await Promise.all([
-      sb.from('User').select('id', { count: 'exact', head: true }),
-      sb.from('StoreBranch').select('id', { count: 'exact', head: true }),
-      sb.from('ProductPrice').select('id', { count: 'exact', head: true }),
-      sb.from('Recipe').select('id', { count: 'exact', head: true }),
-      sb.from('Family').select('id', { count: 'exact', head: true }),
-      sb.from('SavedBasket').select('id', { count: 'exact', head: true }),
-      sb.from('PurchaseHistory').select('id', { count: 'exact', head: true }),
-      sb.from('UserRecipe').select('id', { count: 'exact', head: true }),
+      sb.from('users').select('id', { count: 'exact', head: true }),
+      sb.from('store_branches').select('id', { count: 'exact', head: true }),
+      sb.from('product_prices').select('id', { count: 'exact', head: true }),
+      sb.from('recipes').select('id', { count: 'exact', head: true }),
+      sb.from('families').select('id', { count: 'exact', head: true }),
+      sb.from('saved_baskets').select('id', { count: 'exact', head: true }),
+      sb.from('purchase_history').select('id', { count: 'exact', head: true }),
+      sb.from('user_recipes').select('id', { count: 'exact', head: true }),
     ]);
 
     report.public = {
-      User:            { ok: !userH.error,     count: userH.count ?? 0,     error: userH.error?.message },
-      StoreBranch:     { ok: !storeH.error,    count: storeH.count ?? 0,    error: storeH.error?.message },
-      ProductPrice:    { ok: !priceH.error,    count: priceH.count ?? 0,    error: priceH.error?.message },
-      Recipe:          { ok: !recipeH.error,   count: recipeH.count ?? 0,   error: recipeH.error?.message },
-      Family:          { ok: !famH.error,      count: famH.count ?? 0,      error: famH.error?.message },
-      SavedBasket:     { ok: !basketH.error,   count: basketH.count ?? 0,   error: basketH.error?.message },
-      PurchaseHistory: { ok: !purchaseH.error, count: purchaseH.count ?? 0, error: purchaseH.error?.message },
-      UserRecipe:      { ok: !userRecH.error,  count: userRecH.count ?? 0,  error: userRecH.error?.message },
+      users:            { ok: !userH.error,     count: userH.count ?? 0,     error: userH.error?.message },
+      store_branches:   { ok: !storeH.error,    count: storeH.count ?? 0,    error: storeH.error?.message },
+      product_prices:   { ok: !priceH.error,    count: priceH.count ?? 0,    error: priceH.error?.message },
+      recipes:          { ok: !recipeH.error,   count: recipeH.count ?? 0,   error: recipeH.error?.message },
+      families:         { ok: !famH.error,      count: famH.count ?? 0,      error: famH.error?.message },
+      saved_baskets:    { ok: !basketH.error,   count: basketH.count ?? 0,   error: basketH.error?.message },
+      purchase_history: { ok: !purchaseH.error, count: purchaseH.count ?? 0, error: purchaseH.error?.message },
+      user_recipes:     { ok: !userRecH.error,  count: userRecH.count ?? 0,  error: userRecH.error?.message },
     };
+
+    // Definitive list of actual tables that exist in public (for future debugging)
+    const tableListRes = await sb.schema('admin').rpc('run_readonly_sql', {
+      q: `SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name`,
+      p: JSON.stringify([])
+    });
+    report.public_tables_actually_in_db = (tableListRes.data as Array<{ table_name: string }> | null)?.map(r => r.table_name) ?? [];
 
     const allOk =
       report.env &&

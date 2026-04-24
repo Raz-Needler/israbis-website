@@ -46,7 +46,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const visible = NAV.filter(n => !n.minRole || hasRole(claims.role, n.minRole));
 
   return (
-    <div className="admin-root" style={rootStyles}>
+    <div className="admin-root" dir="ltr" style={rootStyles}>
       <aside style={sidebarStyles}>
         <div style={brandStyles}>
           <div style={brandMarkStyles}>IB</div>

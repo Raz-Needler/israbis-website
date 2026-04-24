@@ -10,17 +10,16 @@ export default async function RecipesPage() {
   const sb = adminSupabase();
 
   const [recipesRes, userRecipesRes, socialRes, likesRes] = await Promise.all([
-    sb.from('Recipe').select('id', { count: 'exact', head: true }),
-    sb.from('UserRecipe').select('id', { count: 'exact', head: true }),
-    sb.from('RecipeSocialStats').select('recipeId, likeCount, upvoteCount, timesCooked, rating, commentCount').order('timesCooked', { ascending: false }).limit(15),
-    sb.from('Like').select('recipeId', { count: 'exact', head: true }),
+    sb.from('recipes').select('id', { count: 'exact', head: true }),
+    sb.from('user_recipes').select('id', { count: 'exact', head: true }),
+    sb.from('recipe_social_stats').select('recipe_id, like_count, upvote_count, times_cooked, rating, comment_count').order('times_cooked', { ascending: false }).limit(15),
+    sb.from('likes').select('recipe_id', { count: 'exact', head: true }),
   ]);
 
-  // Top recipes by cooks (need JOIN with Recipe for names)
-  const topRecipes = (socialRes.data as Array<{ recipeId: string; timesCooked: number; likeCount: number; upvoteCount: number; rating: number | null; commentCount: number }> | null) ?? [];
-  const recipeIds = topRecipes.map(r => r.recipeId).filter(Boolean);
+  const topRecipes = (socialRes.data as Array<{ recipe_id: string; times_cooked: number; like_count: number; upvote_count: number; rating: number | null; comment_count: number }> | null) ?? [];
+  const recipeIds = topRecipes.map(r => r.recipe_id).filter(Boolean);
   const names = recipeIds.length
-    ? await sb.from('Recipe').select('id, name').in('id', recipeIds)
+    ? await sb.from('recipes').select('id, name').in('id', recipeIds)
     : { data: [] as Array<{ id: string; name: string }> };
   const nameMap = new Map((names.data as Array<{ id: string; name: string }> | null ?? []).map(r => [r.id, r.name]));
 
@@ -45,14 +44,14 @@ export default async function RecipesPage() {
         <StatCard label="Recipes (catalog)"  value={recipesRes.count ?? 0} accent="green" source="public.Recipe" />
         <StatCard label="User-created recipes" value={userRecipesRes.count ?? 0} accent="blue" source="public.UserRecipe" />
         <StatCard label="Total likes"         value={likesRes.count ?? 0} accent="rose" source="public.Like" />
-        <StatCard label="Top cooked"          value={topRecipes[0]?.timesCooked ?? 0} accent="gold" source="social stats" />
+        <StatCard label="Top cooked"          value={topRecipes[0]?.times_cooked ?? 0} accent="gold" source="social stats" />
       </div>
 
       <div className="chart-grid cols-1-1">
         <div className="admin-card">
           <div className="admin-card-head"><div className="admin-card-title">Most cooked</div></div>
           <HBarChart
-            data={topRecipes.map(r => ({ name: nameMap.get(r.recipeId) ?? r.recipeId.slice(0, 8), value: r.timesCooked }))}
+            data={topRecipes.map(r => ({ name: nameMap.get(r.recipe_id) ?? r.recipe_id.slice(0, 8), value: r.times_cooked }))}
             labelKey="name" valueKey="value" height={380} color="#34C759"
           />
         </div>
@@ -76,13 +75,13 @@ export default async function RecipesPage() {
           <thead><tr><th>Recipe</th><th>Cooks</th><th>Likes</th><th>Upvotes</th><th>Rating</th><th>Comments</th></tr></thead>
           <tbody>
             {topRecipes.map(r => (
-              <tr key={r.recipeId}>
-                <td style={{ fontWeight: 600 }}>{nameMap.get(r.recipeId) ?? r.recipeId}</td>
-                <td>{r.timesCooked}</td>
-                <td>{r.likeCount}</td>
-                <td>{r.upvoteCount}</td>
+              <tr key={r.recipe_id}>
+                <td style={{ fontWeight: 600 }}>{nameMap.get(r.recipe_id) ?? r.recipe_id}</td>
+                <td>{r.times_cooked}</td>
+                <td>{r.like_count}</td>
+                <td>{r.upvote_count}</td>
                 <td>{r.rating ? Number(r.rating).toFixed(1) : '—'}</td>
-                <td>{r.commentCount}</td>
+                <td>{r.comment_count}</td>
               </tr>
             ))}
           </tbody>

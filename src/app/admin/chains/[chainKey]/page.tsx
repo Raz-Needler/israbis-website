@@ -14,7 +14,7 @@ export default async function ChainDetailPage({ params, searchParams }: { params
   const safeKey = chainKey.replace(/'/g, "''");
   const sb = adminSupabase();
 
-  const branchRes = await sb.from('StoreBranch').select('id, name, city, lat, lng, isActive').eq('chainKey', chainKey).order('city', { ascending: true });
+  const branchRes = await sb.from('store_branches').select('id, name, city, lat, lng, is_active').eq('chain_key', chainKey).order('city', { ascending: true });
   const branches = branchRes.data ?? [];
 
   const volumeRes = await sql<{ day: string; n: number }>(`
@@ -103,12 +103,12 @@ export default async function ChainDetailPage({ params, searchParams }: { params
           <table className="admin-table">
             <thead><tr><th>Name</th><th>City</th><th>Lat/Lng</th><th>Active</th></tr></thead>
             <tbody>
-              {(branches as Array<{ id: string; name: string; city: string; lat: number; lng: number; isActive: boolean }>).map(b => (
+              {(branches as Array<{ id: string; name: string; city: string; lat: number; lng: number; is_active: boolean }>).map(b => (
                 <tr key={b.id}>
                   <td style={{ fontWeight: 600 }}>{b.name}</td>
                   <td className="muted">{b.city}</td>
                   <td className="mono">{b.lat?.toFixed(4)}, {b.lng?.toFixed(4)}</td>
-                  <td>{b.isActive ? <span className="pill pill-green">active</span> : <span className="pill pill-neutral">inactive</span>}</td>
+                  <td>{b.is_active ? <span className="pill pill-green">active</span> : <span className="pill pill-neutral">inactive</span>}</td>
                 </tr>
               ))}
             </tbody>

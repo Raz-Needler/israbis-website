@@ -11,16 +11,16 @@ export const dynamic = 'force-dynamic';
 async function loadUser(id: string) {
   const sb = adminSupabase();
 
-  const userRes = await sb.from('User').select('*').eq('id', id).maybeSingle();
+  const userRes = await sb.from('users').select('*').eq('id', id).maybeSingle();
   if (userRes.error || !userRes.data) return null;
   const user = userRes.data;
 
   const [prefsRes, purchasesRes, recipesRes, familyRes, bookmarksRes] = await Promise.all([
-    sb.from('UserPreferences').select('*').eq('userId', id).maybeSingle(),
-    sb.from('PurchaseHistory').select('id, storeName, totalCost, itemCount, purchasedAt').eq('userId', id).order('purchasedAt', { ascending: false }).limit(20),
-    sb.from('UserRecipe').select('id, title, category, sourceType, createdAt').eq('userId', id).order('createdAt', { ascending: false }).limit(10),
-    sb.from('FamilyMember').select('family:familyId(id, name, ownerId), role').eq('userId', id),
-    sb.from('Bookmark').select('recipeId, createdAt').eq('userId', id).order('createdAt', { ascending: false }).limit(20),
+    sb.from('user_preferences').select('*').eq('user_id', id).maybeSingle(),
+    sb.from('purchase_history').select('id, store_name, total_cost, item_count, purchased_at').eq('user_id', id).order('purchased_at', { ascending: false }).limit(20),
+    sb.from('user_recipes').select('id, title, category, source_type, created_at').eq('user_id', id).order('created_at', { ascending: false }).limit(10),
+    sb.from('family_members').select('family:family_id(id, name, owner_id), role').eq('user_id', id),
+    sb.from('bookmarks').select('recipe_id, created_at').eq('user_id', id).order('created_at', { ascending: false }).limit(20),
   ]);
 
   const eventsRes = await sql<{ event_name: string; occurred_at: string; props: Record<string, unknown> | null }>(`
@@ -57,8 +57,8 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
   if (!data) notFound();
 
   const { user, prefs, purchases, recipes, family, bookmarks, recentEvents, dailyEvents } = data;
-  const daysSinceJoin = Math.round((Date.now() - new Date(user.joinDate as string).getTime()) / 86400_000);
-  const totalSpent = (purchases as Array<{ totalCost: number }>).reduce((s, p) => s + (Number(p.totalCost) || 0), 0);
+  const daysSinceJoin = Math.round((Date.now() - new Date(user.join_date as string).getTime()) / 86400_000);
+  const totalSpent = (purchases as Array<{ total_cost: number }>).reduce((s, p) => s + (Number(p.total_cost) || 0), 0);
 
   return (
     <div>
@@ -68,7 +68,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
           <h1 className="admin-h1" style={{ marginTop: 4 }}>{user.name as string}</h1>
           <p className="admin-sub">
             {user.email as string} · {user.provider as string ?? 'email'} auth ·
-            joined {fmtDate(user.joinDate as string)} ({daysSinceJoin} days ago)
+            joined {fmtDate(user.join_date as string)} ({daysSinceJoin} days ago)
           </p>
         </div>
       </header>
@@ -101,10 +101,10 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             <Row k="Name"             v={user.name as string} />
             <Row k="Email"            v={user.email as string} />
             <Row k="Provider"         v={<span className="pill pill-neutral">{user.provider as string ?? 'email'}</span>} />
-            <Row k="Joined"           v={fmtDate(user.joinDate as string)} />
-            <Row k="Theme"            v={prefs?.darkMode ? 'Dark' : 'Light'} />
-            <Row k="Preferred store"  v={prefs?.preferredStore ?? '—'} />
-            <Row k="Location city"    v={prefs?.locationCity ?? '—'} />
+            <Row k="Joined"           v={fmtDate(user.join_date as string)} />
+            <Row k="Theme"            v={prefs?.dark_mode ? 'Dark' : 'Light'} />
+            <Row k="Preferred store"  v={prefs?.preferred_store ?? '—'} />
+            <Row k="Location city"    v={prefs?.location_city ?? '—'} />
             <Row k="Bookmarks"        v={bookmarks.length.toString()} />
           </dl>
         </div>
@@ -120,12 +120,12 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             <table className="admin-table" style={{ background: 'transparent' }}>
               <thead><tr><th>Store</th><th>Items</th><th>Total</th><th>When</th></tr></thead>
               <tbody>
-                {(purchases as Array<{ storeName: string; itemCount: number; totalCost: number; purchasedAt: string }>).map((p, i) => (
+                {(purchases as Array<{ store_name: string; item_count: number; total_cost: number; purchased_at: string }>).map((p, i) => (
                   <tr key={i}>
-                    <td style={{ fontWeight: 600 }}>{p.storeName ?? '—'}</td>
-                    <td className="muted">{p.itemCount ?? 0}</td>
-                    <td>₪ {Number(p.totalCost ?? 0).toFixed(2)}</td>
-                    <td className="muted">{fmtDate(p.purchasedAt)}</td>
+                    <td style={{ fontWeight: 600 }}>{p.store_name ?? '—'}</td>
+                    <td className="muted">{p.item_count ?? 0}</td>
+                    <td>₪ {Number(p.total_cost ?? 0).toFixed(2)}</td>
+                    <td className="muted">{fmtDate(p.purchased_at)}</td>
                   </tr>
                 ))}
               </tbody>
