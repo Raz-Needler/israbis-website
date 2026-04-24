@@ -1,14 +1,21 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { adminSupabase } from '@/lib/admin/supabase';
-import { sql } from '@/lib/admin/sql';
 import { StatCard } from '../../_components/StatCard';
 import { AreaSeriesChart } from '../../_components/Charts';
 import '../../admin.css';
 
 export const dynamic = 'force-dynamic';
 
+// User IDs are UUIDs. Reject anything that isn't — this is what kept us out
+// of SQL-injection territory even before we moved the event queries off
+// string interpolation. Belt-and-suspenders: validate the shape here, then
+// read events via the Supabase client (which parameterizes under the hood).
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 async function loadUser(id: string) {
+  if (!UUID_RE.test(id)) return null;
+
   const sb = adminSupabase();
 
   const userRes = await sb.from('users').select('*').eq('id', id).maybeSingle();
@@ -23,21 +30,38 @@ async function loadUser(id: string) {
     sb.from('bookmarks').select('recipe_id, created_at').eq('user_id', id).order('created_at', { ascending: false }).limit(20),
   ]);
 
-  const eventsRes = await sql<{ event_name: string; occurred_at: string; props: Record<string, unknown> | null }>(`
-    SELECT event_name, occurred_at::text, props
-    FROM analytics.events
-    WHERE user_id = '${id.replace(/'/g, "''")}'
-    ORDER BY occurred_at DESC
-    LIMIT 100
-  `);
+  // Events via Supabase client — parameterized, no string concatenation.
+  const nowDate = new Date();
+  const threshold = new Date(nowDate.getTime() - 30 * 86400_000).toISOString().slice(0, 10);
+  const [recentEventsRes, dailyEventsAggRes] = await Promise.all([
+    sb.schema('analytics').from('events')
+      .select('event_name, occurred_at, props')
+      .eq('user_id', id)
+      .order('occurred_at', { ascending: false })
+      .limit(100),
+    sb.schema('analytics').from('events')
+      .select('day')
+      .eq('user_id', id)
+      .gte('day', threshold)
+      .limit(20000),
+  ]);
 
-  const dailyEventsRes = await sql<{ day: string; n: number }>(`
-    SELECT day::text AS day, COUNT(*)::int AS n
-    FROM analytics.events
-    WHERE user_id = '${id.replace(/'/g, "''")}'
-      AND day >= current_date - 30
-    GROUP BY day ORDER BY day
-  `);
+  // Aggregate daily event counts in JS since PostgREST can't GROUP BY.
+  const dailyMap = new Map<string, number>();
+  for (const r of (dailyEventsAggRes.data ?? []) as Array<{ day: string }>) {
+    dailyMap.set(r.day, (dailyMap.get(r.day) ?? 0) + 1);
+  }
+  const dailyEvents = Array.from(dailyMap.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([day, n]) => ({ day, n }));
+
+  const eventsRes = {
+    rows: (recentEventsRes.data ?? []).map(r => ({
+      event_name: (r as { event_name: string }).event_name,
+      occurred_at: String((r as { occurred_at: string }).occurred_at),
+      props: (r as { props: Record<string, unknown> | null }).props,
+    })),
+  };
 
   return {
     user,
@@ -47,7 +71,7 @@ async function loadUser(id: string) {
     family: familyRes.data ?? [],
     bookmarks: bookmarksRes.data ?? [],
     recentEvents: eventsRes.rows,
-    dailyEvents: dailyEventsRes.rows,
+    dailyEvents,
   };
 }
 

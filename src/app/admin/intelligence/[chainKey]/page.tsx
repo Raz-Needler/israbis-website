@@ -93,6 +93,11 @@ export default async function IntelligenceChainPage(
 
   // Defection analysis — who did users choose OVER the target chain?
   // Uses analytics.fact_intent_basket which logs every compared basket.
+  // Per-rival defection stats. The `sample_city` subquery here correlates
+  // to the actual rival — it picks the most common city of users who
+  // defected specifically to THAT rival, not a random city from the whole
+  // defection population (the prior version had an unscoped CTE join that
+  // returned a random-looking city regardless of rival).
   const defectionAgg = await sql<{
     to_chain: string;
     baskets_lost: number;
@@ -100,26 +105,36 @@ export default async function IntelligenceChainPage(
     total_delta_nis: number;
     sample_city: string | null;
   }>(`
-    WITH sample AS (
-      SELECT fb.user_chose_chain AS to_chain, fb.delta_nis_vs_cheapest, fb.user_id
+    WITH defections AS (
+      SELECT fb.user_chose_chain AS to_chain,
+             fb.delta_nis_vs_cheapest,
+             fb.user_id
       FROM analytics.fact_intent_basket fb
       WHERE fb.total_nis_by_chain ? '${chainKey.replace(/'/g, '')}'
         AND fb.user_chose_chain IS NOT NULL
         AND fb.user_chose_chain <> '${chainKey.replace(/'/g, '')}'
         AND fb.eventually_purchased = true
+    ),
+    cities_per_rival AS (
+      SELECT d.to_chain, up.location_city, COUNT(*) AS n
+      FROM defections d
+      JOIN public.user_preferences up ON up.user_id = d.user_id
+      WHERE up.location_city IS NOT NULL
+      GROUP BY d.to_chain, up.location_city
+    ),
+    top_city_per_rival AS (
+      SELECT DISTINCT ON (to_chain) to_chain, location_city
+      FROM cities_per_rival
+      ORDER BY to_chain, n DESC
     )
-    SELECT to_chain,
+    SELECT d.to_chain,
            COUNT(*)::int AS baskets_lost,
-           AVG(delta_nis_vs_cheapest)::numeric(10,2) AS avg_delta_nis,
-           SUM(delta_nis_vs_cheapest)::numeric(12,2) AS total_delta_nis,
-           (
-             SELECT up.location_city FROM public.user_preferences up
-             JOIN sample s2 USING (user_id)
-             WHERE up.location_city IS NOT NULL
-             LIMIT 1
-           ) AS sample_city
-    FROM sample
-    GROUP BY to_chain
+           AVG(d.delta_nis_vs_cheapest)::numeric(10,2) AS avg_delta_nis,
+           SUM(d.delta_nis_vs_cheapest)::numeric(12,2) AS total_delta_nis,
+           tc.location_city AS sample_city
+    FROM defections d
+    LEFT JOIN top_city_per_rival tc USING (to_chain)
+    GROUP BY d.to_chain, tc.location_city
     ORDER BY baskets_lost DESC
     LIMIT 10
   `);
@@ -276,8 +291,13 @@ export default async function IntelligenceChainPage(
   }
   matrix.sort((a, b) => a.productName.localeCompare(b.productName));
 
-  const wins = matrix.filter(r => r.winner === chainKey).length;
-  const losses = matrix.filter(r => r.selfPrice != null && r.winner !== chainKey).length;
+  // Wins count any row where target's price equals the winning (minimum) price,
+  // INCLUDING ties. The prior `r.winner === chainKey` approach was ordering-
+  // dependent: if target and a rival both charged ₪10, the row's `winner` got
+  // set to whichever chain was processed first in the by-barcode loop, so
+  // target's win count silently undercounted ties.
+  const wins = matrix.filter(r => r.selfPrice != null && r.winnerPrice !== Infinity && r.selfPrice <= r.winnerPrice).length;
+  const losses = matrix.filter(r => r.selfPrice != null && r.winnerPrice !== Infinity && r.selfPrice > r.winnerPrice).length;
   const missing = matrix.filter(r => r.selfPrice == null).length;
   const biggestLosses = matrix
     .filter(r => r.selfDelta != null && r.selfDelta > 0)
@@ -347,20 +367,32 @@ export default async function IntelligenceChainPage(
     : {};
   const winnerChainKey = Object.entries(overallWinner).sort((a, b) => b[1].count - a[1].count)[0]?.[0] ?? chainKey;
 
+  // Receipt compare — ONLY rows where both target AND a winner have real prices.
+  // Anything else would be comparing apples to oranges (one side would need a
+  // fake backup price), which silently inflates whichever side lacks the SKU.
+  // Sort by biggest delta first so the hero line items lead with the most
+  // damaging gaps.
   const receiptRows = matrix
-    .filter(r => r.selfPrice != null || r.winnerPrice !== Infinity)
+    .filter(r => r.selfPrice != null && r.winnerPrice !== Infinity && r.winnerPrice != null)
+    .slice()
+    .sort((a, b) => {
+      const da = (a.selfPrice ?? 0) - a.winnerPrice;
+      const db = (b.selfPrice ?? 0) - b.winnerPrice;
+      return db - da;
+    })
     .slice(0, 10)
     .map(r => ({
       productName: r.productName,
       barcode: r.barcode,
       targetPrice: r.selfPrice,
-      winnerPrice: r.winnerPrice === Infinity ? null : r.winnerPrice,
+      winnerPrice: r.winnerPrice,
       winnerChain: r.winner,
     }));
-  const basketTotalTarget = receiptRows.reduce((s, r) => s + (r.targetPrice ?? r.winnerPrice ?? 0), 0);
+  // Both totals sum the SAME set of products — now an apples-to-apples receipt.
+  const basketTotalTarget = receiptRows.reduce((s, r) => s + (r.targetPrice ?? 0), 0);
   const basketTotalWinner = receiptRows.reduce((s, r) => {
-    const wp = r.winnerChain === chainKey ? (r.targetPrice ?? 0) : (r.winnerPrice ?? r.targetPrice ?? 0);
-    return s + wp;
+    // Winner is defined per-row; if it's the target itself, use target price.
+    return s + (r.winnerChain === chainKey ? (r.targetPrice ?? 0) : (r.winnerPrice ?? 0));
   }, 0);
 
   return (

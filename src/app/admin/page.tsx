@@ -79,9 +79,12 @@ async function loadOverview() {
 
   const freshness = await eventFreshness();
 
-  // Stores + chain counts for operational context
+  // Stores + chain counts for operational context.
+  // NOTE: product_prices uses `planned` (pg statistics estimate) because an
+  // exact COUNT(*) over the 4.5M-row table times out at the 30s RPC limit.
+  // The number is accurate to within ~1% and reads in milliseconds.
   const storesHead = await sb.from('store_branches').select('id', { count: 'exact', head: true });
-  const pricesHead = await sb.from('product_prices').select('id', { count: 'exact', head: true });
+  const pricesHead = await sb.from('product_prices').select('id', { count: 'planned', head: true });
 
   return {
     totalUsers: usersHead.count ?? 0,

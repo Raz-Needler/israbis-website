@@ -7,7 +7,7 @@ import '../admin.css';
 export const dynamic = 'force-dynamic';
 
 interface RetentionCell { cohort_week: string; week_n: number; active_users: number }
-interface CohortRow { cohort: string; cohort_size: number; weeks: number[] }
+interface CohortRow { cohort: string; cohort_size: number; weeks: Array<number | null> }
 
 async function loadRetention(days: number) {
   const { rows, error } = await sql<RetentionCell>(`
@@ -31,7 +31,11 @@ async function loadRetention(days: number) {
     ORDER BY cohort_week, week_n
   `);
   if (error) return { cohorts: [], error };
-  // pivot to cohort rows
+  // Pivot to cohort rows. `weeks[i]` = active users at week i for that cohort;
+  // `null` means "that week hasn't happened yet" (future relative to today) —
+  // rendered as a grey cell, distinct from `0` = "week elapsed, no returns".
+  const msPerWeek = 7 * 86400_000;
+  const nowMs = Date.now();
   const map = new Map<string, Map<number, number>>();
   for (const r of rows) {
     if (!map.has(r.cohort_week)) map.set(r.cohort_week, new Map());
@@ -39,9 +43,18 @@ async function loadRetention(days: number) {
   }
   const cohorts: CohortRow[] = Array.from(map.entries()).map(([cohort, ws]) => {
     const size = ws.get(0) ?? 0;
-    const maxWeek = Math.max(...Array.from(ws.keys()), 0);
-    const weeks: number[] = [];
-    for (let i = 0; i <= maxWeek; i++) weeks.push(ws.get(i) ?? 0);
+    const observedMax = Math.max(...Array.from(ws.keys()), 0);
+    const cohortStartMs = new Date(cohort + 'T00:00:00Z').getTime();
+    const elapsedWeeks = Math.max(0, Math.floor((nowMs - cohortStartMs) / msPerWeek));
+    const maxWeek = Math.max(observedMax, elapsedWeeks);
+    const weeks: Array<number | null> = [];
+    for (let i = 0; i <= maxWeek; i++) {
+      if (i > elapsedWeeks) {
+        weeks.push(null);            // future — no rendering
+      } else {
+        weeks.push(ws.get(i) ?? 0);  // elapsed — 0 means "no returns", still meaningful
+      }
+    }
     return { cohort, cohort_size: size, weeks };
   }).reverse();
   return { cohorts, error: null };
@@ -54,8 +67,8 @@ export default async function RetentionPage({ searchParams }: { searchParams: Pr
 
   const totalCohorts = cohorts.length;
   const avgW1 = cohorts
-    .filter(c => c.cohort_size > 0 && c.weeks.length >= 2)
-    .map(c => (c.weeks[1] / c.cohort_size) * 100);
+    .filter(c => c.cohort_size > 0 && c.weeks.length >= 2 && c.weeks[1] !== null)
+    .map(c => ((c.weeks[1] as number) / c.cohort_size) * 100);
   const avgW1Mean = avgW1.length ? avgW1.reduce((s, v) => s + v, 0) / avgW1.length : 0;
 
   return (

@@ -188,7 +188,7 @@ export function FunnelChart({
 export function RetentionGrid({
   rows
 }: {
-  rows: Array<{ cohort: string; cohort_size: number; weeks: number[] }>;
+  rows: Array<{ cohort: string; cohort_size: number; weeks: Array<number | null> }>;
 }) {
   if (!rows || rows.length === 0) return <EmptyChart height={240} />;
   const maxWeeks = Math.max(...rows.map(r => r.weeks.length));
@@ -210,12 +210,20 @@ export function RetentionGrid({
               <td style={{ ...td, fontWeight: 700, color: '#1A1A1A' }}>{r.cohort}</td>
               <td style={{ ...td, color: '#3C3C43' }}>{r.cohort_size}</td>
               {r.weeks.map((active, i) => {
+                // null = week hasn't happened yet (future relative to today)
+                if (active === null) {
+                  return (
+                    <td key={i} style={{ ...td, background: 'repeating-linear-gradient(45deg, #FAFBFC, #FAFBFC 3px, #F0F2F5 3px, #F0F2F5 6px)', color: '#B0B0B5', textAlign: 'center', fontWeight: 600, fontSize: 10 }} title="Not yet — this week hasn't elapsed for this cohort">
+                      —
+                    </td>
+                  );
+                }
                 const pct = r.cohort_size ? (active / r.cohort_size) : 0;
                 const bg = pct === 0 ? '#F5F5F5' : `rgba(52, 199, 89, ${Math.min(0.85, 0.12 + pct * 0.85)})`;
                 const color = pct > 0.4 ? '#FFFFFF' : '#1A1A1A';
                 return (
-                  <td key={i} style={{ ...td, background: bg, color, textAlign: 'center', fontWeight: 700 }}>
-                    {pct === 0 ? '' : `${Math.round(pct * 100)}%`}
+                  <td key={i} style={{ ...td, background: bg, color, textAlign: 'center', fontWeight: 700 }} title={`${active} active of ${r.cohort_size}`}>
+                    {pct === 0 ? '0%' : `${Math.round(pct * 100)}%`}
                   </td>
                 );
               })}
