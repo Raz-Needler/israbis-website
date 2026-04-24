@@ -12,6 +12,7 @@ import { IntelligenceHero } from '../_components/IntelligenceHero';
 import { ReceiptCompare } from '../_components/ReceiptCompare';
 import { DefectionAnalysis, type DefectionRow } from '../_components/DefectionAnalysis';
 import { BranchMap, type BranchPoint } from '../_components/BranchMap';
+import { ProductExplorer } from '../_components/ProductExplorer';
 import '../../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -486,6 +487,21 @@ export default async function IntelligenceChainPage(
           </div>
           <BattlegroundList targetChain={chainKey} battlegrounds={battlegrounds.slice(0, 10)} />
         </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+           CROSS-CHAIN PRODUCT EXPLORER — search any product, see every chain
+         ═══════════════════════════════════════════════════════════ */}
+      <div className="admin-card" style={{ marginTop: 16 }}>
+        <div className="admin-card-head">
+          <div>
+            <div className="admin-card-title">Cross-chain product search</div>
+            <div className="admin-card-sub">
+              Type any Hebrew product name or EAN-13 barcode. See every chain that stocks it, their price, and the savings spread.
+            </div>
+          </div>
+        </div>
+        <ProductExplorer targetChain={chainKey} />
       </div>
 
       {/* ═══════════════════════════════════════════════════════════

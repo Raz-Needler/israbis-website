@@ -1,4 +1,6 @@
 import { profileFor } from '@/lib/admin/chainProfiles';
+import { ChainLogo } from '../../_components/ChainLogo';
+import { ProductImage } from '../../_components/ProductImage';
 
 interface Row {
   productName: string;
@@ -37,8 +39,8 @@ export function ReceiptCompare({
   return (
     <div style={wrap}>
       <div style={headerRow}>
-        <ReceiptHeader chainName={target.displayName}  hebName={target.displayNameHe}  color={target.color}  total={basketTotalTarget}  isWinner={delta <= 0} />
-        <ReceiptHeader chainName={winner.displayName}  hebName={winner.displayNameHe}  color={winner.color}  total={basketTotalWinner}  isWinner={delta > 0}  />
+        <ReceiptHeader chainKey={targetChain}     chainName={target.displayName}  hebName={target.displayNameHe}  color={target.color}  total={basketTotalTarget}  isWinner={delta <= 0} />
+        <ReceiptHeader chainKey={winnerChainKey}  chainName={winner.displayName}  hebName={winner.displayNameHe}  color={winner.color}  total={basketTotalWinner}  isWinner={delta > 0}  />
       </div>
 
       <div style={deltaBar(delta)}>
@@ -69,19 +71,24 @@ export function ReceiptCompare({
   );
 }
 
-function ReceiptHeader({ chainName, hebName, color, total, isWinner }: {
-  chainName: string; hebName: string; color: string; total: number; isWinner: boolean;
+function ReceiptHeader({ chainKey, chainName, hebName, color, total, isWinner }: {
+  chainKey: string; chainName: string; hebName: string; color: string; total: number; isWinner: boolean;
 }) {
   return (
     <div style={headerCell(color, isWinner)}>
       <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: '#8E8E93', textTransform: 'uppercase' }}>
-        {isWinner ? 'Basket Winner' : ''}
+        {isWinner ? 'Basket Winner' : 'The Challenger'}
       </div>
-      <div style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', marginTop: 2, letterSpacing: -0.4 }}>
-        {chainName}
-        <span style={{ fontSize: 14, color: '#8E8E93', fontWeight: 600, marginLeft: 8 }}>{hebName}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+        <ChainLogo chainKey={chainKey} size={40} />
+        <div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: '#1A1A1A', letterSpacing: -0.4, lineHeight: 1 }}>
+            {chainName}
+          </div>
+          <div style={{ fontSize: 13, color: '#8E8E93', fontWeight: 600, marginTop: 2 }}>{hebName}</div>
+        </div>
       </div>
-      <div style={{ fontSize: 38, fontWeight: 900, color: isWinner ? '#34C759' : '#FF3B30', marginTop: 8, letterSpacing: -1 }}>
+      <div style={{ fontSize: 38, fontWeight: 900, color: isWinner ? '#34C759' : '#FF3B30', marginTop: 12, letterSpacing: -1 }}>
         ₪{total.toFixed(2)}
       </div>
     </div>
@@ -98,6 +105,7 @@ function LineItem({ row, targetColor, winnerColor }: {
 
   return (
     <div style={itemRow}>
+      <ProductImage barcode={row.barcode} size={36} alt={row.productName} style={{ flexShrink: 0 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 12.5, fontWeight: 600, color: '#1A1A1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {row.productName}

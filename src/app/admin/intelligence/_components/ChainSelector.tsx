@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { CHAIN_PROFILES, profileFor } from '@/lib/admin/chainProfiles';
+import { ChainLogo } from '../../_components/ChainLogo';
 
 interface Props {
   activeKey: string;
@@ -36,7 +37,7 @@ export function ChainSelector({ activeKey, availableChains }: Props) {
               boxShadow: isActive ? `0 6px 16px ${hexWithAlpha(profile.color, 0.35)}` : 'none',
             }}
           >
-            <span style={{ ...dotStyles, background: isActive ? '#FFFFFF' : profile.color }} />
+            <ChainLogo chainKey={key} size={20} />
             <span>{profile.displayName}</span>
             <span style={{ fontSize: 10, opacity: isActive ? 0.9 : 0.45 }}>{profile.displayNameHe}</span>
           </Link>

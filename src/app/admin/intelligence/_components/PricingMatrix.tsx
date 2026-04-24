@@ -1,4 +1,6 @@
 import { profileFor } from '@/lib/admin/chainProfiles';
+import { ChainLogo } from '../../_components/ChainLogo';
+import { ProductImage } from '../../_components/ProductImage';
 
 interface MatrixRow {
   barcode: string;
@@ -62,17 +64,25 @@ export function PricingMatrix({ chainKey, matrix, summary }: Props) {
               return (
                 <tr key={row.barcode} style={{ borderTop: '1px solid #EEF0F3' }}>
                   <td style={tdStyles}>
-                    <div style={{ fontWeight: 600, fontSize: 12.5 }}>{row.productName}</div>
-                    <div style={{ fontSize: 10, color: '#8E8E93', marginTop: 2 }}>{row.barcode}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <ProductImage barcode={row.barcode} size={36} alt={row.productName} style={{ flexShrink: 0 }} />
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontWeight: 600, fontSize: 12.5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 260 }}>{row.productName}</div>
+                        <div style={{ fontSize: 10, color: '#8E8E93', marginTop: 2, fontFamily: 'ui-monospace, monospace' }}>{row.barcode}</div>
+                      </div>
+                    </div>
                   </td>
                   <td style={tdNumStyles}>
                     {row.selfPrice != null ? `₪${row.selfPrice.toFixed(2)}` : <span style={{ color: '#8E8E93' }}>—</span>}
                   </td>
                   <td style={tdNumStyles}>
-                    <span style={winnerChipStyles(winnerProfile.color)}>
-                      {winnerProfile.displayName}
-                    </span>
-                    <div style={{ fontSize: 11, marginTop: 2, fontWeight: 600 }}>₪{row.winnerPrice.toFixed(2)}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
+                      <ChainLogo chainKey={row.winner} size={18} />
+                      <span style={{ fontSize: 11.5, fontWeight: 700, color: winnerProfile.color }}>
+                        {winnerProfile.displayName}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 12, marginTop: 3, fontWeight: 700 }}>₪{row.winnerPrice.toFixed(2)}</div>
                   </td>
                   <td style={tdNumStyles}>
                     {isWinner ? (
@@ -111,11 +121,13 @@ export function PricingMatrix({ chainKey, matrix, summary }: Props) {
           </div>
           {summary.biggestLosses.map((r) => (
             <div key={r.barcode} style={biggestRowStyles}>
+              <ProductImage barcode={r.barcode} size={32} alt={r.productName} style={{ flexShrink: 0 }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12.5, fontWeight: 600 }}>{r.productName}</div>
                 <div style={{ fontSize: 10.5, color: '#8E8E93' }}>Drop to ₪{(r.winnerPrice - 0.01).toFixed(2)} to beat <strong>{profileFor(r.winner).displayName}</strong></div>
               </div>
-              <div style={{ textAlign: 'right' }}>
+              <ChainLogo chainKey={r.winner} size={20} />
+              <div style={{ textAlign: 'right', minWidth: 60 }}>
                 <div style={{ fontSize: 14, color: '#FF3B30', fontWeight: 800 }}>+₪{(r.selfDelta ?? 0).toFixed(2)}</div>
               </div>
             </div>

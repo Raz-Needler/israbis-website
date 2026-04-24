@@ -1,4 +1,5 @@
 import { profileFor } from '@/lib/admin/chainProfiles';
+import { ChainLogo } from '../../_components/ChainLogo';
 
 export interface DefectionRow {
   toChain: string;
@@ -69,9 +70,11 @@ export function DefectionAnalysis({
             return (
               <div key={r.toChain} style={tableRowStyles}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: rival.color, display: 'inline-block' }} />
-                  <span style={{ fontSize: 13, fontWeight: 700 }}>{rival.displayName}</span>
-                  <span style={{ fontSize: 11, color: '#8E8E93' }}>{rival.displayNameHe}</span>
+                  <ChainLogo chainKey={r.toChain} size={24} />
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1A1A1A', lineHeight: 1.2 }}>{rival.displayName}</div>
+                    <div style={{ fontSize: 10.5, color: '#8E8E93' }}>{rival.displayNameHe}</div>
+                  </div>
                 </div>
                 <div style={{ textAlign: 'right', fontSize: 14, fontWeight: 800 }}>{r.baskets_lost.toLocaleString()}</div>
                 <div style={{ textAlign: 'right', fontSize: 13, color: '#FF9500', fontWeight: 700 }}>
