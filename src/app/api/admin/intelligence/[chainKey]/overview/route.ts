@@ -90,43 +90,35 @@ export async function GET(
   }
 
   // --- Price position vs market (avg shelf price) ---
-  // Sampled via last_updated to avoid full-table GROUP BY timeouts.
-  const priceRes = await sql<{ chain: string; avg_price: number; sku_count: number }>(`
-    WITH sample AS (
-      SELECT chain_key, price_nis
-      FROM public.product_prices
-      WHERE price_nis IS NOT NULL AND price_nis > 0
-      ORDER BY last_updated DESC NULLS LAST
-      LIMIT 100000
+  // Stratified per-chain query — a single 100k sample tends to be dominated
+  // by whichever chain had the most recent bulk import, zeroing out rivals.
+  // Running one AVG/COUNT per chain via the indexed chain_key path is bounded
+  // (~14 chains × 200ms) and always returns a row for every chain.
+  const priceRows: Array<{ chain: string; avg_price: number; sku_count: number }> = [];
+  const chainsToQuery = Array.from(new Set([chainKey, ...chainsRanked.map(c => c.chain)])).slice(0, 20);
+  const priceResults = await Promise.all(
+    chainsToQuery.map(ch =>
+      sql<{ avg_price: number; sku_count: number }>(`
+        SELECT AVG(price_nis)::numeric(10,2) AS avg_price,
+               COUNT(*)::int AS sku_count
+        FROM public.product_prices
+        WHERE chain_key = '${ch.replace(/'/g, '')}'
+          AND price_nis IS NOT NULL AND price_nis > 0
+        LIMIT 1
+      `)
     )
-    SELECT chain_key AS chain,
-           AVG(price_nis)::numeric(10,2) AS avg_price,
-           COUNT(*)::int AS sku_count
-    FROM sample
-    GROUP BY chain_key
-    ORDER BY sku_count DESC
-  `);
-  const priceRows = priceRes.rows.map(r => ({
-    chain: r.chain.toUpperCase(),
-    avg_price: Number(r.avg_price),
-    sku_count: Number(r.sku_count),
-  }));
-
-  // Force-include the target chain if the sample missed it (small-catalog chains)
-  if (!priceRows.find(r => r.chain === chainKey)) {
-    const selfRes = await sql<{ avg_price: number; sku_count: number }>(`
-      SELECT AVG(price_nis)::numeric(10,2) AS avg_price,
-             COUNT(*)::int AS sku_count
-      FROM public.product_prices
-      WHERE chain_key = '${chainKey.replace(/'/g, '')}'
-        AND price_nis IS NOT NULL AND price_nis > 0
-      LIMIT 1
-    `);
-    const row = selfRes.rows[0];
+  );
+  priceResults.forEach((res, idx) => {
+    const row = res.rows[0];
     if (row && row.sku_count > 0) {
-      priceRows.push({ chain: chainKey, avg_price: Number(row.avg_price), sku_count: Number(row.sku_count) });
+      priceRows.push({
+        chain: chainsToQuery[idx],
+        avg_price: Number(row.avg_price),
+        sku_count: Number(row.sku_count),
+      });
     }
-  }
+  });
+  priceRows.sort((a, b) => b.sku_count - a.sku_count);
 
   const leaderByPrice = [...priceRows].sort((a, b) => a.avg_price - b.avg_price)[0] ?? null;
   const selfPrice = priceRows.find(r => r.chain === chainKey) ?? null;

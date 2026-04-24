@@ -161,53 +161,36 @@ export default async function IntelligenceChainPage(
   const basketStats = basketStatsRes.rows[0] ?? { compared_total: 0, chose_cheapest_total: 0, defected_total: 0 };
   const totalDefectionNis = defectedByChain.reduce((s, r) => s + r.total_delta_nis, 0);
 
-  // Price position — sampled. A full GROUP BY on 4.5M rows times out at the
-  // 30s RPC limit, so we sample 100k rows via `last_updated` (indexed) to get
-  // a representative average shelf price per chain. Sample size >> chain count
-  // so the per-chain averages remain stable.
-  const priceRes = await sql<{ chain: string; avg_price: number; sku_count: number }>(`
-    WITH sample AS (
-      SELECT chain_key, price_nis
-      FROM public.product_prices
-      WHERE price_nis IS NOT NULL AND price_nis > 0
-      ORDER BY last_updated DESC NULLS LAST
-      LIMIT 100000
+  // Price position — stratified per-chain query. Earlier we used a single
+  // "100k most-recently-updated rows" sample, but it turned out one chain's
+  // bulk import could fill the entire sample, leaving rivals with zero rows.
+  // Instead we run one AVG/COUNT per chain in chainsRanked, using the indexed
+  // chain_key path. 14 chains × ~200ms each = ~2s total, bounded and predictable.
+  const priceRows: Array<{ chain: string; avg_price: number; sku_count: number }> = [];
+  const chainsToQuery = Array.from(new Set([chainKey, ...chainsRanked.map(c => c.chain)])).slice(0, 20);
+  const priceResults = await Promise.all(
+    chainsToQuery.map(ch =>
+      sql<{ avg_price: number; sku_count: number }>(`
+        SELECT AVG(price_nis)::numeric(10,2) AS avg_price,
+               COUNT(*)::int AS sku_count
+        FROM public.product_prices
+        WHERE chain_key = '${ch.replace(/'/g, '')}'
+          AND price_nis IS NOT NULL AND price_nis > 0
+        LIMIT 1
+      `)
     )
-    SELECT chain_key AS chain,
-           AVG(price_nis)::numeric(10,2) AS avg_price,
-           COUNT(*)::int AS sku_count
-    FROM sample
-    GROUP BY chain_key
-    ORDER BY sku_count DESC
-  `);
-  const priceRows = priceRes.rows.map(r => ({
-    chain: r.chain.toUpperCase(),
-    avg_price: Number(r.avg_price),
-    sku_count: Number(r.sku_count),
-  }));
-
-  // Dedicated query for the target chain — it may not appear in the
-  // last-updated-100k sample if its catalog is small (YOCHANANOF has only
-  // ~1,300 rows of the 4.5M). We query directly using the indexed chain_key
-  // so priceRows always includes the target.
-  if (!priceRows.find(r => r.chain === chainKey)) {
-    const selfRes = await sql<{ avg_price: number; sku_count: number }>(`
-      SELECT AVG(price_nis)::numeric(10,2) AS avg_price,
-             COUNT(*)::int AS sku_count
-      FROM public.product_prices
-      WHERE chain_key = '${chainKey.replace(/'/g, '')}'
-        AND price_nis IS NOT NULL AND price_nis > 0
-      LIMIT 1
-    `);
-    const row = selfRes.rows[0];
+  );
+  priceResults.forEach((res, idx) => {
+    const row = res.rows[0];
     if (row && row.sku_count > 0) {
       priceRows.push({
-        chain: chainKey,
+        chain: chainsToQuery[idx],
         avg_price: Number(row.avg_price),
         sku_count: Number(row.sku_count),
       });
     }
-  }
+  });
+  priceRows.sort((a, b) => b.sku_count - a.sku_count);
 
   const leaderByPrice = [...priceRows].sort((a, b) => a.avg_price - b.avg_price)[0] ?? null;
   const selfPrice = priceRows.find(r => r.chain === chainKey) ?? null;
