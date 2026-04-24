@@ -304,6 +304,29 @@ ON CONFLICT (username) DO NOTHING;
 
 
 -- ════════════════════════════════════════════════════════════════════════
+-- PART 5 · Grant the Supabase service_role access to the new schemas
+-- Required — new schemas default to owner-only.
+-- ════════════════════════════════════════════════════════════════════════
+
+GRANT USAGE ON SCHEMA admin     TO service_role, anon, authenticated;
+GRANT USAGE ON SCHEMA analytics TO service_role, anon, authenticated;
+
+GRANT ALL ON ALL TABLES    IN SCHEMA admin     TO service_role;
+GRANT ALL ON ALL TABLES    IN SCHEMA analytics TO service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA admin     TO service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA analytics TO service_role;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA admin     TO service_role;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA analytics TO service_role;
+GRANT EXECUTE ON FUNCTION admin.run_readonly_sql(TEXT, JSONB) TO service_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA admin     GRANT ALL ON TABLES    TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA admin     GRANT ALL ON SEQUENCES TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA admin     GRANT ALL ON FUNCTIONS TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA analytics GRANT ALL ON TABLES    TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA analytics GRANT ALL ON SEQUENCES TO service_role;
+
+
+-- ════════════════════════════════════════════════════════════════════════
 -- DONE · Sanity checks
 -- ════════════════════════════════════════════════════════════════════════
 -- The three queries below run immediately after. You should see:
