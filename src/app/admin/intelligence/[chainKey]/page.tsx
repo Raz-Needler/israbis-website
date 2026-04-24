@@ -94,7 +94,11 @@ export default async function IntelligenceChainPage(
     ? Number((selfPrice.avg_price - leaderByPrice.avg_price).toFixed(2))
     : 0;
 
-  // Pricing matrix (top-20 widest-coverage barcodes)
+  // Pricing matrix — top-20 widest-coverage barcodes. Threshold is 2+ chains
+  // because real shelf-price data in this DB has sparse cross-chain overlap
+  // (most barcodes appear in 1-2 chains, a handful reach 3+). When the target
+  // chain itself lacks SKU data, we still show the matrix so the rival chains
+  // have a story; the UI surfaces "not stocked" clearly for the target.
   const matrixRes = await sql<{
     barcode: string;
     product_name: string | null;
@@ -106,7 +110,7 @@ export default async function IntelligenceChainPage(
       FROM public.product_prices
       WHERE barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0
       GROUP BY barcode
-      HAVING COUNT(DISTINCT chain_key) >= 3
+      HAVING COUNT(DISTINCT chain_key) >= 2
       ORDER BY COUNT(DISTINCT chain_key) DESC, COUNT(*) DESC
       LIMIT 20
     )

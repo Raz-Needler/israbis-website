@@ -38,10 +38,13 @@ export default function AdminLoginPage() {
         setLoading(false);
         return;
       }
+      // Force a full navigation so the httpOnly session cookie attaches cleanly
+      // to the first RSC request for the destination page. `router.push` hits
+      // a race on some browsers where the first fetch rides the old cookie jar.
       if (body.needs_password_change) {
-        router.push('/admin/settings/rotate-password?first=1');
+        window.location.assign('/admin/settings/rotate-password?first=1');
       } else {
-        router.push(next);
+        window.location.assign(next);
       }
     } catch {
       setError('Network error. Try again.');

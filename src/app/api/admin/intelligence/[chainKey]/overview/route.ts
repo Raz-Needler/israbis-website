@@ -124,7 +124,7 @@ export async function GET(
       FROM public.product_prices
       WHERE barcode IS NOT NULL AND price_nis IS NOT NULL AND price_nis > 0
       GROUP BY barcode
-      HAVING COUNT(DISTINCT chain_key) >= 3
+      HAVING COUNT(DISTINCT chain_key) >= 2
       ORDER BY COUNT(DISTINCT chain_key) DESC, COUNT(*) DESC
       LIMIT 20
     )
