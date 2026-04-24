@@ -8,6 +8,10 @@ import { CompetitorRadar } from '../_components/CompetitorRadar';
 import { PricingMatrix } from '../_components/PricingMatrix';
 import { BattlegroundList } from '../_components/BattlegroundList';
 import { BasketBattle } from '../_components/BasketBattle';
+import { IntelligenceHero } from '../_components/IntelligenceHero';
+import { ReceiptCompare } from '../_components/ReceiptCompare';
+import { DefectionAnalysis, type DefectionRow } from '../_components/DefectionAnalysis';
+import { BranchMap, type BranchPoint } from '../_components/BranchMap';
 import '../../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -24,9 +28,9 @@ export default async function IntelligenceChainPage(
 
   const sb = adminSupabase();
 
-  // --- Branches + cities ---
-  const branchRes = await sb.from('store_branches').select('chain_key, city');
-  type BranchRow = { chain_key: string | null; city: string | null };
+  // --- Branches + cities + lat/lng ---
+  const branchRes = await sb.from('store_branches').select('chain_key, city, lat, lng, name');
+  type BranchRow = { chain_key: string | null; city: string | null; lat: number | null; lng: number | null; name: string | null };
   const branches = (branchRes.data as BranchRow[] | null) ?? [];
 
   const branchByChain = new Map<string, { count: number; cities: Set<string> }>();
@@ -72,6 +76,74 @@ export default async function IntelligenceChainPage(
     }
     battlegrounds.sort((a, b) => b.density - a.density);
   }
+
+  // Branch points for the map — target + top-3 competitors only so the map
+  // stays readable.
+  const targetBranchPoints: BranchPoint[] = branches
+    .filter(b => (b.chain_key ?? '').toUpperCase() === chainKey && typeof b.lat === 'number' && typeof b.lng === 'number')
+    .map(b => ({ chainKey, city: b.city ?? '', lat: b.lat as number, lng: b.lng as number, name: b.name ?? undefined }));
+  const topCompetitorKeys = chainsRanked
+    .map(c => c.chain)
+    .filter(c => c !== chainKey && (profile.topCompetitors as string[]).includes(c))
+    .slice(0, 3);
+  const competitorBranchPoints: BranchPoint[] = branches
+    .filter(b => topCompetitorKeys.includes((b.chain_key ?? '').toUpperCase()) && typeof b.lat === 'number' && typeof b.lng === 'number')
+    .map(b => ({ chainKey: (b.chain_key ?? '').toUpperCase(), city: b.city ?? '', lat: b.lat as number, lng: b.lng as number, name: b.name ?? undefined }));
+
+  // Defection analysis — who did users choose OVER the target chain?
+  // Uses analytics.fact_intent_basket which logs every compared basket.
+  const defectionAgg = await sql<{
+    to_chain: string;
+    baskets_lost: number;
+    avg_delta_nis: number;
+    total_delta_nis: number;
+    sample_city: string | null;
+  }>(`
+    WITH sample AS (
+      SELECT fb.user_chose_chain AS to_chain, fb.delta_nis_vs_cheapest, fb.user_id
+      FROM analytics.fact_intent_basket fb
+      WHERE fb.total_nis_by_chain ? '${chainKey.replace(/'/g, '')}'
+        AND fb.user_chose_chain IS NOT NULL
+        AND fb.user_chose_chain <> '${chainKey.replace(/'/g, '')}'
+        AND fb.eventually_purchased = true
+    )
+    SELECT to_chain,
+           COUNT(*)::int AS baskets_lost,
+           AVG(delta_nis_vs_cheapest)::numeric(10,2) AS avg_delta_nis,
+           SUM(delta_nis_vs_cheapest)::numeric(12,2) AS total_delta_nis,
+           (
+             SELECT up.location_city FROM public.user_preferences up
+             JOIN sample s2 USING (user_id)
+             WHERE up.location_city IS NOT NULL
+             LIMIT 1
+           ) AS sample_city
+    FROM sample
+    GROUP BY to_chain
+    ORDER BY baskets_lost DESC
+    LIMIT 10
+  `);
+  const defectedByChain: DefectionRow[] = defectionAgg.rows.map(r => ({
+    toChain: r.to_chain,
+    baskets_lost: Number(r.baskets_lost),
+    avg_delta_nis: Number(r.avg_delta_nis),
+    total_delta_nis: Number(r.total_delta_nis),
+    sample_city: r.sample_city,
+  }));
+
+  const basketStatsRes = await sql<{
+    compared_total: number;
+    chose_cheapest_total: number;
+    defected_total: number;
+  }>(`
+    SELECT
+      COUNT(*)::int AS compared_total,
+      COUNT(*) FILTER (WHERE chose_cheapest = true)::int AS chose_cheapest_total,
+      COUNT(*) FILTER (WHERE user_chose_chain IS NOT NULL AND user_chose_chain <> '${chainKey.replace(/'/g, '')}' AND eventually_purchased = true)::int AS defected_total
+    FROM analytics.fact_intent_basket
+    WHERE total_nis_by_chain ? '${chainKey.replace(/'/g, '')}'
+  `);
+  const basketStats = basketStatsRes.rows[0] ?? { compared_total: 0, chose_cheapest_total: 0, defected_total: 0 };
+  const totalDefectionNis = defectedByChain.reduce((s, r) => s + r.total_delta_nis, 0);
 
   // Price position — sampled. A full GROUP BY on 4.5M rows times out at the
   // 30s RPC limit, so we sample 100k rows via `last_updated` (indexed) to get
@@ -239,12 +311,39 @@ export default async function IntelligenceChainPage(
 
   const profileExists = !!CHAIN_PROFILES[chainKey];
 
+  // Receipt-compare dataset: pick the matrix rows where target loses, sorted
+  // by biggest delta first. Use the top-coverage basket (up to 10 items).
+  const overallWinner = matrix.length > 0
+    ? matrix.reduce<Record<string, { count: number; firstChain: string }>>((acc, r) => {
+        acc[r.winner] = acc[r.winner] ?? { count: 0, firstChain: r.winner };
+        acc[r.winner].count += 1;
+        return acc;
+      }, {})
+    : {};
+  const winnerChainKey = Object.entries(overallWinner).sort((a, b) => b[1].count - a[1].count)[0]?.[0] ?? chainKey;
+
+  const receiptRows = matrix
+    .filter(r => r.selfPrice != null || r.winnerPrice !== Infinity)
+    .slice(0, 10)
+    .map(r => ({
+      productName: r.productName,
+      barcode: r.barcode,
+      targetPrice: r.selfPrice,
+      winnerPrice: r.winnerPrice === Infinity ? null : r.winnerPrice,
+      winnerChain: r.winner,
+    }));
+  const basketTotalTarget = receiptRows.reduce((s, r) => s + (r.targetPrice ?? r.winnerPrice ?? 0), 0);
+  const basketTotalWinner = receiptRows.reduce((s, r) => {
+    const wp = r.winnerChain === chainKey ? (r.targetPrice ?? 0) : (r.winnerPrice ?? r.targetPrice ?? 0);
+    return s + wp;
+  }, 0);
+
   return (
     <div>
       <header className="admin-page-head">
         <div>
           <h1 className="admin-h1">Chain Intelligence</h1>
-          <p className="admin-sub">Tell the competitive story for any chain — the data decides.</p>
+          <p className="admin-sub">Live data · the story changes when you pick a chain.</p>
         </div>
         {!profileExists && (
           <span className="pill pill-neutral" style={{ fontSize: 11 }}>
@@ -257,6 +356,78 @@ export default async function IntelligenceChainPage(
         <ChainSelector activeKey={chainKey} availableChains={availableChains} />
       </div>
 
+      {/* ═══════════════════════════════════════════════════════════
+           HERO — jaw-drop opener. One screenshot, three numbers.
+         ═══════════════════════════════════════════════════════════ */}
+      <IntelligenceHero
+        profile={profile}
+        branchCount={branchCount}
+        rankByBranches={rankByBranches}
+        totalChains={chainsRanked.length}
+        avgVsLeader={avgVsLeader}
+        leaderChain={leaderByPrice?.chain ?? null}
+        basketsLostCount={basketStats.defected_total}
+        revenueAtStakeNis={totalDefectionNis}
+        winsCount={wins}
+        lossesCount={losses}
+      />
+
+      {/* ═══════════════════════════════════════════════════════════
+           SIDE-BY-SIDE RECEIPT — the pitch-deck moment
+         ═══════════════════════════════════════════════════════════ */}
+      <div className="admin-card" style={{ marginBottom: 16, padding: 0, overflow: 'hidden' }}>
+        <div className="admin-card-head" style={{ padding: '18px 20px' }}>
+          <div>
+            <div className="admin-card-title">Basket comparison · the receipt</div>
+            <div className="admin-card-sub">
+              Same {receiptRows.length} items · {profile.displayName} on the left, market leader on the right
+            </div>
+          </div>
+        </div>
+        <ReceiptCompare
+          targetChain={chainKey}
+          rows={receiptRows}
+          basketTotalTarget={basketTotalTarget}
+          basketTotalWinner={basketTotalWinner}
+          winnerChainKey={winnerChainKey}
+        />
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+           DEFECTION ANALYSIS — where customers actually went
+         ═══════════════════════════════════════════════════════════ */}
+      <div className="admin-card" style={{ marginBottom: 16 }}>
+        <div className="admin-card-head">
+          <div>
+            <div className="admin-card-title">Where the money went · defection analysis</div>
+            <div className="admin-card-sub">
+              Baskets IsraBis users compared to {profile.displayName} and then purchased elsewhere
+            </div>
+          </div>
+        </div>
+        <DefectionAnalysis
+          targetChain={chainKey}
+          totalBasketsTracked={basketStats.compared_total}
+          chooseCheapestCount={basketStats.chose_cheapest_total}
+          defectedCount={basketStats.defected_total}
+          defectedByChain={defectedByChain}
+        />
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+           MAP — Israel branch footprint vs rivals
+         ═══════════════════════════════════════════════════════════ */}
+      <div className="admin-card" style={{ marginBottom: 16 }}>
+        <BranchMap
+          targetChain={chainKey}
+          targetBranches={targetBranchPoints}
+          competitorBranches={competitorBranchPoints}
+        />
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+           NARRATIVE + RADAR + BATTLEGROUNDS (secondary storytelling)
+         ═══════════════════════════════════════════════════════════ */}
       <StoryCard
         profile={profile}
         narrative={narrative}
@@ -293,6 +464,9 @@ export default async function IntelligenceChainPage(
         </div>
       </div>
 
+      {/* ═══════════════════════════════════════════════════════════
+           LIVE SIMULATOR + FULL PRICING MATRIX (interactive)
+         ═══════════════════════════════════════════════════════════ */}
       <div className="admin-card" style={{ marginTop: 16 }}>
         <div className="admin-card-head">
           <div>
@@ -308,9 +482,9 @@ export default async function IntelligenceChainPage(
       <div className="admin-card" style={{ marginTop: 16 }}>
         <div className="admin-card-head">
           <div>
-            <div className="admin-card-title">Pricing matrix · 20 common-basket SKUs</div>
+            <div className="admin-card-title">Full pricing matrix</div>
             <div className="admin-card-sub">
-              Widest-coverage barcodes in product_prices — the chain with the lowest shelf price per row wins that product.
+              {matrix.length} widely-stocked SKUs · the chain with the lowest shelf price wins each row
             </div>
           </div>
         </div>
