@@ -1,6 +1,7 @@
 import { sql } from '@/lib/admin/sql';
 import { StatCard } from '../_components/StatCard';
 import { HBarChart, AreaSeriesChart } from '../_components/Charts';
+import { PoweredByFantastic } from '../_components/PoweredByFantastic';
 import '../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -101,6 +102,8 @@ export default async function IntentBasketsPage({ searchParams }: { searchParams
         </form>
       </header>
 
+      <PoweredByFantastic variant="strip" />
+
       <div className="stat-grid cols-5">
         <StatCard label="Baskets built"         value={sc.total_baskets}      accent="green" />
         <StatCard label="Intent → purchase"     value={sc.baskets_purchased}  delta={{ value: convPct, kind: convPct > 40 ? 'up' : 'flat', label: 'conv %' }} accent="blue" />
@@ -171,6 +174,8 @@ export default async function IntentBasketsPage({ searchParams }: { searchParams
           </table>
         )}
       </div>
+
+      <PoweredByFantastic variant="footer" />
     </div>
   );
 }

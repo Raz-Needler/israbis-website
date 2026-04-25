@@ -13,6 +13,7 @@ import { ReceiptCompare } from '../_components/ReceiptCompare';
 import { DefectionAnalysis, type DefectionRow } from '../_components/DefectionAnalysis';
 import { BranchMap, type BranchPoint } from '../_components/BranchMap';
 import { ProductExplorer } from '../_components/ProductExplorer';
+import { PoweredByFantastic } from '../../_components/PoweredByFantastic';
 import '../../admin.css';
 
 export const dynamic = 'force-dynamic';
@@ -396,6 +397,11 @@ export default async function IntelligenceChainPage(
         <ChainSelector activeKey={chainKey} availableChains={availableChains} />
       </div>
 
+      {/* Top-of-page attribution: this whole page is the FA-licensed
+          intelligence layer. The strip is large enough to be unmissable
+          but doesn't dominate the hero below it. */}
+      <PoweredByFantastic variant="strip" />
+
       {/* ═══════════════════════════════════════════════════════════
            HERO — jaw-drop opener. One screenshot, three numbers.
          ═══════════════════════════════════════════════════════════ */}
@@ -444,6 +450,7 @@ export default async function IntelligenceChainPage(
               Baskets IsraBis users compared to {profile.displayName} and then purchased elsewhere
             </div>
           </div>
+          <PoweredByFantastic variant="pill" />
         </div>
         <DefectionAnalysis
           targetChain={chainKey}
@@ -530,6 +537,7 @@ export default async function IntelligenceChainPage(
               Run a preset cart — or upload a real CSV — and watch the data decide who wins.
             </div>
           </div>
+          <PoweredByFantastic variant="pill" />
         </div>
         <BasketBattle chainKey={chainKey} />
       </div>
@@ -549,6 +557,12 @@ export default async function IntelligenceChainPage(
           summary={{ wins, losses, missing, biggestLosses }}
         />
       </div>
+
+      {/* End-of-page attribution block. The page lives or dies on the FA
+          licence — putting a substantial footer here means anyone scrolling
+          to the bottom sees the patent family + the licence statement
+          regardless of whether they noticed the top strip. */}
+      <PoweredByFantastic variant="footer" />
     </div>
   );
 }
